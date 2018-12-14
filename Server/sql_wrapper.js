@@ -15,7 +15,13 @@ module.exports = class DataAccess {
             myQuery += ` WHERE location = ${where.toLowerCase()}`;
         }
         else if(who != "") {
-            myQuery = `SELECT * FROM Availability JOIN ON Users Users` 
+            myQuery = `SELECT * FROM Availability JOIN ON Users Users.user_id = Availability.user_id WHERE Availability.user_id = ${who}`; 
+        }
+
+        if(startTime) {
+            if(who || where) {
+                myQuery += ` AND start_time > `;
+            }
         }
 
         if(size != -1) {
