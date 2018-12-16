@@ -7,26 +7,40 @@ module.exports = class DataAccess {
         this._connection = mysql.createConnection(connectionOptions);
     }
 
-    async getAvailabilityList(size, where, who, startTime, endTime) {
+    async getAvailabilityList(size, where, who, startTime, endTime, price) {
         let users = [];
         let myQuery = `SELECT * FROM Availability`;
 
         if(where != "") {
-            myQuery += ` WHERE location = ${where.toLowerCase()}`;
+            myQuery += ` WHERE location = \'${where.toLowerCase()}\'`;
         }
         else if(who != "") {
-            myQuery = `SELECT * FROM Availability JOIN ON Users Users.user_id = Availability.user_id WHERE Availability.user_id = ${who}`; 
+            myQuery = `SELECT Availability.* FROM Availability JOIN Users ON Users.user_id = Availability.user_id \
+                        WHERE Users.username = \'${who}\'`; 
         }
 
         if(startTime) {
             if(who || where) {
-                myQuery += ` AND start_time > `;
+                myQuery += ` AND start_time >= \'${startTime}\' AND end_time <= \'${endTime}\'`;
+            }
+            else {
+                myQuery += ` WHERE start_time >= \'${startTime}\' AND end_time <= \'${endTime}\'`;
+            }
+        }
+
+        if(price) {
+            if(who || where) {
+                myQuery += ` AND asking_price <= ${price}`;
+            }
+            else {
+                myQuery += ` WHERE asking_price <= ${price}`;
             }
         }
 
         if(size != -1) {
-            myQuery += ` LIMIT ${limit}`;
+            myQuery += ` LIMIT ${size}`;
         }
+        console.log(myQuery);
 
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
@@ -35,8 +49,7 @@ module.exports = class DataAccess {
             else {
                 for(let element of result) {
                     let userRet = {
-                        "user_id" : element.user_id,
-                        "username" : element.username
+                        "result" : result
                     };
                     users.push(userRet);
                 }
