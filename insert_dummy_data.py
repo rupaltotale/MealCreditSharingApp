@@ -5,7 +5,7 @@ import random
 firstNames = []
 lastNames = []
 userNames = []
-numberOfRows = 10
+numberOfRows = 10 # This is also equal to number of distinct users. 
 
 # Inserts dummy data into the three lists above
 for x in range(numberOfRows):
@@ -16,7 +16,7 @@ for x in range(numberOfRows):
         lastName += random.choice(string.letters)
     firstNames.append(firstName)
     lastNames.append(lastName)
-    userNames.append(firstName + "_" + lastName)
+    userNames.append(firstName + "_" + lastName + str(x))
 locations = ["Avenue", "805", "Subway", "Campus Market", "Mustang", "Einstein", "Canyon Cafe", "Red Radish"]
 
 def insert_data():
