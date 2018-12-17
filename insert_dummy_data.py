@@ -5,15 +5,17 @@ import random
 firstNames = []
 lastNames = []
 userNames = []
-numberOfRows = 10 # This is also equal to number of distinct users. 
+numberOfRows = 10 # This is also equal to number of distinct users.
+
+letters = "abcdefghijklmnopqrstuvwxyz"
 
 # Inserts dummy data into the three lists above
 for x in range(numberOfRows):
     firstName = ""
     lastName = ""
     for i in range(3):
-        firstName += random.choice(string.letters)
-        lastName += random.choice(string.letters)
+        firstName += random.choice(letters)
+        lastName += random.choice(letters)
     firstNames.append(firstName)
     lastNames.append(lastName)
     userNames.append(firstName + "_" + lastName + str(x))
@@ -63,7 +65,7 @@ def insert_data_helper(tablename, cursor, mariadb_connection, priceFieldName):
 
         asking_price = (random.randint(1,6) + random.randint(1,6))/2.0 # Max asking price is 6
 
-        query = "Insert into {} (user_id, {}, location, start_time, end_time) VALUES({}, {}, '{}', '{}', '{}');\
+        query = "Insert into {} (user_id, {}, location, start_time, end_time) VALUES ({}, {}, '{}', '{}', '{}');\
         ".format(tablename, priceFieldName, random.randint(1,numberOfRows), asking_price, random.choice(locations), start_time, end_time)
 
         cursor.execute(query)
