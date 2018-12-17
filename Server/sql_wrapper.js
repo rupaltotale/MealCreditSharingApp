@@ -29,13 +29,15 @@ module.exports = class DataAccess {
         }
 
         if(price) {
-            if(who || where) {
+            if(who || where || startTime) {
                 myQuery += ` AND asking_price <= ${price}`;
             }
             else {
                 myQuery += ` WHERE asking_price <= ${price}`;
             }
         }
+
+        myQuery += ` ORDER BY asking_price ASC`;
 
         if(size != -1) {
             myQuery += ` LIMIT ${size}`;
@@ -46,10 +48,14 @@ module.exports = class DataAccess {
             if (err) {
                 reject(err);
             }
-            else {
+            else {   
                 for(let element of result) {
                     let userRet = {
-                        "result" : result
+                        "user_id" : element.user_id,
+                        "asking_price" : element.asking_price,
+                        "location" : element.location,
+                        "start_time" : element.start_time,
+                        "end_time" : element.end_time
                     };
                     users.push(userRet);
                 }
