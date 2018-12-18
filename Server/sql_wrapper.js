@@ -190,7 +190,57 @@ module.exports = class DataAccess {
         
         return users;
     }
+    async postUserObject(firstname, lastname, username, phonenumber = null, email = null){
+        let myQuery = "";
+        if (email != null){
+            myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', ${phonenumber}, '${email}')`;
+        }
+        else{
+            myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', ${phonenumber}, ${email})`;
+        }
+        console.log(myQuery);
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            console.log(myQuery);
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(result);
+            }
+        }));
+        
+        return 0;
+    }
 
+    async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ){
+        let myQuery = `INSERT INTO Availability VALUES (${user_id}, ${asking_price}, '${location}', '${start_time}', '${end_time}')`;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            console.log(myQuery);
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(result);
+            }
+        }));
+        
+        return 0;
+    }
+    async postHungerObject(user_id, max_price, location, start_time, end_time ){
+        let myQuery = `INSERT INTO Hunger VALUES (${user_id}, ${max_price}, '${location}', '${start_time}', '${end_time}')`;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            console.log(myQuery);
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(result);
+            }
+        }));
+        
+        return 0;
+    }
+    
     endConnection() {
         this._connection.end();
     }
