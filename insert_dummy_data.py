@@ -37,10 +37,18 @@ def insert_data():
     cursor.execute("ALTER TABLE Availability MODIFY end_time DATETIME;")
     cursor.execute("ALTER TABLE Hunger MODIFY start_time DATETIME;")
     cursor.execute("ALTER TABLE Hunger MODIFY end_time DATETIME;")
+
+    # Alter Users to incorporate password (uncomment only if Users does not have password)
+    # cursor.execute("alter table Users drop column Phone;")
+    # cursor.execute("alter table Users drop column Email;")
+    # cursor.execute("alter table Users add column password_hash varchar (500);")
+    # cursor.execute("alter table Users add column salt varchar (500);")
+    # cursor.execute("alter table Users add column phone varchar (10);")
+    # cursor.execute("alter table Users add column email varchar (64);")
     
     # Inserts dummy data into the Users table
     for i in range (numberOfRows):
-        query = "Insert into Users (firstname, lastname, username) VALUES ('{}', '{}', '{}')".format(firstNames[i], lastNames[i], userNames[i])
+        query = "Insert into Users (firstname, lastname, username, password, salt) VALUES ('{}', '{}', '{}', 'password', 'salt')".format(firstNames[i], lastNames[i], userNames[i])
         cursor.execute(query)
         mariadb_connection.commit()
     

@@ -1,4 +1,8 @@
-const mysql = require('mysql')
+const mysql = require('mysql');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const someOtherPlaintextPassword = 'not_bacon';
 
 module.exports = class DataAccess {
 
@@ -190,58 +194,57 @@ module.exports = class DataAccess {
         
         return users;
     }
-    async postUserObject(firstname, lastname, username, phonenumber = null, email = null){
+    async postUserObject(firstname, lastname, username, password, phonenumber = null, email = null){
         let myQuery = "";
-        if (email != null){
-            myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', ${phonenumber}, '${email}')`;
-        }
-        else{
-            myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', ${phonenumber}, ${email})`;
-        }
-        console.log(myQuery);
-        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            console.log(myQuery);
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve(result);
-            }
-        }));
-        
-        return 0;
+        let salt = this.makeSalt(10);
+        bcrypt.hash(password + salt, saltRounds).then((hash) =>{
+            myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', '${password_hash}','${salt}', '${phonenumber}', '${email}')`;
+            this._connection.query(myQuery);
+        });
     }
 
     async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ){
         let myQuery = `INSERT INTO Availability VALUES (${user_id}, ${asking_price}, '${location}', '${start_time}', '${end_time}')`;
-        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            console.log(myQuery);
-            if (err) {
-                reject(err);
-            }
-            else {
-                resolve(result);
-            }
-        }));
-        
-        return 0;
+        this._connection.query(myQuery);
     }
     async postHungerObject(user_id, max_price, location, start_time, end_time ){
         let myQuery = `INSERT INTO Hunger VALUES (${user_id}, ${max_price}, '${location}', '${start_time}', '${end_time}')`;
+        this._connection.query(myQuery);
+    }
+    
+    // Password helper functions 
+    
+    makeSalt (length) {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        
+        for (var i = 0; i < length; i++)
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+        return text;
+    }
+
+    async checkUser(username, password) {
+        let myQuery = `Select * from Users where username = '${username}'`
+        let match;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            console.log(myQuery);
             if (err) {
                 reject(err);
             }
             else {
+                let password_hash = result[0].password_hash;
+                let salt = result[0].salt;
+                match = bcrypt.compare(password + salt, password_hash);
+                if(match) {
+                    console.log("Password matches");
+                }
                 resolve(result);
             }
         }));
-        
-        return 0;
+        return match;
     }
-    
     endConnection() {
         this._connection.end();
     }
+
+    
 }

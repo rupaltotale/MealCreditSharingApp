@@ -56,25 +56,26 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
  */
 
 // Creates a new user object. What about password?
-app.post('/user/:firstname/:lastname/:username/:phonenumber?/:email?', function(req, res){
+app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?', function(req, res){
     var firstname=req.params.firstname;
     var lastname=req.params.lastname;
     var username=req.params.username; // Needs to be checked if unique!! Create another function?
+    var password = req.params.password;
     var phonenumber=req.params.phonenumber; // Make sure on the front end that this is a number!
     var email=req.params.email;
     
     // There has to be a better way to do this checking of null values.
     if (phonenumber != null & email != null){
-        wrapper.postUserObject(firstname, lastname, username, phonenumber, email);
+        wrapper.postUserObject(firstname, lastname, username, password, phonenumber, email);
     }
     else if (phonenumber != null){
-        wrapper.postUserObject(firstname, lastname, username, phonenumber);
+        wrapper.postUserObject(firstname, lastname, username, password, phonenumber);
     }
     else if (email != null){
-        wrapper.postUserObject(firstname, lastname, username, null, email);
+        wrapper.postUserObject(firstname, lastname, username, password, null, email);
     }
     else{
-        wrapper.postUserObject(firstname, lastname, username);
+        wrapper.postUserObject(firstname, lastname, username, password);
     }
     
     res.send("Created Object"); // This should be changed later on. 
@@ -109,3 +110,4 @@ app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function
 app.listen(8000, '127.0.0.1', () => {
     console.log("Connected to port 8000");
 });
+
