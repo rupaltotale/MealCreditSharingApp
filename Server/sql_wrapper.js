@@ -97,36 +97,8 @@ module.exports = class DataAccess {
         return users;
     }
 
-    async getUsersFromAlpha(start, limit) {
-        let users = [];
-        if(limit == -1) {
-            var myQuery = `SELECT * FROM Users GROUP BY username`;
-        }
-        else {
-            var myQuery = `SELECT * FROM Users GROUP BY username LIMIT ${limit}`;
-        }
-        
-        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            if (err) {
-                reject(err);
-            }
-            else {
-                for(let element of result) {
-                    let userRet = {
-                        "user_id" : element.user_id,
-                        "username" : element.username
-                    };
-                    users.push(userRet);
-                }
-                resolve(users);
-            }
-        }));
-        
-        return users;
-    }
-
     // Gets n (= limit) number of availabilities posted by a user (id = user_id)
-    async getUserAvalibiltyList(user_id, limit){
+    async getUserAvalibiltyList(user_id, limit) {
         let availabilities = [];
         if(limit == -1) {
             var myQuery = `SELECT * FROM Availability WHERE location = ${user_id}`;
@@ -192,20 +164,22 @@ module.exports = class DataAccess {
         
         return users;
     }
+
     async postUserObject(firstname, lastname, username, password, phonenumber = null, email = null){
         let myQuery = "";
         let salt = this.makeSalt(10);
-        bcrypt.hash(password + salt, saltRounds).then((hash) =>{
+        bcrypt.hash(password + salt, saltRounds).then((hash) => {
             myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', '${password_hash}','${salt}', '${phonenumber}', '${email}')`;
             this._connection.query(myQuery);
         });
     }
 
-    async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ){
+    async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ) {
         let myQuery = `INSERT INTO Availability VALUES (${user_id}, ${asking_price}, '${location}', '${start_time}', '${end_time}')`;
         this._connection.query(myQuery);
     }
-    async postHungerObject(user_id, max_price, location, start_time, end_time ){
+
+    async postHungerObject(user_id, max_price, location, start_time, end_time ) {
         let myQuery = `INSERT INTO Hunger VALUES (${user_id}, ${max_price}, '${location}', '${start_time}', '${end_time}')`;
         this._connection.query(myQuery);
     }
@@ -214,7 +188,7 @@ module.exports = class DataAccess {
 
     makeSalt (length) {
         var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var possible = "*.-/|{}!@#$%^&():;<>?[]ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         
         for (var i = 0; i < length; i++)
           text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -240,9 +214,8 @@ module.exports = class DataAccess {
         }));
         return match;
     }
+    
     endConnection() {
         this._connection.end();
     }
-
-    
 }
