@@ -21,14 +21,20 @@ app.get('/', function (req, res) {
     res.send('Start');
 });
 
+/** GET requests -- getting any data from the database
+ * Availability
+ * Hunger
+ */
+
 app.get('/availability-list', (req, res) => {
-    //get data
+    //get all availability data
     wrapper.getAvailabilityList(-1, false, false, false, false, false).then((result) => {
         res.send(result);
     });
 });
 
 app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) => {
+    // Creates an object representing the parameters for the SQL wrapper
     let holder = {
         "size" : req.params.size,
         "where" : req.params.where,
@@ -84,11 +90,11 @@ app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?',
 
 // Creates a new availability object
 app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time', function(req, res){
-    var user_id=req.params.user_id;
-    var asking_price=req.params.asking_price;
-    var location=req.params.location;
-    var start_time=req.params.start_time;
-    var end_time=req.params.end_time;
+    let user_id = req.params.user_id;
+    let asking_price = req.params.asking_price;
+    let location = req.params.location;
+    let start_time = req.params.start_time;
+    let end_time = req.params.end_time;
     
     wrapper.postAvailabilityObject(Number(user_id), Number(asking_price), location, start_time, end_time);
     res.send("Created Object"); // This should be changed later on. 
@@ -96,11 +102,11 @@ app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time',
 
 // Creates a new hunger object
 app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function(req, res){
-    var user_id=req.params.user_id;
-    var max_price=req.params.max_price;
-    var location=req.params.location;
-    var start_time=req.params.start_time;
-    var end_time=req.params.end_time;
+    let user_id = req.params.user_id;
+    let max_price = req.params.max_price;
+    let location = req.params.location;
+    let start_time = req.params.start_time;
+    let end_time = req.params.end_time;
     
     wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time);
     res.send("Created Object"); // This should be changed later on. 

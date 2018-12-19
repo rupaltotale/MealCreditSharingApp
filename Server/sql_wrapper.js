@@ -213,7 +213,7 @@ module.exports = class DataAccess {
     }
     
     // Password helper functions 
-    
+
     makeSalt (length) {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
