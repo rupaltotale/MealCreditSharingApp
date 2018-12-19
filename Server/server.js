@@ -21,14 +21,20 @@ app.get('/', function (req, res) {
     res.send('Start');
 });
 
+/** GET requests -- getting any data from the database
+ * Availability
+ * Hunger
+ */
+
 app.get('/availability-list', (req, res) => {
-    //get data
+    //get all availability data
     wrapper.getAvailabilityList(-1, false, false, false, false, false).then((result) => {
         res.send(result);
     });
 });
 
 app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) => {
+    // Creates an object representing the parameters for the SQL wrapper
     let holder = {
         "size" : req.params.size,
         "where" : req.params.where,
@@ -57,11 +63,11 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
 
 // Creates a new user object. What about password?
 app.post('/user/:firstname/:lastname/:username/:phonenumber?/:email?', function(req, res){
-    var firstname=req.params.firstname;
-    var lastname=req.params.lastname;
-    var username=req.params.username; // Needs to be checked if unique!! Create another function?
-    var phonenumber=req.params.phonenumber; // Make sure on the front end that this is a number!
-    var email=req.params.email;
+    let firstname = req.params.firstname;
+    let lastname = req.params.lastname;
+    let username = req.params.username; // Needs to be checked if unique!! Create another function?
+    let phonenumber = req.params.phonenumber; // Make sure on the front end that this is a number!
+    let email = req.params.email;
     
     // There has to be a better way to do this checking of null values.
     if (phonenumber != null & email != null){
@@ -83,11 +89,11 @@ app.post('/user/:firstname/:lastname/:username/:phonenumber?/:email?', function(
 
 // Creates a new availability object
 app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time', function(req, res){
-    var user_id=req.params.user_id;
-    var asking_price=req.params.asking_price;
-    var location=req.params.location;
-    var start_time=req.params.start_time;
-    var end_time=req.params.end_time;
+    let user_id = req.params.user_id;
+    let asking_price = req.params.asking_price;
+    let location = req.params.location;
+    let start_time = req.params.start_time;
+    let end_time = req.params.end_time;
     
     wrapper.postAvailabilityObject(Number(user_id), Number(asking_price), location, start_time, end_time);
     res.send("Created Object"); // This should be changed later on. 
@@ -95,11 +101,11 @@ app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time',
 
 // Creates a new hunger object
 app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function(req, res){
-    var user_id=req.params.user_id;
-    var max_price=req.params.max_price;
-    var location=req.params.location;
-    var start_time=req.params.start_time;
-    var end_time=req.params.end_time;
+    let user_id = req.params.user_id;
+    let max_price = req.params.max_price;
+    let location = req.params.location;
+    let start_time = req.params.start_time;
+    let end_time = req.params.end_time;
     
     wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time);
     res.send("Created Object"); // This should be changed later on. 

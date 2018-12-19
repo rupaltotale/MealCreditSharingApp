@@ -190,6 +190,7 @@ module.exports = class DataAccess {
         
         return users;
     }
+
     async postUserObject(firstname, lastname, username, phonenumber = null, email = null){
         let myQuery = "";
         if (email != null){
