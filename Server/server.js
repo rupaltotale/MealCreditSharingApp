@@ -63,12 +63,12 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
 
 // Creates a new user object. What about password?
 app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?', function(req, res){
-    var firstname=req.params.firstname;
-    var lastname=req.params.lastname;
-    var username=req.params.username; // Needs to be checked if unique!! Create another function?
+    var firstname = req.params.firstname;
+    var lastname = req.params.lastname;
+    var username = req.params.username; // Needs to be checked if unique!! Create another function?
     var password = req.params.password;
-    var phonenumber=req.params.phonenumber; // Make sure on the front end that this is a number!
-    var email=req.params.email;
+    var phonenumber = req.params.phonenumber; // Make sure on the front end that this is a number!
+    var email = req.params.email;
     
     // There has to be a better way to do this checking of null values.
     if (phonenumber != null & email != null){
