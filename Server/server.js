@@ -54,6 +54,29 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
     });
 });
 
+// Same as availability but for hunger
+app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
+    // Creates an object representing the parameters for the SQL wrapper
+    let holder = {
+        "size" : req.params.size,
+        "where" : req.params.where,
+        "who" : req.params.who,
+        "start" : req.params.start,
+        "end" : req.params.end,
+        "price" : req.params.price
+    }
+
+    for(let key in holder) {
+        if(holder[key] == "false") {
+            holder[key] = "";
+        }
+    }
+
+    wrapper.getNeedsList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
+        res.send(result);
+    });
+});
+
 
 /** Post Requests -- Creates/Inserts into database
  * User (on sign up)
@@ -62,7 +85,7 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
  */
 
 // Creates a new user object. What about password?
-app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?', function(req, res){
+app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?', function(req, res) {
     var firstname = req.params.firstname;
     var lastname = req.params.lastname;
     var username = req.params.username; // Needs to be checked if unique!! Create another function?
@@ -89,7 +112,7 @@ app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?',
 
 
 // Creates a new availability object
-app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time', function(req, res){
+app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time', function(req, res) {
     let user_id = req.params.user_id;
     let asking_price = req.params.asking_price;
     let location = req.params.location;
@@ -101,7 +124,7 @@ app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time',
 });
 
 // Creates a new hunger object
-app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function(req, res){
+app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function(req, res) {
     let user_id = req.params.user_id;
     let max_price = req.params.max_price;
     let location = req.params.location;
@@ -112,8 +135,16 @@ app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function
     res.send("Created Object"); // This should be changed later on. 
 });
 
+/** DELETE requests - remove objects
+ * Availability
+ * Hunger
+ */
+
+ app.delete('/delete/availability/:id/:token', (req, res) => {
+    let availability_id = req.params.id;    
+ });
+
 
 app.listen(8000, '127.0.0.1', () => {
     console.log("Connected to port 8000");
 });
-

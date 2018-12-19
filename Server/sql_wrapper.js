@@ -134,12 +134,33 @@ module.exports = class DataAccess {
         if(location != "") {
             myQuery += ` WHERE location = ${location.toLowerCase()}`;
         }
-        if (start_time != ""){
-            myQuery += `AND start_time <= ${start_time}`;
+
+        if (start_time != "") {
+            if(location != "") {
+                myQuery += ` AND start_time <= ${start_time}`;
+            }
+            else {
+                myQuery += ` WHERE start_time <= ${start_time}`;
+            }
         }
-        if (end_time != ""){
-            myQuery += `AND end_time >= ${end_time}`;
+        if (end_time != "") {
+            if(start_time != "" || location != "") {
+                myQuery += ` AND end_time >= ${end_time}`;
+            }
+            else {
+                myQuery += ` WHERE end_time >= ${end_time}`;
+            }
         }
+
+        if(price != 0) {
+            if(start_time != "" || location != "" || end_time != "") {
+                myQuery += ` AND max_price >= ${price}`;
+            }
+            else {
+                myQuery += ` WHERE max_price >= ${price}`;
+            }
+        }
+
         if(size != -1) {
             myQuery += ` LIMIT ${limit}`;
         }
@@ -214,7 +235,7 @@ module.exports = class DataAccess {
         }));
         return match;
     }
-    
+
     endConnection() {
         this._connection.end();
     }
