@@ -134,6 +134,12 @@ app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function
     wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time);
     res.send("Created Object"); // This should be changed later on. 
 });
+/** PUT Requests -- Creates/Inserts into database
+ * User 
+ * Availability
+ * Hunger ?
+ */
+
 
 /** DELETE requests - remove objects
  * Availability
