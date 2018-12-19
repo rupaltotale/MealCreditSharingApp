@@ -48,7 +48,7 @@ def insert_data():
     
     # Inserts dummy data into the Users table
     for i in range (numberOfRows):
-        query = "Insert into Users (firstname, lastname, username, password, salt) VALUES ('{}', '{}', '{}', 'password', 'salt')".format(firstNames[i], lastNames[i], userNames[i])
+        query = "Insert into Users (firstname, lastname, username, password_hash, salt) VALUES ('{}', '{}', '{}', 'password', 'salt')".format(firstNames[i], lastNames[i], userNames[i])
         cursor.execute(query)
         mariadb_connection.commit()
     
