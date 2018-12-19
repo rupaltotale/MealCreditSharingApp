@@ -31,6 +31,8 @@ def insert_data():
     cursor.execute("DELETE from Hunger;")
     cursor.execute("DELETE from Users;")
     cursor.execute("ALTER TABLE Users AUTO_INCREMENT = 1;")
+    cursor.execute("ALTER TABLE Availability AUTO_INCREMENT = 1;")
+    cursor.execute("ALTER TABLE Hunger AUTO_INCREMENT = 1;")
 
     # Alters the datatype of start_time and end_time in case it isn't DATETIME
     cursor.execute("ALTER TABLE Availability MODIFY start_time DATETIME;")
@@ -45,7 +47,13 @@ def insert_data():
     # cursor.execute("alter table Users add column salt varchar (500);")
     # cursor.execute("alter table Users add column phone varchar (10);")
     # cursor.execute("alter table Users add column email varchar (64);")
-    
+
+    # Add id to Availability and Hunger
+    # cursor.execute("Alter table Availability add column av_id INT AUTO_INCREMENT PRIMARY KEY;")
+    # cursor.execute("Alter table Hunger add column hg_id INT AUTO_INCREMENT PRIMARY KEY;")
+    # cursor.execute("ALTER TABLE Availability MODIFY av_id INT auto_increment AFTER user_id;")
+    # cursor.execute("ALTER TABLE hunger MODIFY hg_id INT auto_increment AFTER user_id;")
+
     # Inserts dummy data into the Users table
     for i in range (numberOfRows):
         query = "Insert into Users (firstname, lastname, username, password_hash, salt) VALUES ('{}', '{}', '{}', 'password', 'salt')".format(firstNames[i], lastNames[i], userNames[i])

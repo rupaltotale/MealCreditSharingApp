@@ -236,6 +236,21 @@ module.exports = class DataAccess {
         return match;
     }
 
+    async isUnique(username){
+        let myQuery = `Select * from Users where username = '${username}'`;
+        let unique = true;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            console.log(result);
+            if (err) {
+                reject(err);
+            }
+            else if (result.length > 0){
+                    unique = false;
+            }
+        }));
+        return unique;
+    }
+
     endConnection() {
         this._connection.end();
     }
