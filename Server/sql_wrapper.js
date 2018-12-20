@@ -200,7 +200,8 @@ module.exports = class DataAccess {
                     reject(err);
                 }
                 else {
-                    user_id = result.insertID;
+                    user_id = result.insertId;
+                    console.log("Last id: " + user_id);
                     if(user_id == 0 && result.affectedRows == 0) {
                         user_id = null;
                     }

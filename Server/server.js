@@ -217,11 +217,19 @@ app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?',
         }
         else {
             const tokenReturn = function(sendName, user_id) {
-                let tokenMade = makeToken(user_id);
-                return sendName.json({
-                    message : "User created",
-                    token : tokenMade
-                });
+                if(user_id !== null) {
+                    let tokenMade = makeToken(user_id);
+                    return sendName.json({
+                        message : "User created",
+                        id : user_id,
+                        token : tokenMade
+                    });
+                }
+                else {
+                    return sendName.status(500).json({
+                        message : "error in user creation"
+                    });
+                }
             };
 
             // There has to be a better way to do this checking of null values.
