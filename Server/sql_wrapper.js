@@ -330,6 +330,13 @@ module.exports = class DataAccess {
         return retResult;
     }
 
+    deleteOldObjects(start, end) {
+        let myQuery1 = `DELETE FROM Availability WHERE start_time < '${start}' AND end_time < '${end}'`;
+        let myQuery2 = `DELETE FROM Hunger WHERE start_time < '${start}' AND end_time < '${end}'`;
+        this._connection.query(myQuery1);
+        this._connection.query(myQuery2);
+    }
+
     endConnection() {
         this._connection.end();
     }
