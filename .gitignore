@@ -1,4 +1,0 @@
-# Don't track content of these folders
-Server/node_modules/
-Server/package.json
-Server/package-lock.json
