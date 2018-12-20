@@ -300,6 +300,7 @@ module.exports = class DataAccess {
 
     async changeTable(table_name, col_name, value, id, id_name){
         let myQuery = `UPDATE ${table_name} SET ${col_name} = '${value}' WHERE ${id_name} = '${id}'`;
+        console.log(myQuery);
         let retResult;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {

@@ -390,43 +390,64 @@ app.put('/change/availability/:user_id/:token/:av_id', (req, res) => {
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }
-    let asking_price = req.body.asking_price;
-    let location = req.body.location;
-    let start_time = req.body.start_time;
-    let end_time = req.body.end_time;
-    if (asking_price != null){
-        wrapper.changeTable("Availability", "asking_price", asking_price, availability_id, "av_id")
-        .then((result) => {
-            if (!result){
-                return res.status(500).json({
-                    "message" : "insertion failure"
-                });
-            }
-        });
+    let avObj = {
+        "asking_price": req.body.asking_price,
+        "location":req.body.location,
+        "start_time":req.body.start_time,
+        "end_time":req.body.end_time
     }
-    if (location != null){
-        wrapper.changeTable("Availability", "location", location, availability_id, "av_id")
-        .then((result) => {
-            if (!result){
-                return res.status(500).json({
-                    "message" : "insertion failure"
-                });
-            }
-        });
+    const keys = Object.keys(avObj)
+    for (let i in keys){
+        let key = keys[i];
+        let value = avObj[key];
+        if (value != null){
+            wrapper.changeTable("Availability", key, value, availability_id, "av_id")
+            .then((result) => {
+                if (!result){
+                    return res.status(500).json({
+                        "message" : "insertion failure"
+                    });
+                }
+            });
+        }
     }
-    if (start_time != null){
-        wrapper.changeTable("Availability", "start_time", start_time, availability_id, "av_id")
-        .then((result) => {
-            if (!result){
-                return res.status(500).json({
-                    "message" : "insertion failure"
-                });
-            }
-        });
+    return res.status(500).json({
+        "message" : "insertion success"
+    });
+
+})
+
+app.put('/change/user/:user_id/:token/', (req, res) => {
+    let user_id = Number(req.params.user_id);
+    let token = req.params.token;
+
+    // Authentiates if the user has the permission to do an action. 
+    let authentic = authenticate(token, res, user_id);
+    if (authentic != true){
+        // This means that the user does not have permission or that something went wrong
+        return authentic;
     }
-    if (end_time != null){
-        wrapper.changeTable("Availability", "end_time", end_time, availability_id, "av_id")
-        .then((result) => sendResult(res, result));
+    let userObj = {
+        "firstname": req.body.firstname,
+        "lastname":req.body.lastname,
+        "phone":req.body.phone,
+        "email":req.body.email
+    }
+    // Code below till the return statement should probably be converted to a func. 
+    const keys = Object.keys(userObj)
+    for (let i in keys){
+        let key = keys[i];
+        let value = userObj[key];
+        if (value != null){
+            wrapper.changeTable("Users", key, value, user_id, "user_id")
+            .then((result) => {
+                if (!result){
+                    return res.status(500).json({
+                        "message" : "insertion failure"
+                    });
+                }
+            });
+        }
     }
     return res.status(500).json({
         "message" : "insertion success"
