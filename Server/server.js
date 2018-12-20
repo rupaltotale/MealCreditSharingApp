@@ -365,6 +365,44 @@ app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time/:token', f
     });
  });
 
+ app.delete('/delete/hunger/:id/:token/:hg_id', (req, res) => {
+    let id = Number(req.params.id);
+    let hunger_id = req.params.hg_id;
+    let token = req.params.token;
+
+    if(token == undefined || token == "" || token == null) {
+        return res.status(401).json({
+            message : "Invalid token - 1"
+        });
+    }
+
+    let retToken = verifyToken(token);
+    // The === on the false is important, as 0 can be a user_id
+    if(retToken === false) {
+        return res.status(401).json({
+            message : "Invalid token - 2"
+        });
+    }
+    else if(retToken != id) {
+        return res.status(401).json({
+            message : "Invalid user ID"
+        });
+    }
+
+    wrapper.deleteHungerObject(hunger_id).then((result) => {
+        if(result) {
+            return res.json({
+                message : "success"
+            });
+        }
+        else {
+            return res.status(500).json({
+                message : "deletion failure"
+            });
+        }
+    });
+ });
+
 
 app.listen(8000, '127.0.0.1', () => {
     console.log("Connected to port 8000");

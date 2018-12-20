@@ -299,6 +299,22 @@ module.exports = class DataAccess {
         return retResult;
     }
 
+    async deleteAvailabilityObject(hg_id) {
+        let myQuery = `DELETE FROM Availability WHERE hg_id = ${hg_id}`;
+        let retResult;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                retResult = result.affectedRows > 0;
+            }
+            resolve(result);
+        }));
+
+        return retResult;
+    }
+
     endConnection() {
         this._connection.end();
     }
