@@ -96,6 +96,25 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
  * Hunger
  */
 
+ // creates and signs a new token
+ function makeToken(user_id) {
+    let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
+    let payload = {
+        "user-id" : user_id,
+        "login" : "yes"
+    };
+    let signOptions = {
+        issuer : "meal-server",
+        subject : "meal-user",
+        audience : "meal-app",
+        expiresIn : "2h",
+        algorithm : "RS256"
+    };
+
+    return jwt.sign(payload, privateKey, signOptions);
+ }
+
+ // verfies a given token
 function verifyToken(token) {
     let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
     let verifyOptions = {
@@ -129,20 +148,7 @@ function verifyToken(token) {
         if("matched" in loginChecked) {
             // Both matched must be set to true and "id" must exist for the returned object to be acceptable
             if(loginChecked["matched"] && "id" in loginChecked) {
-                let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
-                let payload = {
-                    "user-id" : loginChecked["id"],
-                    "login" : "yes"
-                };
-                let signOptions = {
-                    issuer : "meal-server",
-                    subject : "meal-user",
-                    audience : "meal-app",
-                    expiresIn : "2h",
-                    algorithm : "RS256"
-                };
-
-                let token = jwt.sign(payload, privateKey, signOptions);
+                let token = makeToken(loginChecked["id"]);
                 return res.status(200).json({
                     message: "OAuth successful",
                     jwt : token
@@ -210,21 +216,40 @@ app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?',
             });
         }
         else {
+            const tokenReturn = function(sendName, user_id) {
+                let tokenMade = makeToken(user_id);
+                return sendName.json({
+                    message : "User created",
+                    token : tokenMade
+                });
+            };
+
             // There has to be a better way to do this checking of null values.
+            // Result variable = user_id (null or number)
             if (phonenumber != null && email != null) {
-                wrapper.postUserObject(firstname, lastname, username, password, phonenumber, email);
+                wrapper.postUserObject(firstname, lastname, username, password, phonenumber, email).then((result) => {
+                    tokenReturn(res, result);
+                    return;
+                });
             }
             else if (phonenumber != null) {
-                wrapper.postUserObject(firstname, lastname, username, password, phonenumber);
+                wrapper.postUserObject(firstname, lastname, username, password, phonenumber).then((result) => {
+                    tokenReturn(res, result);
+                    return;
+                });
             }
             else if (email != null) {
-                wrapper.postUserObject(firstname, lastname, username, password, null, email);
+                wrapper.postUserObject(firstname, lastname, username, password, null, email).then((result) => {
+                    tokenReturn(res, result);
+                    return;
+                });
             }
             else {
-                wrapper.postUserObject(firstname, lastname, username, password);
+                wrapper.postUserObject(firstname, lastname, username, password).then((result) => {
+                    tokenReturn(res, result);
+                    return;
+                });
             }
-            
-            res.send("Created Object"); // This should be changed later on. 
         }
     });
 });

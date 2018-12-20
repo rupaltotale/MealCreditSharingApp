@@ -186,16 +186,30 @@ module.exports = class DataAccess {
         return users;
     }
 
-    async postUserObject(firstname, lastname, username, password, phonenumber = null, email = null){
+    async postUserObject(firstname, lastname, username, password, phonenumber = null, email = null) {
         let myQuery = "";
         let salt = this.makeSalt(10);
-        bcrypt.hash(password + salt, saltRounds).then((password_hash) => {
+        let user_id = null;
+        await bcrypt.hash(password + salt, saltRounds).then(async (password_hash) => {
             myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', '${password_hash}','${salt}',`;
             myQuery += phonenumber !== null ? `'${phonenumber}',` :  'NULL,';
             myQuery += email !== null ? `'${email}')` :  'NULL)';
             //console.log(myQuery);
-            this._connection.query(myQuery);
+            await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    user_id = result.insertID;
+                    if(user_id == 0 && result.affectedRows == 0) {
+                        user_id = null;
+                    }
+                }
+                resolve(result);
+            }));
         });
+
+        return user_id;
     }
 
     async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ) {
