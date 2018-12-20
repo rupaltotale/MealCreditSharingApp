@@ -1,6 +1,16 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const mysql = require('mysql')
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
+const tokenAge = "2h";
+
+/** PUT STATUS CODES HERE
+ * 200 == OK
+ * 404 == Not Found
+ * 403 == Permission Denied
+ * 401 == Unacceptable input
+ * 500 == SQL error
+ */
 
 const WrapperObj = require('./sql_wrapper')
 
@@ -29,7 +39,9 @@ app.get('/', function (req, res) {
 app.get('/availability-list', (req, res) => {
     //get all availability data
     wrapper.getAvailabilityList(-1, false, false, false, false, false).then((result) => {
-        res.send(result);
+        res.send(res.status(200).json({
+            "result" : result
+        }));
     });
 });
 
@@ -84,56 +96,225 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
  * Hunger
  */
 
-// Creates a new user object. What about password?
+function verifyToken(token) {
+    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let verifyOptions = {
+        issuer : "meal-server",
+        subject : "meal-user",
+        audience : "meal-app",
+        maxAge : tokenAge,
+        algorithm : ["RS256"]
+    };
+    let payload;
+    try {
+        payload = jwt.verify(token, publicKey, verifyOptions);
+    }
+    catch(err) {
+        return false;
+    }
+    if((payload["login"] == "yes")) {
+        return Number(payload["user-id"]);
+    }
+    else {
+        return false;
+    }
+}
+
+ // Login. Sends back a JWT for authentication
+ app.post('/login/:username/:password', (req, res) => {
+    let username = req.params.username;
+    let password = req.params.password;
+
+    wrapper.checkUser(username, password).then((loginChecked) => {
+        if("matched" in loginChecked) {
+            // Both matched must be set to true and "id" must exist for the returned object to be acceptable
+            if(loginChecked["matched"] && "id" in loginChecked) {
+                let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
+                let payload = {
+                    "user-id" : loginChecked["id"],
+                    "login" : "yes"
+                };
+                let signOptions = {
+                    issuer : "meal-server",
+                    subject : "meal-user",
+                    audience : "meal-app",
+                    expiresIn : "2h",
+                    algorithm : "RS256"
+                };
+
+                let token = jwt.sign(payload, privateKey, signOptions);
+                return res.status(200).json({
+                    message: "OAuth successful",
+                    jwt : token
+                });
+            }
+            else {
+                return res.status(401).json({
+                    message : "OAuth failed"
+                });
+            }
+        }
+        else {
+            return res.status(401).json({
+                message : "OAuth failed"
+            });
+        }
+    });
+ });
+
+ // Do basic OAuth check (tester function). ADMIN function test (need to know the user_id)
+ app.post('/verify/:id/:jwt', (req, res) => {
+    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let verifyOptions = {
+        issuer : "meal-server",
+        subject : "meal-user",
+        audience : "meal-app",
+        maxAge : tokenAge,
+        algorithm : ["RS256"]
+    };
+    let payload;
+    try {
+        payload = jwt.verify(req.params.jwt, publicKey, verifyOptions);
+    }
+    catch(err) {
+        return res.status(403).json({
+            message : "VERIFICATION FAILED"
+        });
+    }
+    if((payload["login"] == "yes") && (Number(payload["user-id"]) == Number(req.params.id))) {
+        return res.status(200).json({
+            message : "VERIFIED"
+        });
+    }
+    else {
+        return res.status(403).json({
+            message : "VERIFIED, but wrong ID"
+        });
+    }
+ });
+
+// Creates a new user object.
 app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?', function(req, res) {
     var firstname = req.params.firstname;
     var lastname = req.params.lastname;
-    var username = req.params.username; // Needs to be checked if unique!! Create another function?
-    var password = req.params.password;
+    var username = req.params.username; // Needs to be checked if unique!!
+    var password = req.params.password; // Will be hashed with salt
     var phonenumber = req.params.phonenumber; // Make sure on the front end that this is a number!
-    var email = req.params.email;
-    
-    // There has to be a better way to do this checking of null values.
-    if (phonenumber != null & email != null){
-        wrapper.postUserObject(firstname, lastname, username, password, phonenumber, email);
-    }
-    else if (phonenumber != null){
-        wrapper.postUserObject(firstname, lastname, username, password, phonenumber);
-    }
-    else if (email != null){
-        wrapper.postUserObject(firstname, lastname, username, password, null, email);
-    }
-    else{
-        wrapper.postUserObject(firstname, lastname, username, password);
-    }
-    
-    res.send("Created Object"); // This should be changed later on. 
+    var email = req.params.email; // Do email regex checking on front end
+    //console.log('received post request')
+
+    wrapper.isUniqueUsername(username).then((result) => {
+        if(!result) {
+            return res.status(401).json({
+                message : "username taken"
+            });
+        }
+        else {
+            // There has to be a better way to do this checking of null values.
+            if (phonenumber != null && email != null) {
+                wrapper.postUserObject(firstname, lastname, username, password, phonenumber, email);
+            }
+            else if (phonenumber != null) {
+                wrapper.postUserObject(firstname, lastname, username, password, phonenumber);
+            }
+            else if (email != null) {
+                wrapper.postUserObject(firstname, lastname, username, password, null, email);
+            }
+            else {
+                wrapper.postUserObject(firstname, lastname, username, password);
+            }
+            
+            res.send("Created Object"); // This should be changed later on. 
+        }
+    });
 });
 
 
 // Creates a new availability object
-app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time', function(req, res) {
+app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time/:token', function(req, res) {
     let user_id = req.params.user_id;
     let asking_price = req.params.asking_price;
     let location = req.params.location;
     let start_time = req.params.start_time;
     let end_time = req.params.end_time;
+    let token = req.params.token;
     
-    wrapper.postAvailabilityObject(Number(user_id), Number(asking_price), location, start_time, end_time);
-    res.send("Created Object"); // This should be changed later on. 
+    if(token == undefined || token == "" || token == null) {
+        return res.status(401).json({
+            message : "Invalid token - 1"
+        });
+    }
+
+    let retToken = verifyToken(token);
+    // The === on the false is important, as 0 can be a user_id
+    if(retToken === false) {
+        return res.status(401).json({
+            message : "Invalid token - 2"
+        });
+    }
+    else if(retToken != user_id) {
+        return res.status(401).json({
+            message : "Invalid user ID"
+        });
+    }
+    
+    wrapper.postAvailabilityObject(Number(user_id), Number(asking_price), location, start_time, end_time).then((result) => {
+        if(result) {
+            return res.json({
+                message : "success"
+            });
+        }
+        else {
+            return res.status(500).json({
+                message : "insertion failure"
+            });
+        }
+    });
 });
 
 // Creates a new hunger object
-app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function(req, res) {
+app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time/:token', function(req, res) {
     let user_id = req.params.user_id;
     let max_price = req.params.max_price;
     let location = req.params.location;
     let start_time = req.params.start_time;
     let end_time = req.params.end_time;
+    let token = req.params.token;
     
-    wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time);
-    res.send("Created Object"); // This should be changed later on. 
+    if(token == undefined || token == "" || token == null) {
+        return res.status(401).json({
+            message : "Invalid token - 1"
+        });
+    }
+
+    let retToken = verifyToken(token);
+    // The === on the false is important, as 0 can be a user_id
+    if(retToken === false) {
+        return res.status(401).json({
+            message : "Invalid token - 2"
+        });
+    }
+    else if(retToken != user_id) {
+        return res.status(401).json({
+            message : "Invalid user ID"
+        });
+    }
+    
+    wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).then((result) => {
+        if(result) {
+            return res.json({
+                message : "success"
+            });
+        }
+        else {
+            return res.status(500).json({
+                message : "insertion failure"
+            });
+        }
+    });
 });
+
+
 /** PUT Requests -- Creates/Inserts into database
  * User 
  * Availability
@@ -146,8 +327,42 @@ app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time', function
  * Hunger
  */
 
- app.delete('/delete/availability/:id/:token', (req, res) => {
-    let availability_id = req.params.id;    
+ app.delete('/delete/availability/:id/:token/:av_id', (req, res) => {
+    let id = Number(req.params.id);
+    let availability_id = req.params.av_id;
+    let token = req.params.token;
+
+    if(token == undefined || token == "" || token == null) {
+        return res.status(401).json({
+            message : "Invalid token - 1"
+        });
+    }
+
+    let retToken = verifyToken(token);
+    // The === on the false is important, as 0 can be a user_id
+    if(retToken === false) {
+        return res.status(401).json({
+            message : "Invalid token - 2"
+        });
+    }
+    else if(retToken != id) {
+        return res.status(401).json({
+            message : "Invalid user ID"
+        });
+    }
+
+    wrapper.deleteAvailabilityObject(availability_id).then((result) => {
+        if(result) {
+            return res.json({
+                message : "success"
+            });
+        }
+        else {
+            return res.status(500).json({
+                message : "deletion failure"
+            });
+        }
+    });
  });
 
 

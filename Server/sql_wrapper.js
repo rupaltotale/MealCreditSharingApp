@@ -189,20 +189,45 @@ module.exports = class DataAccess {
     async postUserObject(firstname, lastname, username, password, phonenumber = null, email = null){
         let myQuery = "";
         let salt = this.makeSalt(10);
-        bcrypt.hash(password + salt, saltRounds).then((hash) => {
-            myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', '${password_hash}','${salt}', '${phonenumber}', '${email}')`;
+        bcrypt.hash(password + salt, saltRounds).then((password_hash) => {
+            myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', '${password_hash}','${salt}',`;
+            myQuery += phonenumber !== null ? `'${phonenumber}',` :  'NULL,';
+            myQuery += email !== null ? `'${email}')` :  'NULL)';
+            //console.log(myQuery);
             this._connection.query(myQuery);
         });
     }
 
     async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ) {
-        let myQuery = `INSERT INTO Availability VALUES (${user_id}, ${asking_price}, '${location}', '${start_time}', '${end_time}')`;
-        this._connection.query(myQuery);
+        let myQuery = `INSERT INTO Availability VALUES (DEFAULT, ${user_id}, ${asking_price}, '${location}', '${start_time}', '${end_time}')`;
+        let retResult;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                retResult = result.affectedRows > 0;
+            }
+            resolve(result);
+        }));
+
+        return retResult;
     }
 
     async postHungerObject(user_id, max_price, location, start_time, end_time ) {
-        let myQuery = `INSERT INTO Hunger VALUES (${user_id}, ${max_price}, '${location}', '${start_time}', '${end_time}')`;
-        this._connection.query(myQuery);
+        let myQuery = `INSERT INTO Hunger VALUES (DEFAULT, ${user_id}, ${max_price}, '${location}', '${start_time}', '${end_time}')`;
+        let retResult;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                retResult = result.affectedRows > 0;
+            }
+            resolve(result);
+        }));
+
+        return retResult;
     }
     
     // Password helper functions 
@@ -217,38 +242,61 @@ module.exports = class DataAccess {
     }
 
     async checkUser(username, password) {
-        let myQuery = `Select * from Users where username = '${username}'`
-        let match;
+        let myQuery = `SELECT * FROM Users WHERE username = '${username}'`
+        let returnUser = {};
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
                 reject(err);
             }
             else {
-                let password_hash = result[0].password_hash;
-                let salt = result[0].salt;
-                match = bcrypt.compare(password + salt, password_hash);
-                if(match) {
-                    console.log("Password matches");
+                if(result.length > 0) {
+                    let password_hash = result[0].password_hash;
+                    let salt = result[0].salt;
+                    //console.log(password);
+                    if(bcrypt.compareSync(password + salt, password_hash)) {
+                        returnUser["id"] = result[0].user_id;
+                        returnUser["matched"] = true;
+                        console.log("Password matches");
+                    }
                 }
-                resolve(result);
+                resolve(returnUser);
             }
         }));
-        return match;
+
+        return returnUser;
     }
 
-    async isUnique(username){
+    async isUniqueUsername(username) {
         let myQuery = `Select * from Users where username = '${username}'`;
         let unique = true;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            console.log(result);
+            console.log(result.length);
             if (err) {
                 reject(err);
             }
             else if (result.length > 0){
-                    unique = false;
+                unique = false;
             }
+            resolve(unique);
         }));
+
         return unique;
+    }
+
+    async deleteAvailabilityObject(av_id) {
+        let myQuery = `DELETE FROM Availability WHERE av_id = ${av_id}`;
+        let retResult;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                retResult = result.affectedRows > 0;
+            }
+            resolve(result);
+        }));
+
+        return retResult;
     }
 
     endConnection() {

@@ -35,24 +35,24 @@ def insert_data():
     cursor.execute("ALTER TABLE Hunger AUTO_INCREMENT = 1;")
 
     # Alters the datatype of start_time and end_time in case it isn't DATETIME
-    cursor.execute("ALTER TABLE Availability MODIFY start_time DATETIME;")
+    """ cursor.execute("ALTER TABLE Availability MODIFY start_time DATETIME;")
     cursor.execute("ALTER TABLE Availability MODIFY end_time DATETIME;")
     cursor.execute("ALTER TABLE Hunger MODIFY start_time DATETIME;")
-    cursor.execute("ALTER TABLE Hunger MODIFY end_time DATETIME;")
+    cursor.execute("ALTER TABLE Hunger MODIFY end_time DATETIME;") """
 
-    # Alter Users to incorporate password (uncomment only if Users does not have password)
-    # cursor.execute("alter table Users drop column Phone;")
-    # cursor.execute("alter table Users drop column Email;")
-    # cursor.execute("alter table Users add column password_hash varchar (500);")
-    # cursor.execute("alter table Users add column salt varchar (500);")
-    # cursor.execute("alter table Users add column phone varchar (10);")
-    # cursor.execute("alter table Users add column email varchar (64);")
+    """ # Alter Users to incorporate password (uncomment only if Users does not have password)
+    cursor.execute("alter table Users drop column Phone;")
+    cursor.execute("alter table Users drop column Email;")
+    cursor.execute("alter table Users add column password_hash varchar (500);")
+    cursor.execute("alter table Users add column salt varchar (500);")
+    cursor.execute("alter table Users add column phone varchar (10);")
+    cursor.execute("alter table Users add column email varchar (64);")
 
     # Add id to Availability and Hunger
-    # cursor.execute("Alter table Availability add column av_id INT AUTO_INCREMENT PRIMARY KEY;")
-    # cursor.execute("Alter table Hunger add column hg_id INT AUTO_INCREMENT PRIMARY KEY;")
-    # cursor.execute("ALTER TABLE Availability MODIFY av_id INT auto_increment AFTER user_id;")
-    # cursor.execute("ALTER TABLE hunger MODIFY hg_id INT auto_increment AFTER user_id;")
+    cursor.execute("Alter table Availability add column av_id INT AUTO_INCREMENT PRIMARY KEY;")
+    cursor.execute("Alter table Hunger add column hg_id INT AUTO_INCREMENT PRIMARY KEY;")
+    cursor.execute("ALTER TABLE Availability MODIFY av_id INT auto_increment AFTER user_id;")
+    cursor.execute("ALTER TABLE Hunger MODIFY hg_id INT auto_increment AFTER user_id;") """
 
     # Inserts dummy data into the Users table
     for i in range (numberOfRows):
