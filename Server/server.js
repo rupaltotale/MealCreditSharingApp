@@ -25,14 +25,40 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.enable('trust proxy')
 
-app.get('/', function (req, res) {
-    res.send('Start');
-});
+/**
+ * Regular functions
+ */
+
+ // Have a regular every hour to delete old availability/hunger
+ const makeDateTime = (year, month, day, hour, minute, second) => {
+    return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+ };
+
+ function deleteOld() {
+    let dateObj = new Date();
+    let day = dateObj.getDay();
+    let month = dateObj.getMonth();
+    let year = dateObj.getFullYear();
+    let currDateTime = makeDateTime(year, month, day, dateObj.getHours(), dateObj.getMinutes(), dateObj.getSeconds());
+    let prevDay = day == 0 ? 31 : day - 1; // Test if end of month
+    let newMonth = (prevDay == 31 && month == 0) ? 12 : month; // When month needs to change to last year (Dec 31)
+    newMonth = (newMonth == month && prevDay == 31) ? month - 1 : newMonth; // When month needs to change but not to last year
+    let newYear = (newMonth == 12 && prevDay == 31) ? year - 1 : year;
+    let pastDateTime = makeDateTime(newYear, newMonth, prevDay, dateObj.getHours(), dateObj.getMinutes(), dateObj.getSeconds());
+    
+    wrapper.deleteOldObjects(pastDateTime, currDateTime);
+ }
+ deleteOld();
+ setInterval(deleteOld, 3600000);
 
 /** GET requests -- getting any data from the database
  * Availability
  * Hunger
  */
+
+app.get('/', function (req, res) {
+    res.send('Start');
+});
 
 app.get('/availability-list', (req, res) => {
     //get all availability data
