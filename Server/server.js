@@ -3,6 +3,16 @@ const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const tokenAge = "2h";
+const WrapperObj = require('./sql_wrapper')
+
+// Instance of sql_swapper.js. Allows us to use function within it. 
+let wrapper = new WrapperObj({
+    host : "localhost",
+    user : "mealRoot",
+    password : "paulhatalsky",
+    database : "mealcredit"
+});
+let app = express()
 
 /** PUT STATUS CODES HERE
  * 200 == OK
@@ -11,18 +21,6 @@ const tokenAge = "2h";
  * 401 == Unacceptable input
  * 500 == SQL error
  */
-
-const WrapperObj = require('./sql_wrapper')
-
-let wrapper = new WrapperObj({
-    host : "localhost",
-    user : "mealRoot",
-    password : "paulhatalsky",
-    database : "mealcredit"
-});
-
-let app = express()
-
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.enable('trust proxy')
@@ -43,6 +41,7 @@ app.get('/availability-list', (req, res) => {
             "result" : result
         }));
     });
+    // What about error handling? Catch?
 });
 
 app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) => {
@@ -62,7 +61,8 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
     }
 
     wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
-        res.send(result);
+        // What about status?
+        res.send(result); 
     });
 });
 
@@ -85,48 +85,43 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
     }
 
     wrapper.getNeedsList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
+        // What about status?
         res.send(result);
     });
 });
-
-
-/** Post Requests -- Creates/Inserts into database
- * User (on sign up)
- * Availability
- * Hunger
+/** Token Helper functions
+ * makeToken: makes a token with private key, payload, and options by signing. 
+ * verifyToken: verifies a token by extracting payload and checking if it contains correct info.
  */
-
- // creates and signs a new token
- function makeToken(user_id) {
+function makeToken(user_id) {
     let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
     let payload = {
         "user-id" : user_id,
         "login" : "yes"
     };
-    let signOptions = {
-        issuer : "meal-server",
-        subject : "meal-user",
-        audience : "meal-app",
-        expiresIn : "2h",
-        algorithm : "RS256"
+    let options = {
+        "issuer" : "meal-server",
+        "subject" : "meal-user",
+        "audience" : "meal-app",
+        // tokenAge : "2h",
+        "algorithm" : "RS256"
     };
 
-    return jwt.sign(payload, privateKey, signOptions);
+    return jwt.sign(payload, privateKey, options);
  }
 
- // verfies a given token
-function verifyToken(token) {
+ function verifyToken(token) {
     let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
-    let verifyOptions = {
-        issuer : "meal-server",
-        subject : "meal-user",
-        audience : "meal-app",
-        maxAge : tokenAge,
-        algorithm : ["RS256"]
+    let options = {
+        "issuer" : "meal-server",
+        "subject" : "meal-user",
+        "audience" : "meal-app",
+        // "tokenAge" : tokenAge,
+        "algorithm" : ["RS256"]
     };
     let payload;
     try {
-        payload = jwt.verify(token, publicKey, verifyOptions);
+        payload = jwt.verify(token, publicKey, options);
     }
     catch(err) {
         return false;
@@ -135,25 +130,61 @@ function verifyToken(token) {
         return Number(payload["user-id"]);
     }
     else {
+        // Implies that User does not have permission..?
         return false;
     }
 }
+// Test: Authentication of a user with their user_id and token
+// Do basic OAuth check (tester function). ADMIN function test (need to know the user_id)
+app.post('/verify/:id/:jwt', (req, res) => {
+    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let options = {
+        "issuer" : "meal-server",
+        "subject" : "meal-user",
+        "audience" : "meal-app",
+        "tokenAge" : tokenAge,
+        "algorithm" : ["RS256"]
+    };
+    let payload;
+    try {
+        payload = jwt.verify(req.params.jwt, publicKey, options);
+    }
+    catch(err) {
+        return res.status(403).json({
+            "message" : "VERIFICATION FAILED"
+        });
+    }
+    if((payload["login"] == "yes") && (Number(payload["user-id"]) == Number(req.params.id))) {
+        return res.status(200).json({
+            "message" : "VERIFIED"
+        });
+    }
+    else {
+        return res.status(403).json({
+            "message" : "VERIFIED, but wrong ID"
+        });
+    }
+ });
+
 
  // Login. Sends back a JWT for authentication
  app.post('/login/:username/:password', (req, res) => {
     let username = req.params.username;
     let password = req.params.password;
 
+    // LoginChecked is an object returned by checkUser. 
     wrapper.checkUser(username, password).then((loginChecked) => {
+        // if matched exists..
         if("matched" in loginChecked) {
             // Both matched must be set to true and "id" must exist for the returned object to be acceptable
             if(loginChecked["matched"] && "id" in loginChecked) {
                 let token = makeToken(loginChecked["id"]);
                 return res.status(200).json({
                     message: "OAuth successful",
-                    jwt : token
+                    "token" : token
                 });
             }
+            // Login or password does not match
             else {
                 return res.status(401).json({
                     message : "OAuth failed"
@@ -167,39 +198,13 @@ function verifyToken(token) {
         }
     });
  });
+/** Post Requests -- Creates/Inserts into database
+ * User (on sign up)
+ * Availability
+ * Hunger
+ */
 
- // Do basic OAuth check (tester function). ADMIN function test (need to know the user_id)
- app.post('/verify/:id/:jwt', (req, res) => {
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
-    let verifyOptions = {
-        issuer : "meal-server",
-        subject : "meal-user",
-        audience : "meal-app",
-        maxAge : tokenAge,
-        algorithm : ["RS256"]
-    };
-    let payload;
-    try {
-        payload = jwt.verify(req.params.jwt, publicKey, verifyOptions);
-    }
-    catch(err) {
-        return res.status(403).json({
-            message : "VERIFICATION FAILED"
-        });
-    }
-    if((payload["login"] == "yes") && (Number(payload["user-id"]) == Number(req.params.id))) {
-        return res.status(200).json({
-            message : "VERIFIED"
-        });
-    }
-    else {
-        return res.status(403).json({
-            message : "VERIFIED, but wrong ID"
-        });
-    }
- });
-
-// Creates a new user object.
+// Creates a new user object. (Register)
 app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?', function(req, res) {
     var firstname = req.params.firstname;
     var lastname = req.params.lastname;
@@ -209,31 +214,36 @@ app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?',
     var email = req.params.email; // Do email regex checking on front end
     //console.log('received post request')
 
-    wrapper.isUniqueUsername(username).then((result) => {
-        if(!result) {
+    // Checks if the username given is unique. 
+    wrapper.isUniqueUsername(username).then((unique) => {
+        if(!unique) {
             return res.status(401).json({
-                message : "username taken"
+                "message" : "username taken"
             });
         }
+        // If it is unique ... 
         else {
-            const tokenReturn = function(sendName, user_id) {
+
+            // TokenReturn is what happens once the user has been successfully created. 
+            const tokenReturn = function(res, user_id) {
                 if(user_id !== null) {
-                    let tokenMade = makeToken(user_id);
-                    return sendName.json({
-                        message : "User created",
-                        id : user_id,
-                        token : tokenMade
+                    let token = makeToken(user_id);
+                    return res.json({
+                        "message" : "User created",
+                        "user_id" : user_id,
+                        "token" : token
                     });
                 }
                 else {
-                    return sendName.status(500).json({
-                        message : "error in user creation"
+                    return res.status(500).json({
+                        "message" : "error in user creation"
                     });
                 }
             };
 
-            // There has to be a better way to do this checking of null values.
-            // Result variable = user_id (null or number)
+            // Creates a new user based on whether a phone or email has been provided
+            // Change: Maybe we could create the user without the phone and email and then check if 
+            // either is or both are are given and if they are we alter the Users table to add them. 
             if (phonenumber != null && email != null) {
                 wrapper.postUserObject(firstname, lastname, username, password, phonenumber, email).then((result) => {
                     tokenReturn(res, result);
@@ -262,7 +272,41 @@ app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?',
     });
 });
 
+function authenticate(token, res, user_id){
+    if(token == undefined || token == "" || token == null) {
+        return res.status(401).json({
+            "message" : "Invalid token - 1"
+        });
+    }
 
+    // ret token is either false (authentication failed) or equal to a user_id
+    let retToken = verifyToken(token);
+    // The === on the false is important, as 0 can be a user_id
+    if(retToken === false) {
+        return res.status(401).json({
+            "message" : "Invalid token - 2"
+        });
+    }
+    else if(retToken != user_id) {
+        return res.status(401).json({
+            "message" : "Invalid user ID"
+        });
+    }
+    return true;
+}
+
+function sendResult(res, result){
+    if(result) {
+        return res.json({
+            "message" : "success"
+        });
+    }
+    else {
+        return res.status(500).json({
+            "message" : "insertion failure"
+        });
+    }
+}
 // Creates a new availability object
 app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time/:token', function(req, res) {
     let user_id = req.params.user_id;
@@ -272,37 +316,15 @@ app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time/:
     let end_time = req.params.end_time;
     let token = req.params.token;
     
-    if(token == undefined || token == "" || token == null) {
-        return res.status(401).json({
-            message : "Invalid token - 1"
-        });
+    // Authentiates if the user has the permission to do an action. 
+    let authentic = authenticate(token, res, user_id);
+    if (authentic != true){
+        // This means that the user does not have permission or that something went wrong
+        return authentic;
     }
 
-    let retToken = verifyToken(token);
-    // The === on the false is important, as 0 can be a user_id
-    if(retToken === false) {
-        return res.status(401).json({
-            message : "Invalid token - 2"
-        });
-    }
-    else if(retToken != user_id) {
-        return res.status(401).json({
-            message : "Invalid user ID"
-        });
-    }
-    
-    wrapper.postAvailabilityObject(Number(user_id), Number(asking_price), location, start_time, end_time).then((result) => {
-        if(result) {
-            return res.json({
-                message : "success"
-            });
-        }
-        else {
-            return res.status(500).json({
-                message : "insertion failure"
-            });
-        }
-    });
+    wrapper.postAvailabilityObject(Number(user_id), Number(asking_price), location, start_time, end_time).
+    then((result) => sendResult(res, result));
 });
 
 // Creates a new hunger object
@@ -314,126 +336,111 @@ app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time/:token', f
     let end_time = req.params.end_time;
     let token = req.params.token;
     
-    if(token == undefined || token == "" || token == null) {
-        return res.status(401).json({
-            message : "Invalid token - 1"
-        });
-    }
-
-    let retToken = verifyToken(token);
-    // The === on the false is important, as 0 can be a user_id
-    if(retToken === false) {
-        return res.status(401).json({
-            message : "Invalid token - 2"
-        });
-    }
-    else if(retToken != user_id) {
-        return res.status(401).json({
-            message : "Invalid user ID"
-        });
+    // Authentiates if the user has the permission to do an action. 
+    let authentic = authenticate(token, res, user_id);
+    if (authentic != true){
+        // This means that the user does not have permission or that something went wrong
+        return authentic;
     }
     
-    wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).then((result) => {
-        if(result) {
-            return res.json({
-                message : "success"
-            });
-        }
-        else {
-            return res.status(500).json({
-                message : "insertion failure"
-            });
-        }
-    });
+    wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).
+    then((result) => sendResult(res, result));
 });
 
 
-/** PUT Requests -- Creates/Inserts into database
+/** PUT Requests -- Alters the database
  * User 
  * Availability
  * Hunger ?
  */
+app.put('/change/availability/:user_id/:token/:av_id', (req, res) => {
+    let user_id = Number(req.params.user_id);
+    let availability_id = Number(req.params.av_id);
+    let token = req.params.token;
 
+    // Authentiates if the user has the permission to do an action. 
+    let authentic = authenticate(token, res, user_id);
+    if (authentic != true){
+        // This means that the user does not have permission or that something went wrong
+        return authentic;
+    }
+    let asking_price = req.body.asking_price;
+    let location = req.body.location;
+    let start_time = req.body.start_time;
+    let end_time = req.body.end_time;
+    if (asking_price != null){
+        wrapper.changeTable("Availability", "asking_price", asking_price, availability_id, "av_id")
+        .then((result) => {
+            if (!result){
+                return res.status(500).json({
+                    "message" : "insertion failure"
+                });
+            }
+        });
+    }
+    if (location != null){
+        wrapper.changeTable("Availability", "location", location, availability_id, "av_id")
+        .then((result) => {
+            if (!result){
+                return res.status(500).json({
+                    "message" : "insertion failure"
+                });
+            }
+        });
+    }
+    if (start_time != null){
+        wrapper.changeTable("Availability", "start_time", start_time, availability_id, "av_id")
+        .then((result) => {
+            if (!result){
+                return res.status(500).json({
+                    "message" : "insertion failure"
+                });
+            }
+        });
+    }
+    if (end_time != null){
+        wrapper.changeTable("Availability", "end_time", end_time, availability_id, "av_id")
+        .then((result) => sendResult(res, result));
+    }
+    return res.status(500).json({
+        "message" : "insertion success"
+    });
+
+})
 
 /** DELETE requests - remove objects
  * Availability
  * Hunger
+ * Change: What if someone with an id = 3 deletes an av obj whose user_id = 5? 
+ * We need to make sure that the user_id of the av obj matches the req.params.user_id
  */
 
- app.delete('/delete/availability/:id/:token/:av_id', (req, res) => {
-    let id = Number(req.params.id);
-    let availability_id = req.params.av_id;
+ app.delete('/delete/availability/:user_id/:token/:av_id', (req, res) => {
+    let user_id = Number(req.params.user_id);
+    let availability_id = Number(req.params.av_id);
     let token = req.params.token;
 
-    if(token == undefined || token == "" || token == null) {
-        return res.status(401).json({
-            message : "Invalid token - 1"
-        });
+    // Authentiates if the user has the permission to do an action. 
+    let authentic = authenticate(token, res, user_id);
+    if (authentic != true){
+        // This means that the user does not have permission or that something went wrong
+        return authentic;
     }
-
-    let retToken = verifyToken(token);
-    // The === on the false is important, as 0 can be a user_id
-    if(retToken === false) {
-        return res.status(401).json({
-            message : "Invalid token - 2"
-        });
-    }
-    else if(retToken != id) {
-        return res.status(401).json({
-            message : "Invalid user ID"
-        });
-    }
-
-    wrapper.deleteAvailabilityObject(availability_id).then((result) => {
-        if(result) {
-            return res.json({
-                message : "success"
-            });
-        }
-        else {
-            return res.status(500).json({
-                message : "deletion failure"
-            });
-        }
-    });
+    wrapper.deleteAvailabilityObject(availability_id).then((result) => sendResult(res, result));
  });
 
  app.delete('/delete/hunger/:id/:token/:hg_id', (req, res) => {
-    let id = Number(req.params.id);
+    let user_id = Number(req.params.id);
     let hunger_id = req.params.hg_id;
     let token = req.params.token;
 
-    if(token == undefined || token == "" || token == null) {
-        return res.status(401).json({
-            message : "Invalid token - 1"
-        });
+    // Authentiates if the user has the permission to do an action. 
+    let authentic = authenticate(token, res, user_id);
+    if (authentic != true){
+        // This means that the user does not have permission or that something went wrong
+        return authentic;
     }
-
-    let retToken = verifyToken(token);
-    // The === on the false is important, as 0 can be a user_id
-    if(retToken === false) {
-        return res.status(401).json({
-            message : "Invalid token - 2"
-        });
-    }
-    else if(retToken != id) {
-        return res.status(401).json({
-            message : "Invalid user ID"
-        });
-    }
-
-    wrapper.deleteHungerObject(hunger_id).then((result) => {
-        if(result) {
-            return res.json({
-                message : "success"
-            });
-        }
-        else {
-            return res.status(500).json({
-                message : "deletion failure"
-            });
-        }
-    });
+    wrapper.deleteHungerObject(hunger_id).then((result) => sendResult(res, result));
  });
 
 
