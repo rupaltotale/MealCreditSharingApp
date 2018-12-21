@@ -7,7 +7,8 @@ const cryenc = require('./cryptoencryption');
 require('dotenv').load()
 
 const tokenAge = "2h";
-const WrapperObj = require('./sql_wrapper')
+const WrapperObj = require('./sql_wrapper');
+const cryenc = require('./cryptoencryption');
 
 // Instance of sql_swapper.js. Allows us to use function within it. 
 let wrapper = new WrapperObj({
@@ -118,10 +119,11 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
     }
 
     wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
-        // What about status?
-        return res.json({
-            message : result
-        });
+        res.status(200).send({
+            result
+        }); 
+        // console.log(result);
+        // return res.send(result);
     });
 });
 
@@ -144,10 +146,9 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
     }
 
     wrapper.getNeedsList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
-        // What about status?
-        return res.json({
-            message: result
-        });
+        res.send(res.status(200).json({
+            "result" : result
+        }));
     });
 });
 
@@ -204,10 +205,10 @@ app.get('/confirmation/:token', (req, res) => {
 });
 
 
-/** Post Requests -- Creates/Inserts into database
- * User (on sign up)
- * Availability
- * Hunger
+/** Token related functions
+ * Make Token User: Makes a token given the user id
+ * Make Token Email: makes email toen for email verification given all user details
+ * Verify Token: This is the reverse of Make Token User. 
  */
 
  // creates and signs a new token
@@ -247,19 +248,19 @@ app.get('/confirmation/:token', (req, res) => {
         expiresIn : "1d",
         algorithm : "RS256"
     };
-
-    return cryenc.encrypt(jwt.sign(payload, privateKey, signOptions));
+    let token = jwt.sign(payload, privateKey, signOptions);
+    return cryenc.encrypt(token);
  }
 
  // verfies a given token
 function verifyToken(token) {
     let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
     let options = {
-        issuer : "meal-server",
-        subject : "meal-user",
-        audience : "meal-app",
+        "issuer" : "meal-server",
+        "subject" : "meal-user",
+        "audience" : "meal-app",
         maxAge : tokenAge,
-        algorithm : ["RS256"]
+        "algorithm" : ["RS256"]
     };
     let payload;
     try {
@@ -272,10 +273,41 @@ function verifyToken(token) {
         return Number(payload["user-id"]);
     }
     else {
-        // Implies that User does not have permission..?
+        // Implies that User does not have permission.
         return false;
     }
 }
+// Test: Authentication of a user with their user_id and token
+// Do basic OAuth check (tester function). ADMIN function test (need to know the user_id)
+app.post('/verify/:id/:jwt', (req, res) => {
+    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let options = {
+        "issuer" : "meal-server",
+        "subject" : "meal-user",
+        "audience" : "meal-app",
+        // "tokenAge" : tokenAge
+        "algorithm" : ["RS256"]
+    };
+    let payload;
+    try {
+        payload = jwt.verify(req.params.jwt, publicKey, options);
+    }
+    catch(err) {
+        return res.status(403).json({
+            "message" : "VERIFICATION FAILED"
+        });
+    }
+    if((payload["login"] == "yes") && (Number(payload["user-id"]) == Number(req.params.id))) {
+        return res.status(200).json({
+            "message" : "VERIFIED"
+        });
+    }
+    else {
+        return res.status(403).json({
+            "message" : "VERIFIED, but wrong ID"
+        });
+    }
+ });
 
 
  // Login. Sends back a JWT for authentication
@@ -309,45 +341,9 @@ function verifyToken(token) {
         }
     });
  });
-/** Post Requests -- Creates/Inserts into database
- * User (on sign up)
- * Availability
- * Hunger
- */
-
- // Do basic OAuth check (tester function). ADMIN function test (need to know the user_id)
- app.post('/verify/:id/:jwt', (req, res) => {
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
-    let verifyOptions = {
-        issuer : "meal-server",
-        subject : "meal-user",
-        audience : "meal-app",
-        maxAge : tokenAge,
-        algorithm : ["RS256"]
-    };
-    let payload;
-    try {
-        payload = jwt.verify(req.params.jwt, publicKey, verifyOptions);
-    }
-    catch(err) {
-        return res.status(403).json({
-            message : "VERIFICATION FAILED"
-        });
-    }
-    if((payload["login"] == "yes") && (Number(payload["user-id"]) == Number(req.params.id))) {
-        return res.status(200).json({
-            message : "VERIFIED"
-        });
-    }
-    else {
-        return res.status(403).json({
-            message : "VERIFIED, but wrong ID"
-        });
-    }
- });
 
  const sendEmail = (firstname, lastname, email, token, req, res) => {
-    let rand = Math.floor((Math.random() * 100) + 54);
+    // let rand = Math.floor((Math.random() * 100) + 54);
     let host = req.get('host');
     let link = "http://" + host + "/confirmation/" + token;
     let hover = ''; //`onmouseover="() => { this.style.opacity = "0.7"; }"`; // Cant get this to work
@@ -357,7 +353,6 @@ function verifyToken(token) {
         subject : "Please confirm your Meal Credit email account",
         html : `Hello ${firstname} ${lastname},<br> Please Click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
     };
-    //console.log(mailOptions);
     smtpTransport.sendMail(mailOptions, function(error, response) {
         if(error) {
             console.log(error);
@@ -372,6 +367,11 @@ function verifyToken(token) {
         }
     });
  };
+/** Post Requests -- Creates/Inserts into database
+ * User (on sign up)
+ * Availability
+ * Hunger
+ */
 
 // Creates a new user object. (Register)
 app.post('/register/', function(req, res) {
@@ -392,10 +392,12 @@ app.post('/register/', function(req, res) {
         else {
             // Result variable = user_id (null or number)
             if (phonenumber != null && email != null) {
+                console.log("email is " + email);
                 let token = makeTokenEmail(firstname, lastname, username, password, phonenumber, email);
                 return sendEmail(firstname, lastname, email, token, req, res);
             }
             else if (email != null) {
+                console.log("email is " + email);
                 let token = makeTokenEmail(firstname, lastname, username, password, null, email);
                 return sendEmail(firstname, lastname, email, token, req, res);
             }
@@ -412,51 +414,6 @@ app.post('/register/', function(req, res) {
                 });
             }
         }
-        /* ALL YOUR CHANGES HERE
-        // Creates a new user with "essential" details
-
-        // Change: creates the user without the phone and email and then checks if 
-        // email and/or phone are given and if they are we alter the Users table to add them.
-        let user_id; 
-        wrapper.postUserObject(firstname, lastname, username, password).then((result) => {
-            if(result === null){
-                return res.status(500).json({
-                    "message" : "error in user creation"
-                });
-            }
-            else{
-                user_id = result;
-                // Handles phone
-                if (phonenumber != null){
-                    wrapper.changeTable("Users", "phonenumber", phonenumber, user_id, "user_id")
-                    .then((result) => {
-                        if (!result){
-                            return res.status(500).json({
-                                "message" : "insertion failure for phone number"
-                            });
-                        }
-                    });
-                }
-                // Handles email
-                if (email != null){
-                    wrapper.changeTable("Users", "email", email, user_id, "user_id")
-                    .then((result) => {
-                        if (!result){
-                            return res.status(500).json({
-                                "message" : "insertion failure for email"
-                            });
-                        }
-                    });
-                }
-                // if all is successful...
-                let token = makeToken(user_id);
-                return res.json({
-                    "message" : "User created",
-                    "user_id" : user_id,
-                    "token" : token
-                });
-            }
-        });*/
     });
 });
 
@@ -485,7 +442,7 @@ function authenticate(token, res, user_id){
 
 function sendResult(res, result){
     if(result) {
-        return res.json({
+        return res.status(200).json({
             "message" : "success"
         });
     }
@@ -573,7 +530,7 @@ app.put('/change/availability/', (req, res) => {
             });
         }
     }
-    return res.status(500).json({
+    return res.status(200).json({
         "message" : "insertion success"
     });
 
@@ -611,7 +568,7 @@ app.put('/change/user/', (req, res) => {
             });
         }
     }
-    return res.status(500).json({
+    return res.status(200).json({
         "message" : "insertion success"
     });
 

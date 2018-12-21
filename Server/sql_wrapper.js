@@ -13,17 +13,22 @@ module.exports = class DataAccess {
     async getAvailabilityList(size, where, who, startTime, endTime, price) {
         let users = [];
         let myQuery = `SELECT * FROM Availability`;
-        
+
         if(who != "") {
-            myQuery = `SELECT Availability.* FROM Availability JOIN Users ON Users.user_id = Availability.user_id WHERE Users.username = '${who}'`; 
+            myQuery = `SELECT * FROM Availability INNER JOIN Users ON Availability.user_id = Users.user_id 
+            WHERE Users.user_id = '${who}'`;
+            // `SELECT Availability.* FROM Availability JOIN Users ON Users.user_id = Availability.user_id \
+            //             WHERE Users.username = '${who}'`; 
         }
 
-        if(where != "" && who != "") {
-            myQuery += ` AND location = '${where.toLowerCase()}'`;
-        }
-        else if(where != "") {
-            myQuery += ` WHERE location = '${where.toLowerCase()}'`
-        }
+        if(where != "") {
+            if (who != ""){
+                myQuery += ` AND location = '${where.toLowerCase()}'`;
+            }
+            else{
+                myQuery += ` WHERE location = '${where.toLowerCase()}'`;
+            }
+    }
 
         if(startTime) {
             if(who || where) {
