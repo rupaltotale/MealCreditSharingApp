@@ -287,8 +287,18 @@ module.exports = class DataAccess {
     }
 
     // Checks if the username and password are correct
-    async checkUser(username, password) {
-        let myQuery = `SELECT * FROM Users WHERE username = '${username}'`
+    async checkUser(username, email, password) {
+        let myQuery;
+        if(username !== undefined && username.length > 0) {
+            myQuery = `SELECT * FROM Users WHERE username = '${username}'`;
+        }
+        else if(email !== undefined && email.length > 0) {
+            myQuery = `SELECT * FROM Users WHERE email = '${email}'`;
+        }
+        else {
+            return false;
+        }
+
         let returnUser = {};
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
@@ -314,6 +324,23 @@ module.exports = class DataAccess {
 
     async isUniqueUsername(username) {
         let myQuery = `Select * from Users where username = '${username}'`;
+        let unique = true;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            //console.log(result.length);
+            if (err) {
+                reject(err);
+            }
+            else if (result.length > 0){
+                unique = false;
+            }
+            resolve(unique);
+        }));
+
+        return unique;
+    }
+
+    async isUniqueEmail(email) {
+        let myQuery = `Select * from Users where email = '${email}'`;
         let unique = true;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             //console.log(result.length);

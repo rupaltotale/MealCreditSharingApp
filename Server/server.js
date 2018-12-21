@@ -174,7 +174,7 @@ app.get('/confirmation/:token', (req, res) => {
     if(retToken !== false) {
         let username = retToken.username;
         let password = cryenc.decrypt(retToken.password_enc);
-        let firstname = retToken.username;
+        let firstname = retToken.firstname;
         let lastname = retToken.lastname;
         let email = retToken.email;
         let phonenumber = retToken.phonenumber;
@@ -379,12 +379,28 @@ function verifyToken(token) {
 }
 
  // Login. Sends back a JWT for authentication
- app.post('/login/:username/:password', (req, res) => {
-    let username = req.params.username;
-    let password = req.params.password;
+ app.post('/login/', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    let email = req.body.email;
+    let pass = true;
+    if(password === undefined || password == "") {
+        pass = false;
+    }
+    if(username !== undefined && username.length == 0) {
+        pass = false;
+    }
+    else if(email !== undefined && email.length == 0) {
+        pass = false;
+    }
+    if(!pass) {
+        return res.status(401).json({
+            message : "invalid username or password input"
+        });
+    }
 
     // LoginChecked is an object returned by checkUser. 
-    wrapper.checkUser(username, password).then((loginChecked) => {
+    wrapper.checkUser(username, email, password).then((loginChecked) => {
         // if matched exists..
         if("matched" in loginChecked) {
             // Both matched must be set to true and "id" must exist for the returned object to be acceptable
@@ -449,6 +465,12 @@ app.post('/register/', function(req, res) {
     var password = req.body.password; // Will be hashed with salt
     var phonenumber = req.body.phonenumber; // Make sure on the front end that this is a number!
     var email = req.body.email; // Do email regex checking on front end
+    
+    if(username.length == 0 || username === undefined) {
+        return res.status(401).json({
+            "message" : "invalid username"
+        });
+    }
 
     // Checks if the username given is unique. 
     wrapper.isUniqueUsername(username).then((unique) => {
@@ -460,14 +482,30 @@ app.post('/register/', function(req, res) {
         else {
             // Result variable = user_id (null or number)
             if (phonenumber != null && email != null) {
-                console.log("email is " + email);
-                let token = makeTokenEmail(firstname, lastname, username, password, phonenumber, email);
-                return sendEmail(firstname, lastname, email, token, req, res);
+                wrapper.isUniqueEmail(email).then((unique) => {
+                    if(!unique) {
+                        return res.status(401).json({
+                            message : "email taken"
+                        });
+                    }
+                    else {
+                        let token = makeTokenEmail(firstname, lastname, username, password, phonenumber, email);
+                        return sendEmail(firstname, lastname, email, token, req, res);
+                    }
+                });
             }
             else if (email != null) {
-                console.log("email is " + email);
-                let token = makeTokenEmail(firstname, lastname, username, password, null, email);
-                return sendEmail(firstname, lastname, email, token, req, res);
+                wrapper.isUniqueEmail(email).then((unique) => {
+                    if(!unique) {
+                        return res.status(401).json({
+                            message : "email taken"
+                        });
+                    }
+                    else {
+                        let token = makeTokenEmail(firstname, lastname, username, password, null, email);
+                        return sendEmail(firstname, lastname, email, token, req, res);
+                    }
+                });
             }
             else if (phonenumber != null) {
                 wrapper.postUserObject(firstname, lastname, username, password, phonenumber).then((result) => {
@@ -559,6 +597,12 @@ app.post('/create/hunger/', function(req, res) {
     wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).then((result) => sendResult(res, result));
 });
 
+app.post('/recover', (req, res) => {
+    let email = req.body.email;
+
+
+});
+
 
 /** PUT Requests -- Alters the database
  * User 
@@ -573,7 +617,7 @@ app.put('/change/availability/', (req, res) => {
 
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
-    if (authentic != true){
+    if (authentic != true) {
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }
@@ -690,6 +734,5 @@ app.put('/change/user/', (req, res) => {
 
 
 app.listen(8000, '127.0.0.1', () => {
-    // console.log
     console.log("Connected to port 8000");
 });
