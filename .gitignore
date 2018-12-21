@@ -2,3 +2,4 @@
 Server/node_modules/
 Server/package.json
 Server/package-lock.json
+Server/.env

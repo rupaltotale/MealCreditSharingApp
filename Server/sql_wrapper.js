@@ -309,6 +309,23 @@ module.exports = class DataAccess {
         return unique;
     }
 
+    async isUniqueEmail(email) {
+        let myQuery = `Select * from Users where email = '${email}'`;
+        let unique = true;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            //console.log(result.length);
+            if (err) {
+                reject(err);
+            }
+            else if (result.length > 0){
+                unique = false;
+            }
+            resolve(unique);
+        }));
+
+        return unique;
+    }
+
     async changeTable(table_name, col_name, value, id, id_name){
         let myQuery = `UPDATE ${table_name} SET ${col_name} = '${value}' WHERE ${id_name} = '${id}'`;
         console.log(myQuery);

@@ -3,7 +3,6 @@ const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
-const cryenc = require('./cryptoencryption');
 require('dotenv').load()
 
 const tokenAge = "2h";
@@ -177,7 +176,7 @@ app.get('/confirmation/:token', (req, res) => {
     if(retToken !== false) {
         let username = retToken.username;
         let password = cryenc.decrypt(retToken.password_enc);
-        let firstname = retToken.username;
+        let firstname = retToken.firstname;
         let lastname = retToken.lastname;
         let email = retToken.email;
         let phonenumber = retToken.phonenumber;
@@ -277,43 +276,11 @@ function verifyToken(token) {
         return false;
     }
 }
-// Test: Authentication of a user with their user_id and token
-// Do basic OAuth check (tester function). ADMIN function test (need to know the user_id)
-app.post('/verify/:id/:jwt', (req, res) => {
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
-    let options = {
-        "issuer" : "meal-server",
-        "subject" : "meal-user",
-        "audience" : "meal-app",
-        // "tokenAge" : tokenAge
-        "algorithm" : ["RS256"]
-    };
-    let payload;
-    try {
-        payload = jwt.verify(req.params.jwt, publicKey, options);
-    }
-    catch(err) {
-        return res.status(403).json({
-            "message" : "VERIFICATION FAILED"
-        });
-    }
-    if((payload["login"] == "yes") && (Number(payload["user-id"]) == Number(req.params.id))) {
-        return res.status(200).json({
-            "message" : "VERIFIED"
-        });
-    }
-    else {
-        return res.status(403).json({
-            "message" : "VERIFIED, but wrong ID"
-        });
-    }
- });
-
 
  // Login. Sends back a JWT for authentication
- app.post('/login/:username/:password', (req, res) => {
-    let username = req.params.username;
-    let password = req.params.password;
+ app.post('/login/', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
 
     // LoginChecked is an object returned by checkUser. 
     wrapper.checkUser(username, password).then((loginChecked) => {
@@ -381,6 +348,12 @@ app.post('/register/', function(req, res) {
     var password = req.body.password; // Will be hashed with salt
     var phonenumber = req.body.phonenumber; // Make sure on the front end that this is a number!
     var email = req.body.email; // Do email regex checking on front end
+    
+    if(username.length == 0 || username === undefined) {
+        return res.status(401).json({
+            "message" : "invalid username"
+        });
+    }
 
     // Checks if the username given is unique. 
     wrapper.isUniqueUsername(username).then((unique) => {
@@ -392,14 +365,30 @@ app.post('/register/', function(req, res) {
         else {
             // Result variable = user_id (null or number)
             if (phonenumber != null && email != null) {
-                console.log("email is " + email);
-                let token = makeTokenEmail(firstname, lastname, username, password, phonenumber, email);
-                return sendEmail(firstname, lastname, email, token, req, res);
+                wrapper.isUniqueEmail(email).then((unique) => {
+                    if(!unique) {
+                        return res.status(401).json({
+                            message : "email taken"
+                        });
+                    }
+                    else {
+                        let token = makeTokenEmail(firstname, lastname, username, password, phonenumber, email);
+                        return sendEmail(firstname, lastname, email, token, req, res);
+                    }
+                });
             }
             else if (email != null) {
-                console.log("email is " + email);
-                let token = makeTokenEmail(firstname, lastname, username, password, null, email);
-                return sendEmail(firstname, lastname, email, token, req, res);
+                wrapper.isUniqueEmail(email).then((unique) => {
+                    if(!unique) {
+                        return res.status(401).json({
+                            message : "email taken"
+                        });
+                    }
+                    else {
+                        let token = makeTokenEmail(firstname, lastname, username, password, null, email);
+                        return sendEmail(firstname, lastname, email, token, req, res);
+                    }
+                });
             }
             else if (phonenumber != null) {
                 wrapper.postUserObject(firstname, lastname, username, password, phonenumber).then((result) => {
@@ -491,6 +480,12 @@ app.post('/create/hunger/', function(req, res) {
     wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).then((result) => sendResult(res, result));
 });
 
+app.post('/recover', (req, res) => {
+    let email = req.body.email;
+
+
+});
+
 
 /** PUT Requests -- Alters the database
  * User 
@@ -505,7 +500,7 @@ app.put('/change/availability/', (req, res) => {
 
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
-    if (authentic != true){
+    if (authentic != true) {
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }
