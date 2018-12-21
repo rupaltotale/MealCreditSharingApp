@@ -245,7 +245,6 @@ app.get('/confirmation/:token', (req, res) => {
         algorithm : "RS256"
     };
     let token = jwt.sign(payload, privateKey, signOptions);
-    console.log(token);
     return cryenc.encrypt(token);
  }
 
