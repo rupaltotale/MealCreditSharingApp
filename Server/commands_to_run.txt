@@ -1,0 +1,2 @@
+echo "export PRIVATE_KEY='`cat ./private.key`'" >> .env
+echo "export PUBLIC_KEY='`cat ./public.key`'" >> .env

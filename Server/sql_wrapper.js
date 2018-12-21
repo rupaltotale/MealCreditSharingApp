@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
+require('dotenv').config()
 const saltRounds = 10;
 
 module.exports = class DataAccess {
