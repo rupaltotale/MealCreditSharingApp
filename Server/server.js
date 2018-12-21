@@ -279,9 +279,25 @@ function verifyToken(token) {
  app.post('/login/', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
+    let email = req.body.email;
+    let pass = true;
+    if(password === undefined || password == "") {
+        pass = false;
+    }
+    if(username !== undefined && username.length == 0) {
+        pass = false;
+    }
+    else if(email !== undefined && email.length == 0) {
+        pass = false;
+    }
+    if(!pass) {
+        return res.status(401).json({
+            message : "invalid username or password input"
+        });
+    }
 
     // LoginChecked is an object returned by checkUser. 
-    wrapper.checkUser(username, password).then((loginChecked) => {
+    wrapper.checkUser(username, email, password).then((loginChecked) => {
         // if matched exists..
         if("matched" in loginChecked) {
             // Both matched must be set to true and "id" must exist for the returned object to be acceptable
@@ -604,8 +620,5 @@ app.put('/change/user/', (req, res) => {
 
 
 app.listen(8000, '127.0.0.1', () => {
-    // console.log
-    var private_value = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
-    console.log(private_value);
     console.log("Connected to port 8000");
 });
