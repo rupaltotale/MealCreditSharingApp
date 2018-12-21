@@ -201,9 +201,7 @@ app.get('/confirmation/:token', (req, res) => {
     }
 });
 
-app.get("/email_recovery/:user_name", (req, res) => {
 
-});
 
 
 
