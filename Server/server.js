@@ -231,14 +231,13 @@ app.post('/verify/:id/:jwt', (req, res) => {
  */
 
 // Creates a new user object. (Register)
-app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?', function(req, res) {
-    var firstname = req.params.firstname;
-    var lastname = req.params.lastname;
-    var username = req.params.username; // Needs to be checked if unique!!
-    var password = req.params.password; // Will be hashed with salt
-    var phonenumber = req.params.phonenumber; // Make sure on the front end that this is a number!
-    var email = req.params.email; // Do email regex checking on front end
-    //console.log('received post request')
+app.post('/register/', function(req, res) {
+    var firstname = req.body.firstname;
+    var lastname = req.body.lastname;
+    var username = req.body.username; 
+    var password = req.body.password; // Will be hashed with salt
+    var phonenumber = req.body.phonenumber; // Make sure on the front end that this is a number!
+    var email = req.body.email; // Do email regex checking on front end
 
     // Checks if the username given is unique. 
     wrapper.isUniqueUsername(username).then((unique) => {
@@ -247,54 +246,53 @@ app.post('/user/:firstname/:lastname/:username/:password/:phonenumber?/:email?',
                 "message" : "username taken"
             });
         }
-        // If it is unique ... 
-        else {
+        // Creates a new user with "essential" details
 
-            // TokenReturn is what happens once the user has been successfully created. 
-            const tokenReturn = function(res, user_id) {
-                if(user_id !== null) {
-                    let token = makeToken(user_id);
-                    return res.json({
-                        "message" : "User created",
-                        "user_id" : user_id,
-                        "token" : token
+        // Change: creates the user without the phone and email and then checks if 
+        // email and/or phone are given and if they are we alter the Users table to add them.
+        let user_id; 
+        wrapper.postUserObject(firstname, lastname, username, password).then((result) => {
+            if(result === null){
+                return res.status(500).json({
+                    "message" : "error in user creation"
+                });
+            }
+            else{
+                user_id = result;
+                // Handles phone
+                if (phonenumber != null){
+                    wrapper.changeTable("Users", "phonenumber", phonenumber, user_id, "user_id")
+                    .then((result) => {
+                        if (!result){
+                            return res.status(500).json({
+                                "message" : "insertion failure for phone number"
+                            });
+                        }
                     });
                 }
-                else {
-                    return res.status(500).json({
-                        "message" : "error in user creation"
+                // Handles email
+                if (email != null){
+                    wrapper.changeTable("Users", "email", email, user_id, "user_id")
+                    .then((result) => {
+                        if (!result){
+                            return res.status(500).json({
+                                "message" : "insertion failure for email"
+                            });
+                        }
                     });
                 }
-            };
+                // if all is successful...
+                let token = makeToken(user_id);
+                return res.json({
+                    "message" : "User created",
+                    "user_id" : user_id,
+                    "token" : token
+                });
+            }
+        });
 
-            // Creates a new user based on whether a phone or email has been provided
-            // Change: Maybe we could create the user without the phone and email and then check if 
-            // either is or both are are given and if they are we alter the Users table to add them. 
-            if (phonenumber != null && email != null) {
-                wrapper.postUserObject(firstname, lastname, username, password, phonenumber, email).then((result) => {
-                    tokenReturn(res, result);
-                    return;
-                });
-            }
-            else if (phonenumber != null) {
-                wrapper.postUserObject(firstname, lastname, username, password, phonenumber).then((result) => {
-                    tokenReturn(res, result);
-                    return;
-                });
-            }
-            else if (email != null) {
-                wrapper.postUserObject(firstname, lastname, username, password, null, email).then((result) => {
-                    tokenReturn(res, result);
-                    return;
-                });
-            }
-            else {
-                wrapper.postUserObject(firstname, lastname, username, password).then((result) => {
-                    tokenReturn(res, result);
-                    return;
-                });
-            }
-        }
+        
+        
     });
 });
 
