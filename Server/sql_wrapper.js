@@ -209,7 +209,7 @@ module.exports = class DataAccess {
                 }
                 else {
                     user_id = result.insertId;
-                    console.log("Last id: " + user_id);
+                    //console.log("Last id: " + user_id);
                     if(user_id == 0 && result.affectedRows == 0) {
                         user_id = null;
                     }
@@ -293,7 +293,7 @@ module.exports = class DataAccess {
         let myQuery = `Select * from Users where username = '${username}'`;
         let unique = true;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            console.log(result.length);
+            //console.log(result.length);
             if (err) {
                 reject(err);
             }

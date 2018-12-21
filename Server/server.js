@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
 const tokenAge = "2h";
 const WrapperObj = require('./sql_wrapper')
 
@@ -12,6 +13,32 @@ let wrapper = new WrapperObj({
     password : "paulhatalsky",
     database : "mealcredit"
 });
+
+// This info should be stored in environment variables eventually
+var smtpTransport = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+        user: "mealcreditverifier@gmail.com",
+        pass: "paulhatalsky1928"
+    }
+});
+
+const tokenReturn = function(sendName, user_id) {
+    if(user_id !== null) {
+        let tokenMade = makeTokenUser(user_id);
+        return sendName.json({
+            message : "User created",
+            id : user_id,
+            token : tokenMade
+        });
+    }
+    else {
+        return sendName.status(500).json({
+            message : "error in user creation"
+        });
+    }
+};
+
 let app = express()
 
 /** PUT STATUS CODES HERE
@@ -119,28 +146,109 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
         }));
     });
 });
-/** Token Helper functions
- * makeToken: makes a token with private key, payload, and options by signing. 
- * verifyToken: verifies a token by extracting payload and checking if it contains correct info.
+
+// Email verification
+app.get('/confirmation/:token', (req, res) => {
+    let token = cryenc.decrypt(req.params.token);
+    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let verifyOptions = {
+        issuer : "meal-server",
+        subject : "meal-user",
+        audience : "meal-app",
+        maxAge : "1d",
+        algorithm : ["RS256"]
+    };
+    let retToken;
+    try {
+        retToken = jwt.verify(token, publicKey, verifyOptions);
+        //console.log(retToken);
+    }
+    catch(err) {
+        return res.status(401).json({
+            message : "Invalid token on email verification"
+        });
+    }
+
+    if(retToken !== false) {
+        let username = retToken.username;
+        let password = cryenc.decrypt(retToken.password_enc);
+        let firstname = retToken.username;
+        let lastname = retToken.lastname;
+        let email = retToken.email;
+        let phonenumber = retToken.phonenumber;
+        if(username !== undefined && password !== undefined && firstname !== undefined && lastname !== undefined) {
+            if(retToken.phonenumber !== undefined) {
+                wrapper.postUserObject(firstname, lastname, username, password, phonenumber, email).then((result) => {
+                    tokenReturn(res, result);
+                    return;
+                });
+            }
+            else {
+                wrapper.postUserObject(firsname, lastname, username, password, null, email).then((result) => {
+                    tokenReturn(res, result);
+                    return;
+                });
+            }
+        }
+    }
+    else {
+        res.status(401).json({
+            message : "Invalid token for email confirmation",
+            email_confirmed : false
+        });
+    }
+});
+
+
+/** Token related functions
+ * Make Token User: Makes a token given the user id
+ * Make Token Email: makes email toen for email verification given all user details
+ * Verify Token: This is the reverse of Make Token User. 
  */
-function makeToken(user_id) {
+
+ // creates and signs a new token
+ function makeTokenUser(user_id) {
     let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
     let payload = {
         "user-id" : user_id,
         "login" : "yes"
     };
-    let options = {
-        "issuer" : "meal-server",
-        "subject" : "meal-user",
-        "audience" : "meal-app",
-        expiresIn : "2h", 
-        "algorithm" : "RS256"
+    let signOptions = {
+        issuer : "meal-server",
+        subject : "meal-user",
+        audience : "meal-app",
+        expiresIn : tokenAge,
+        algorithm : "RS256"
     };
 
-    return jwt.sign(payload, privateKey, options);
+    return jwt.sign(payload, privateKey, signOptions);
  }
 
- function verifyToken(token) {
+ // creates and signs an email token
+ function makeTokenEmail(fn, ln, un, password, pn, em) {
+    let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
+    let passwordEnc = cryenc.encrypt(password);
+    let payload = {
+        password_enc : passwordEnc,
+        firstname : fn,
+        lastname : ln,
+        phonenumber : pn,
+        username : un,
+        email : em
+    };
+    let signOptions = {
+        issuer : "meal-server",
+        subject : "meal-user",
+        audience : "meal-app",
+        expiresIn : "1d",
+        algorithm : "RS256"
+    };
+
+    return cryenc.encrypt(jwt.sign(payload, privateKey, signOptions));
+ }
+
+ // verfies a given token
+function verifyToken(token) {
     let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
     let options = {
         "issuer" : "meal-server",
@@ -208,7 +316,7 @@ app.post('/verify/:id/:jwt', (req, res) => {
         if("matched" in loginChecked) {
             // Both matched must be set to true and "id" must exist for the returned object to be acceptable
             if(loginChecked["matched"] && "id" in loginChecked) {
-                let token = makeToken(loginChecked["id"]);
+                let token = makeTokenUser(loginChecked["id"]);
                 return res.status(200).json({
                     message: "OAuth successful",
                     "token" : token
@@ -228,6 +336,33 @@ app.post('/verify/:id/:jwt', (req, res) => {
         }
     });
  });
+
+ 
+ const sendEmail = (email, token, req, res) => {
+    // let rand = Math.floor((Math.random() * 100) + 54); This is not used. 
+    let host = req.get('host');
+    let link = "http://" + host + "/confirmation/" + token;
+    let hover = ''; //`onmouseover="() => { this.style.opacity = "0.7"; }"`; // Cant get this to work
+    let style = 'background-color: green; color: white; width: 4em; text-decoration: none; padding: 1vh 1vw; border-radius: 5%;';
+    let mailOptions = {
+        to : email,
+        subject : "Please confirm your Meal Credit email account",
+        html : `Hello,<br> Please Click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
+    };
+    smtpTransport.sendMail(mailOptions, function(error, response) {
+        if(error) {
+            console.log(error);
+            return res.status(501).json({
+                message : error
+            });
+        }
+        else {
+            return res.json({
+                message : "email sent"
+            });
+        }
+    });
+ };
 /** Post Requests -- Creates/Inserts into database
  * User (on sign up)
  * Availability
@@ -250,53 +385,29 @@ app.post('/register/', function(req, res) {
                 "message" : "username taken"
             });
         }
-        // Creates a new user with "essential" details
-
-        // Change: creates the user without the phone and email and then checks if 
-        // email and/or phone are given and if they are we alter the Users table to add them.
-        let user_id; 
-        wrapper.postUserObject(firstname, lastname, username, password).then((result) => {
-            if(result === null){
-                return res.status(500).json({
-                    "message" : "error in user creation"
+        else {
+            // Result variable = user_id (null or number)
+            if (phonenumber != null && email != null) {
+                let token = makeTokenEmail(firstname, lastname, username, password, phonenumber, email);
+                return sendEmail(email, token, req, res);
+            }
+            else if (email != null) {
+                let token = makeTokenEmail(firstname, lastname, username, password, null, email);
+                return sendEmail(email, token, req, res);
+            }
+            else if (phonenumber != null) {
+                wrapper.postUserObject(firstname, lastname, username, password, phonenumber).then((result) => {
+                    tokenReturn(res, result);
+                    return;
                 });
             }
-            else{
-                user_id = result;
-                // Handles phone
-                if (phonenumber != null){
-                    wrapper.changeTable("Users", "phonenumber", phonenumber, user_id, "user_id")
-                    .then((result) => {
-                        if (!result){
-                            return res.status(500).json({
-                                "message" : "insertion failure for phone number"
-                            });
-                        }
-                    });
-                }
-                // Handles email
-                if (email != null){
-                    wrapper.changeTable("Users", "email", email, user_id, "user_id")
-                    .then((result) => {
-                        if (!result){
-                            return res.status(500).json({
-                                "message" : "insertion failure for email"
-                            });
-                        }
-                    });
-                }
-                // if all is successful...
-                let token = makeToken(user_id);
-                return res.json({
-                    "message" : "User created",
-                    "user_id" : user_id,
-                    "token" : token
+            else {
+                wrapper.postUserObject(firstname, lastname, username, password).then((result) => {
+                    tokenReturn(res, result);
+                    return;
                 });
             }
-        });
-
-        
-        
+        }
     });
 });
 
