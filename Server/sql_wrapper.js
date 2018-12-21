@@ -16,9 +16,7 @@ module.exports = class DataAccess {
 
         if(who != "") {
             myQuery = `SELECT * FROM Availability INNER JOIN Users ON Availability.user_id = Users.user_id 
-            WHERE Users.user_id = '${who}'`;
-            // `SELECT Availability.* FROM Availability JOIN Users ON Users.user_id = Availability.user_id \
-            //             WHERE Users.username = '${who}'`; 
+            WHERE Users.username = '${who}'`;
         }
 
         if(where != "") {
@@ -28,7 +26,7 @@ module.exports = class DataAccess {
             else{
                 myQuery += ` WHERE location = '${where.toLowerCase()}'`;
             }
-    }
+        }
 
         if(startTime) {
             if(who || where) {
@@ -107,42 +105,22 @@ module.exports = class DataAccess {
         return users;
     }
 
-    // Gets n (= limit) number of availabilities posted by a user (id = user_id)
-    async getUserAvalibiltyList(user_id, limit) {
-        let availabilities = [];
-        if(limit == -1) {
-            var myQuery = `SELECT * FROM Availability WHERE location = ${user_id}`;
-        }
-        else {
-            var myQuery = `SELECT * FROM Availability WHERE location = ${user_id} LIMIT ${limit}`;
-        }
-
-        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            if (err) {
-                reject(err);
-            }
-            else {
-                for(let element of result) {
-                    let userRet = {
-                        "location" : element.location,
-                        "start_time" : element.start_time,
-                        "end_time" : element.end_time
-                    };
-                    availabilities.push(userRet);
-                }
-                resolve(availabilities);
-            }
-        }));
-        return availabilities;
-    }
-
     // Gives a list of people who don't have a match yet
-    async getNeedsList(location, start_time, end_time, limit, price){
+    async getNeedsList(limit, location, username, start_time, end_time, price){
         let users = [];
         let myQuery = `SELECT * FROM Hunger`;
-
+        if(user_id != "") {
+            myQuery = `SELECT * FROM Hunger INNER JOIN Users ON Hunger.user_id = Users.user_id 
+            WHERE Users.username = '${username}'`;
+        }
         if(location != "") {
-            myQuery += ` WHERE location = ${location.toLowerCase()}`;
+            if (who != ""){
+                myQuery += ` AND location = ${location.toLowerCase()}`;
+            }
+            else{
+                myQuery += ` WHERE location = ${location.toLowerCase()}`;
+            }
+            
         }
 
         if (start_time != "") {

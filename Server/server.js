@@ -1,10 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
 const nodemailer = require('nodemailer');
 require('dotenv').load()
-
 const tokenAge = "2h";
 const WrapperObj = require('./sql_wrapper');
 const cryenc = require('./cryptoencryption');
@@ -154,7 +152,7 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
 // Email verification
 app.get('/confirmation/:token', (req, res) => {
     let token = cryenc.decrypt(req.params.token);
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let publicKey  = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
     let verifyOptions = {
         issuer : "meal-server",
         subject : "meal-user",
@@ -212,7 +210,7 @@ app.get('/confirmation/:token', (req, res) => {
 
  // creates and signs a new token
  function makeTokenUser(user_id) {
-    let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
+    let privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
     let payload = {
         "user-id" : user_id,
         "login" : "yes"
@@ -230,7 +228,7 @@ app.get('/confirmation/:token', (req, res) => {
 
  // creates and signs an email token
  function makeTokenEmail(fn, ln, un, password, pn, em) {
-    let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
+    let privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
     let passwordEnc = cryenc.encrypt(password);
     let payload = {
         password_enc : passwordEnc,
@@ -253,7 +251,7 @@ app.get('/confirmation/:token', (req, res) => {
 
  // verfies a given token
 function verifyToken(token) {
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let publicKey  = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
     let options = {
         "issuer" : "meal-server",
         "subject" : "meal-user",
@@ -606,5 +604,8 @@ app.put('/change/user/', (req, res) => {
 
 
 app.listen(8000, '127.0.0.1', () => {
+    // console.log
+    var private_value = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
+    console.log(private_value);
     console.log("Connected to port 8000");
 });
