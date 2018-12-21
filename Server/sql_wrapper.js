@@ -298,6 +298,21 @@ module.exports = class DataAccess {
         return unique;
     }
 
+    async changeTable(table_name, col_name, value, id, id_name){
+        let myQuery = `UPDATE ${table_name} SET ${col_name} = '${value}' WHERE ${id_name} = '${id}'`;
+        console.log(myQuery);
+        let retResult;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                retResult = result.affectedRows > 0;
+            }
+            resolve(result);
+        }));
+        return retResult;
+    }
     async deleteAvailabilityObject(av_id) {
         let myQuery = `DELETE FROM Availability WHERE av_id = ${av_id}`;
         let retResult;
