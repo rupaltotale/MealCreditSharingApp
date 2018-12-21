@@ -87,8 +87,11 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
     }
 
     wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
-        // What about status?
-        res.send(result); 
+        res.status(200).send({
+            result
+        }); 
+        // console.log(result);
+        // return res.send(result);
     });
 });
 
@@ -111,8 +114,9 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
     }
 
     wrapper.getNeedsList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
-        // What about status?
-        res.send(result);
+        res.send(res.status(200).json({
+            "result" : result
+        }));
     });
 });
 /** Token Helper functions
@@ -129,7 +133,7 @@ function makeToken(user_id) {
         "issuer" : "meal-server",
         "subject" : "meal-user",
         "audience" : "meal-app",
-        // tokenAge : "2h",
+        expiresIn : "2h", 
         "algorithm" : "RS256"
     };
 
@@ -142,7 +146,7 @@ function makeToken(user_id) {
         "issuer" : "meal-server",
         "subject" : "meal-user",
         "audience" : "meal-app",
-        // "tokenAge" : tokenAge,
+        maxAge : tokenAge,
         "algorithm" : ["RS256"]
     };
     let payload;
@@ -156,7 +160,7 @@ function makeToken(user_id) {
         return Number(payload["user-id"]);
     }
     else {
-        // Implies that User does not have permission..?
+        // Implies that User does not have permission.
         return false;
     }
 }
@@ -168,7 +172,7 @@ app.post('/verify/:id/:jwt', (req, res) => {
         "issuer" : "meal-server",
         "subject" : "meal-user",
         "audience" : "meal-app",
-        "tokenAge" : tokenAge,
+        // "tokenAge" : tokenAge
         "algorithm" : ["RS256"]
     };
     let payload;
@@ -321,7 +325,7 @@ function authenticate(token, res, user_id){
 
 function sendResult(res, result){
     if(result) {
-        return res.json({
+        return res.status(200).json({
             "message" : "success"
         });
     }
@@ -409,7 +413,7 @@ app.put('/change/availability/', (req, res) => {
             });
         }
     }
-    return res.status(500).json({
+    return res.status(200).json({
         "message" : "insertion success"
     });
 
@@ -447,7 +451,7 @@ app.put('/change/user/', (req, res) => {
             });
         }
     }
-    return res.status(500).json({
+    return res.status(200).json({
         "message" : "insertion success"
     });
 

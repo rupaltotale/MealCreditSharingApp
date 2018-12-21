@@ -13,20 +13,28 @@ module.exports = class DataAccess {
         let users = [];
         let myQuery = `SELECT * FROM Availability`;
 
+        if(who != "") {
+            myQuery = `SELECT * FROM Availability INNER JOIN Users ON Availability.user_id = Users.user_id 
+            WHERE Users.user_id = '${who}'`;
+            // `SELECT Availability.* FROM Availability JOIN Users ON Users.user_id = Availability.user_id \
+            //             WHERE Users.username = '${who}'`; 
+        }
+
         if(where != "") {
-            myQuery += ` WHERE location = \'${where.toLowerCase()}\'`;
-        }
-        else if(who != "") {
-            myQuery = `SELECT Availability.* FROM Availability JOIN Users ON Users.user_id = Availability.user_id \
-                        WHERE Users.username = \'${who}\'`; 
-        }
+            if (who != ""){
+                myQuery += ` AND location = '${where.toLowerCase()}'`;
+            }
+            else{
+                myQuery += ` WHERE location = '${where.toLowerCase()}'`;
+            }
+    }
 
         if(startTime) {
             if(who || where) {
-                myQuery += ` AND start_time >= \'${startTime}\' AND end_time <= \'${endTime}\'`;
+                myQuery += ` AND start_time >= '${startTime}' AND end_time <= '${endTime}'`;
             }
             else {
-                myQuery += ` WHERE start_time >= \'${startTime}\' AND end_time <= \'${endTime}\'`;
+                myQuery += ` WHERE start_time >= '${startTime}' AND end_time <= '${endTime}'`;
             }
         }
 
