@@ -1,11 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
 const nodemailer = require('nodemailer');
-const cryenc = require('./cryptoencryption');
 require('dotenv').load()
-
 const tokenAge = "2h";
 const WrapperObj = require('./sql_wrapper');
 const cryenc = require('./cryptoencryption');
@@ -155,7 +152,7 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
 // Email verification
 app.get('/confirmation/:token', (req, res) => {
     let token = cryenc.decrypt(req.params.token);
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let publicKey  = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
     let verifyOptions = {
         issuer : "meal-server",
         subject : "meal-user",
@@ -213,7 +210,7 @@ app.get('/confirmation/:token', (req, res) => {
 
  // creates and signs a new token
  function makeTokenUser(user_id) {
-    let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
+    let privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
     let payload = {
         "user-id" : user_id,
         "login" : "yes"
@@ -231,7 +228,7 @@ app.get('/confirmation/:token', (req, res) => {
 
  // creates and signs an email token
  function makeTokenEmail(fn, ln, un, password, pn, em) {
-    let privateKey = fs.readFileSync(__dirname + '/private.key', 'utf8');
+    let privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
     let passwordEnc = cryenc.encrypt(password);
     let payload = {
         password_enc : passwordEnc,
@@ -254,7 +251,7 @@ app.get('/confirmation/:token', (req, res) => {
 
  // verfies a given token
 function verifyToken(token) {
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
+    let publicKey  = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
     let options = {
         "issuer" : "meal-server",
         "subject" : "meal-user",
@@ -277,38 +274,6 @@ function verifyToken(token) {
         return false;
     }
 }
-// Test: Authentication of a user with their user_id and token
-// Do basic OAuth check (tester function). ADMIN function test (need to know the user_id)
-app.post('/verify/:id/:jwt', (req, res) => {
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
-    let options = {
-        "issuer" : "meal-server",
-        "subject" : "meal-user",
-        "audience" : "meal-app",
-        // "tokenAge" : tokenAge
-        "algorithm" : ["RS256"]
-    };
-    let payload;
-    try {
-        payload = jwt.verify(req.params.jwt, publicKey, options);
-    }
-    catch(err) {
-        return res.status(403).json({
-            "message" : "VERIFICATION FAILED"
-        });
-    }
-    if((payload["login"] == "yes") && (Number(payload["user-id"]) == Number(req.params.id))) {
-        return res.status(200).json({
-            "message" : "VERIFIED"
-        });
-    }
-    else {
-        return res.status(403).json({
-            "message" : "VERIFIED, but wrong ID"
-        });
-    }
- });
-
 
  // Login. Sends back a JWT for authentication
  app.post('/login/:username/:password', (req, res) => {
@@ -611,5 +576,8 @@ app.put('/change/user/', (req, res) => {
 
 
 app.listen(8000, '127.0.0.1', () => {
+    // console.log
+    var private_value = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
+    console.log(private_value);
     console.log("Connected to port 8000");
 });
