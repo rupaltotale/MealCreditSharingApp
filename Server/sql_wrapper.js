@@ -61,6 +61,7 @@ module.exports = class DataAccess {
             else {   
                 for(let element of result) {
                     let userRet = {
+                        "av_id" : element.av_id,
                         "user_id" : element.user_id,
                         "asking_price" : element.asking_price,
                         "location" : element.location,
@@ -264,6 +265,7 @@ module.exports = class DataAccess {
         return text;
     }
 
+    // Checks if the username and password are correct
     async checkUser(username, password) {
         let myQuery = `SELECT * FROM Users WHERE username = '${username}'`
         let returnUser = {};
@@ -321,6 +323,7 @@ module.exports = class DataAccess {
         }));
         return retResult;
     }
+
     async deleteAvailabilityObject(av_id) {
         let myQuery = `DELETE FROM Availability WHERE av_id = ${av_id}`;
         let retResult;

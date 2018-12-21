@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
 const tokenAge = "2h";
-const WrapperObj = require('./sql_wrapper')
+const WrapperObj = require('./sql_wrapper');
+const cryenc = require('./cryptoencryption');
 
 // Instance of sql_swapper.js. Allows us to use function within it. 
 let wrapper = new WrapperObj({
@@ -34,7 +35,7 @@ const tokenReturn = function(sendName, user_id) {
     }
     else {
         return sendName.status(500).json({
-            message : "error in user creation"
+            message : "error in user database creation"
         });
     }
 };
@@ -90,9 +91,9 @@ app.get('/', function (req, res) {
 app.get('/availability-list', (req, res) => {
     //get all availability data
     wrapper.getAvailabilityList(-1, false, false, false, false, false).then((result) => {
-        res.send(res.status(200).json({
+        return res.json({
             "result" : result
-        }));
+        });
     });
     // What about error handling? Catch?
 });
@@ -243,8 +244,9 @@ app.get('/confirmation/:token', (req, res) => {
         expiresIn : "1d",
         algorithm : "RS256"
     };
-
-    return cryenc.encrypt(jwt.sign(payload, privateKey, signOptions));
+    let token = jwt.sign(payload, privateKey, signOptions);
+    console.log(token);
+    return cryenc.encrypt(token);
  }
 
  // verfies a given token
@@ -316,10 +318,10 @@ app.post('/verify/:id/:jwt', (req, res) => {
         if("matched" in loginChecked) {
             // Both matched must be set to true and "id" must exist for the returned object to be acceptable
             if(loginChecked["matched"] && "id" in loginChecked) {
-                let token = makeTokenUser(loginChecked["id"]);
+                let retToken = makeTokenUser(loginChecked["id"]);
                 return res.status(200).json({
                     message: "OAuth successful",
-                    "token" : token
+                    token : retToken
                 });
             }
             // Login or password does not match
@@ -337,9 +339,8 @@ app.post('/verify/:id/:jwt', (req, res) => {
     });
  });
 
- 
- const sendEmail = (email, token, req, res) => {
-    // let rand = Math.floor((Math.random() * 100) + 54); This is not used. 
+ const sendEmail = (firstname, lastname, email, token, req, res) => {
+    // let rand = Math.floor((Math.random() * 100) + 54);
     let host = req.get('host');
     let link = "http://" + host + "/confirmation/" + token;
     let hover = ''; //`onmouseover="() => { this.style.opacity = "0.7"; }"`; // Cant get this to work
@@ -347,7 +348,7 @@ app.post('/verify/:id/:jwt', (req, res) => {
     let mailOptions = {
         to : email,
         subject : "Please confirm your Meal Credit email account",
-        html : `Hello,<br> Please Click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
+        html : `Hello ${firstname} ${lastname},<br> Please Click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
     };
     smtpTransport.sendMail(mailOptions, function(error, response) {
         if(error) {
@@ -388,12 +389,14 @@ app.post('/register/', function(req, res) {
         else {
             // Result variable = user_id (null or number)
             if (phonenumber != null && email != null) {
+                console.log("email is " + email);
                 let token = makeTokenEmail(firstname, lastname, username, password, phonenumber, email);
-                return sendEmail(email, token, req, res);
+                return sendEmail(firstname, lastname, email, token, req, res);
             }
             else if (email != null) {
+                console.log("email is " + email);
                 let token = makeTokenEmail(firstname, lastname, username, password, null, email);
-                return sendEmail(email, token, req, res);
+                return sendEmail(firstname, lastname, email, token, req, res);
             }
             else if (phonenumber != null) {
                 wrapper.postUserObject(firstname, lastname, username, password, phonenumber).then((result) => {
@@ -457,7 +460,7 @@ app.post('/create/availability/', function(req, res) {
     
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
-    if (authentic != true){
+    if (authentic != true) {
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }
@@ -482,8 +485,7 @@ app.post('/create/hunger/', function(req, res) {
         return authentic;
     }
     
-    wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).
-    then((result) => sendResult(res, result));
+    wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).then((result) => sendResult(res, result));
 });
 
 
@@ -492,6 +494,7 @@ app.post('/create/hunger/', function(req, res) {
  * Availability
  * Hunger ?
  */
+
 app.put('/change/availability/', (req, res) => {
     let user_id = Number(req.body.user_id);
     let availability_id = Number(req.body.av_id);
