@@ -3,23 +3,26 @@ const bodyParser = require('body-parser')
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
+const cryenc = require('./cryptoencryption');
+require('dotenv').load()
+
 const tokenAge = "2h";
 const WrapperObj = require('./sql_wrapper')
 
 // Instance of sql_swapper.js. Allows us to use function within it. 
 let wrapper = new WrapperObj({
-    host : "localhost",
-    user : "mealRoot",
-    password : "paulhatalsky",
-    database : "mealcredit"
+    host : process.env.DB_HOST,
+    user : process.env.DB_USERNAME,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME
 });
 
 // This info should be stored in environment variables eventually
 var smtpTransport = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-        user: "mealcreditverifier@gmail.com",
-        pass: "paulhatalsky1928"
+        user: process.env.GMAIL_ACC,
+        pass: process.env.GMAIL_PASS
     }
 });
 
@@ -48,6 +51,7 @@ let app = express()
  * 401 == Unacceptable input
  * 500 == SQL error
  */
+
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.enable('trust proxy')

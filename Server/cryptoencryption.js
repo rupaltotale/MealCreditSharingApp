@@ -1,9 +1,10 @@
 'use strict';
 
 const crypto = require('crypto');
+require('dotenv').config();
 
 // Needs to be ENV variable too
-const cryptPass = `Hw76%^@32)Swh%<&dn>Am|/;tm8*(@^^`;
+const cryptPass = process.env.ENCRYPTION_KEY;
 //const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY; // Must be 256 bytes (32 characters)
 const IV_LENGTH = 16; // For AES, this is always 16
 
