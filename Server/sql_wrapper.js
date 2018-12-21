@@ -201,7 +201,7 @@ module.exports = class DataAccess {
                 }
                 else {
                     user_id = result.insertId;
-                    console.log("Last id: " + user_id);
+                    //console.log("Last id: " + user_id);
                     if(user_id == 0 && result.affectedRows == 0) {
                         user_id = null;
                     }
@@ -285,7 +285,7 @@ module.exports = class DataAccess {
         let myQuery = `Select * from Users where username = '${username}'`;
         let unique = true;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            console.log(result.length);
+            //console.log(result.length);
             if (err) {
                 reject(err);
             }
@@ -314,8 +314,8 @@ module.exports = class DataAccess {
         return retResult;
     }
 
-    async deleteAvailabilityObject(hg_id) {
-        let myQuery = `DELETE FROM Availability WHERE hg_id = ${hg_id}`;
+    async deleteHungerObject(hg_id) {
+        let myQuery = `DELETE FROM Hunger WHERE hg_id = ${hg_id}`;
         let retResult;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
