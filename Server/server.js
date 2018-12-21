@@ -201,6 +201,11 @@ app.get('/confirmation/:token', (req, res) => {
     }
 });
 
+app.get("/email_recovery/:user_name", (req, res) => {
+
+});
+
+
 
 /** Token related functions
  * Make Token User: Makes a token given the user id
@@ -577,7 +582,5 @@ app.put('/change/user/', (req, res) => {
 
 app.listen(8000, '127.0.0.1', () => {
     // console.log
-    var private_value = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
-    console.log(private_value);
     console.log("Connected to port 8000");
 });
