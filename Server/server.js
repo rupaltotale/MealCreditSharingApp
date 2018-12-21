@@ -332,13 +332,13 @@ function sendResult(res, result){
     }
 }
 // Creates a new availability object
-app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time/:token', function(req, res) {
-    let user_id = req.params.user_id;
-    let asking_price = req.params.asking_price;
-    let location = req.params.location;
-    let start_time = req.params.start_time;
-    let end_time = req.params.end_time;
-    let token = req.params.token;
+app.post('/create/availability/', function(req, res) {
+    let user_id = req.body.user_id;
+    let asking_price = req.body.asking_price;
+    let location = req.body.location;
+    let start_time = req.body.start_time;
+    let end_time = req.body.end_time;
+    let token = req.body.token;
     
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
@@ -352,13 +352,13 @@ app.post('/availability/:user_id/:asking_price/:location/:start_time/:end_time/:
 });
 
 // Creates a new hunger object
-app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time/:token', function(req, res) {
-    let user_id = req.params.user_id;
-    let max_price = req.params.max_price;
-    let location = req.params.location;
-    let start_time = req.params.start_time;
-    let end_time = req.params.end_time;
-    let token = req.params.token;
+app.post('/create/hunger/', function(req, res) {
+    let user_id = req.body.user_id;
+    let max_price = req.body.max_price;
+    let location = req.body.location;
+    let start_time = req.body.start_time;
+    let end_time = req.body.end_time;
+    let token = req.body.token;
     
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
@@ -377,10 +377,10 @@ app.post('/hunger/:user_id/:max_price/:location/:start_time/:end_time/:token', f
  * Availability
  * Hunger ?
  */
-app.put('/change/availability/:user_id/:token/:av_id', (req, res) => {
-    let user_id = Number(req.params.user_id);
-    let availability_id = Number(req.params.av_id);
-    let token = req.params.token;
+app.put('/change/availability/', (req, res) => {
+    let user_id = Number(req.body.user_id);
+    let availability_id = Number(req.body.av_id);
+    let token = req.body.token;
 
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
@@ -415,9 +415,9 @@ app.put('/change/availability/:user_id/:token/:av_id', (req, res) => {
 
 })
 
-app.put('/change/user/:user_id/:token/', (req, res) => {
-    let user_id = Number(req.params.user_id);
-    let token = req.params.token;
+app.put('/change/user/', (req, res) => {
+    let user_id = Number(req.body.user_id);
+    let token = req.body.token;
 
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
@@ -460,10 +460,10 @@ app.put('/change/user/:user_id/:token/', (req, res) => {
  * We need to make sure that the user_id of the av obj matches the req.params.user_id
  */
 
- app.delete('/delete/availability/:user_id/:token/:av_id', (req, res) => {
-    let user_id = Number(req.params.user_id);
-    let availability_id = Number(req.params.av_id);
-    let token = req.params.token;
+ app.delete('/delete/availability/', (req, res) => {
+    let user_id = Number(req.body.user_id);
+    let availability_id = Number(req.body.av_id);
+    let token = req.body.token;
 
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
@@ -474,10 +474,10 @@ app.put('/change/user/:user_id/:token/', (req, res) => {
     wrapper.deleteAvailabilityObject(availability_id).then((result) => sendResult(res, result));
  });
 
- app.delete('/delete/hunger/:id/:token/:hg_id', (req, res) => {
-    let user_id = Number(req.params.id);
-    let hunger_id = req.params.hg_id;
-    let token = req.params.token;
+ app.delete('/delete/hunger/', (req, res) => {
+    let user_id = Number(req.body.id);
+    let hunger_id = req.body.hg_id;
+    let token = req.body.token;
 
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
