@@ -174,6 +174,29 @@ module.exports = class DataAccess {
         return users;
     }
 
+    async getUser(username, firstname = null, lastname = null) {
+        let myQuery
+        if (username !== null){
+            myQuery = `Select * from Users where username = '${username}'`;
+        }
+        else{
+            myQuery = `Select * from Users where firstname = '${firstname}' AND lastname = '${lastname}'`;
+        }
+        let users;
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                users = result;
+            }
+            resolve(result);
+        }));
+        return users;
+    }
+    
+
+
     async postUserObject(firstname, lastname, username, password, phonenumber = null, email = null) {
         let myQuery = "";
         let salt = this.makeSalt(10);
@@ -199,6 +222,25 @@ module.exports = class DataAccess {
         });
 
         return user_id;
+    }
+
+    async changePassword(user_id, password){
+        let salt = this.makeSalt(10);
+        await bcrypt.hash(password + salt, saltRounds).then(async (password_hash) => {
+            let myQuery = `UPDATE Users SET password_hash = '${password_hash}', salt = '${salt}' WHERE user_id = '${user_id}';`;
+            await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    user_id = result.insertId;
+                    if(user_id == 0 && result.affectedRows == 0) {
+                        user_id = null;
+                    }
+                }
+                resolve(result);
+            }));
+        });
     }
 
     async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ) {

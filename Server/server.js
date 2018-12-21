@@ -201,10 +201,105 @@ app.get('/confirmation/:token', (req, res) => {
     }
 });
 
+app.get('/send_recovery_mail/:username/:firstname?/:lastname?', function(req, res) {
+    let username = req.params.username;
+    let firstname = req.params.firstname;
+    let lastname = req.params.lastname
+
+    if (username != "null"){
+        wrapper.getUser(username).then((users) => {
+            if (users == []){
+                return res.json({
+                    "message" : "Username is invalid."
+                });
+            }
+            let user = users[0];
+            if (user.email!= null){
+                let token = makeTokenEmail(user.firstname, user.lastname, username, null, null, user.email, user.user_id);
+                return sendRecoveryEmail(username, "", user.email, token, req, res);
+            } 
+            return res.json({
+                "message" : "User does not have an email"
+            });
+        });
+    }
+    else{
+        wrapper.getUser(null, firstname, lastname).then((users) => {
+            if (users == []){
+                return res.json({
+                    "message" : "Username is invalid."
+                });
+            }
+            user = users[0];
+            if (user.email!= null){
+                let token = makeTokenEmail(user.firstname, user.lastname, username, null, null, user.email, user.user_id);
+                return sendRecoveryEmail(firstname, lastname, user.email, token, req, res);
+            } 
+            return res.json({
+                "message" : "User does not have an email"
+            });
+        }); 
+    }
+    
+});
+app.get("/recover_account/:token/", function(req, res){
+    let token = cryenc.decrypt(req.params.token);
+    let publicKey  = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
+    let verifyOptions = {
+        issuer : "meal-server",
+        subject : "meal-user",
+        audience : "meal-app",
+        maxAge : "1d",
+        algorithm : ["RS256"]
+    };
+    let correctToken;
+    try {
+        correctToken = jwt.verify(token, publicKey, verifyOptions);
+    }
+    catch(err) {
+        return res.status(401).json({
+            message : "Invalid token"
+        });
+    }
+    if (correctToken){
+        let user_id = correctToken.user_id;
+        console.log(user_id);
+        token = makeTokenUser(user_id);
+        return res.json({
+            "message": "Valid Token",
+            "Logged in" : "yes",
+            "Token" : token,
+            "User_id" : user_id
+        });
+        // once the user does this, they should be prompted to a page to change their password
+    }
 
 
-
-
+});
+const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
+    console.log(email);
+    let host = req.get('host');
+    let link = "http://" + host + "/recovery/" + token;
+    let style = 'background-color: green; color: white; width: 4em; text-decoration: none; padding: 1vh 1vw; border-radius: 5%;';
+    let mailOptions = {
+        to : email,
+        subject : "Recover Your Meal Credit Account",
+        html : `Hello ${firstname} ${lastname},<br> Please Click on the button to recover your account.<br><br><a style="${style}" href="${link}">Click here to recover</a><br><br>`
+    };
+    smtpTransport.sendMail(mailOptions, function(error, response) {
+        if(error) {
+            console.log(error);
+            return res.status(501).json({
+                message : error
+            });
+        }
+        else {
+            return res.json({
+                message : "email sent"
+            });
+        }
+    });
+ };
 /** Token related functions
  * Make Token User: Makes a token given the user id
  * Make Token Email: makes email toen for email verification given all user details
@@ -230,16 +325,20 @@ app.get('/confirmation/:token', (req, res) => {
  }
 
  // creates and signs an email token
- function makeTokenEmail(fn, ln, un, password, pn, em) {
+ function makeTokenEmail(fn, ln, un, password, pn, em, user_id = null) {
     let privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
-    let passwordEnc = cryenc.encrypt(password);
+    let passwordEnc = null;
+    if (password !== null){
+        passwordEnc = cryenc.encrypt(password);
+    }
     let payload = {
         password_enc : passwordEnc,
         firstname : fn,
         lastname : ln,
         phonenumber : pn,
         username : un,
-        email : em
+        email : em,
+        "user_id": user_id
     };
     let signOptions = {
         issuer : "meal-server",
@@ -249,6 +348,7 @@ app.get('/confirmation/:token', (req, res) => {
         algorithm : "RS256"
     };
     let token = jwt.sign(payload, privateKey, signOptions);
+    // console.log(token);
     return cryenc.encrypt(token);
  }
 
@@ -298,13 +398,13 @@ function verifyToken(token) {
             // Login or password does not match
             else {
                 return res.status(401).json({
-                    message : "OAuth failed"
+                    message : "OAuth failed 1"
                 });
             }
         }
         else {
             return res.status(401).json({
-                message : "OAuth failed"
+                message : "OAuth failed 2"
             });
         }
     });
@@ -536,10 +636,21 @@ app.put('/change/user/', (req, res) => {
             });
         }
     }
-    return res.status(200).json({
-        "message" : "insertion success"
-    });
-
+    if (req.body.change_password){
+        if (!req.body.require_old_password){
+            let new_password = req.body.new_password;
+            wrapper.changePassword(user_id, new_password).then((result) => {
+                return res.json({
+                    "message" : "password changed"
+                })
+            });
+        }
+    }
+    else{
+        return res.status(200).json({
+            "message" : "insertion success"
+        });
+    }
 })
 
 /** DELETE requests - remove objects
