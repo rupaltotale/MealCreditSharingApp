@@ -34,7 +34,7 @@ const tokenReturn = function(sendName, user_id) {
     }
     else {
         return sendName.status(500).json({
-            message : "error in user creation"
+            message : "error in user database creation"
         });
     }
 };
@@ -90,9 +90,9 @@ app.get('/', function (req, res) {
 app.get('/availability-list', (req, res) => {
     //get all availability data
     wrapper.getAvailabilityList(-1, false, false, false, false, false).then((result) => {
-        res.send(res.status(200).json({
+        return res.json({
             "result" : result
-        }));
+        });
     });
     // What about error handling? Catch?
 });
@@ -115,7 +115,9 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
 
     wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
         // What about status?
-        res.send(result); 
+        return res.json({
+            message : result
+        });
     });
 });
 
@@ -139,7 +141,9 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
 
     wrapper.getNeedsList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
         // What about status?
-        res.send(result);
+        return res.json({
+            message: result
+        });
     });
 });
 
@@ -268,37 +272,6 @@ function verifyToken(token) {
         return false;
     }
 }
-// Test: Authentication of a user with their user_id and token
-// Do basic OAuth check (tester function). ADMIN function test (need to know the user_id)
-app.post('/verify/:id/:jwt', (req, res) => {
-    let publicKey  = fs.readFileSync(__dirname + '/public.key', 'utf8');
-    let options = {
-        "issuer" : "meal-server",
-        "subject" : "meal-user",
-        "audience" : "meal-app",
-        "tokenAge" : tokenAge,
-        "algorithm" : ["RS256"]
-    };
-    let payload;
-    try {
-        payload = jwt.verify(req.params.jwt, publicKey, options);
-    }
-    catch(err) {
-        return res.status(403).json({
-            "message" : "VERIFICATION FAILED"
-        });
-    }
-    if((payload["login"] == "yes") && (Number(payload["user-id"]) == Number(req.params.id))) {
-        return res.status(200).json({
-            "message" : "VERIFIED"
-        });
-    }
-    else {
-        return res.status(403).json({
-            "message" : "VERIFIED, but wrong ID"
-        });
-    }
- });
 
 
  // Login. Sends back a JWT for authentication
@@ -312,10 +285,10 @@ app.post('/verify/:id/:jwt', (req, res) => {
         if("matched" in loginChecked) {
             // Both matched must be set to true and "id" must exist for the returned object to be acceptable
             if(loginChecked["matched"] && "id" in loginChecked) {
-                let token = makeTokenUser(loginChecked["id"]);
+                let retToken = makeTokenUser(loginChecked["id"]);
                 return res.status(200).json({
                     message: "OAuth successful",
-                    "token" : token
+                    token : retToken
                 });
             }
             // Login or password does not match
@@ -369,7 +342,7 @@ app.post('/verify/:id/:jwt', (req, res) => {
     }
  });
 
- const sendEmail = (email, token, req, res) => {
+ const sendEmail = (firstname, lastname, email, token, req, res) => {
     let rand = Math.floor((Math.random() * 100) + 54);
     let host = req.get('host');
     let link = "http://" + host + "/confirmation/" + token;
@@ -378,7 +351,7 @@ app.post('/verify/:id/:jwt', (req, res) => {
     let mailOptions = {
         to : email,
         subject : "Please confirm your Meal Credit email account",
-        html : `Hello,<br> Please Click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
+        html : `Hello ${firstname} ${lastname},<br> Please Click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
     };
     //console.log(mailOptions);
     smtpTransport.sendMail(mailOptions, function(error, response) {
@@ -416,11 +389,11 @@ app.post('/register/', function(req, res) {
             // Result variable = user_id (null or number)
             if (phonenumber != null && email != null) {
                 let token = makeTokenEmail(firstname, lastname, username, password, phonenumber, email);
-                return sendEmail(email, token, req, res);
+                return sendEmail(firstname, lastname, email, token, req, res);
             }
             else if (email != null) {
                 let token = makeTokenEmail(firstname, lastname, username, password, null, email);
-                return sendEmail(email, token, req, res);
+                return sendEmail(firstname, lastname, email, token, req, res);
             }
             else if (phonenumber != null) {
                 wrapper.postUserObject(firstname, lastname, username, password, phonenumber).then((result) => {
@@ -529,7 +502,7 @@ app.post('/create/availability/', function(req, res) {
     
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
-    if (authentic != true){
+    if (authentic != true) {
         // This means that the user does not have permission or that something went wrong
         return authentic;
     }
@@ -554,8 +527,7 @@ app.post('/create/hunger/', function(req, res) {
         return authentic;
     }
     
-    wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).
-    then((result) => sendResult(res, result));
+    wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).then((result) => sendResult(res, result));
 });
 
 
@@ -564,6 +536,7 @@ app.post('/create/hunger/', function(req, res) {
  * Availability
  * Hunger ?
  */
+
 app.put('/change/availability/', (req, res) => {
     let user_id = Number(req.body.user_id);
     let availability_id = Number(req.body.av_id);
