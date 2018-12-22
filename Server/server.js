@@ -28,9 +28,9 @@ const tokenReturn = function(sendName, user_id) {
     if(user_id !== null) {
         let tokenMade = makeTokenUser(user_id);
         return sendName.json({
-            message : "User created",
-            id : user_id,
-            token : tokenMade
+            "message" : "User created",
+            "user_id" : user_id,
+            "token" : tokenMade
         });
     }
     else {
@@ -119,8 +119,6 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
         res.status(200).send({
             result
         }); 
-        // console.log(result);
-        // return res.send(result);
     });
 });
 
@@ -163,7 +161,6 @@ app.get('/confirmation/:token', (req, res) => {
     let retToken;
     try {
         retToken = jwt.verify(token, publicKey, verifyOptions);
-        //console.log(retToken);
     }
     catch(err) {
         return res.status(401).json({
@@ -201,45 +198,19 @@ app.get('/confirmation/:token', (req, res) => {
     }
 });
 
-app.get('/send_recovery_mail/:username/:firstname?/:lastname?', function(req, res) {
-    let username = req.params.username;
-    let firstname = req.params.firstname;
-    let lastname = req.params.lastname
-
-    if (username != "null"){
-        wrapper.getUser(username).then((users) => {
-            if (users == []){
-                return res.json({
-                    "message" : "Username is invalid."
-                });
-            }
-            let user = users[0];
-            if (user.email!= null){
-                let token = makeTokenEmail(user.firstname, user.lastname, username, null, null, user.email, user.user_id);
-                return sendRecoveryEmail(username, "", user.email, token, req, res);
-            } 
+app.get('/send_recovery_mail/:email', function(req, res) {
+    let email = req.params.email;
+    wrapper.getUserFromEmail(email).then((users) => {
+        if (users == []){
             return res.json({
-                "message" : "User does not have an email"
+                "message" : "Email is not registered."
             });
-        });
-    }
-    else{
-        wrapper.getUser(null, firstname, lastname).then((users) => {
-            if (users == []){
-                return res.json({
-                    "message" : "Username is invalid."
-                });
-            }
-            user = users[0];
-            if (user.email!= null){
-                let token = makeTokenEmail(user.firstname, user.lastname, username, null, null, user.email, user.user_id);
-                return sendRecoveryEmail(firstname, lastname, user.email, token, req, res);
-            } 
-            return res.json({
-                "message" : "User does not have an email"
-            });
-        }); 
-    }
+        }
+        user = users[0];
+        let token = makeTokenEmail(user.firstname, user.lastname, user.username, null, null, user.email, user.user_id);
+        return sendRecoveryEmail(user.firstname, user.lastname, email, token, req, res);
+    }); 
+    
     
 });
 app.get("/recover_account/:token/", function(req, res){
@@ -263,7 +234,6 @@ app.get("/recover_account/:token/", function(req, res){
     }
     if (correctToken){
         let user_id = correctToken.user_id;
-        console.log(user_id);
         token = makeTokenUser(user_id);
         return res.json({
             "message": "Valid Token",
@@ -277,9 +247,8 @@ app.get("/recover_account/:token/", function(req, res){
 
 });
 const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
-    console.log(email);
     let host = req.get('host');
-    let link = "http://" + host + "/recovery/" + token;
+    let link = "http://" + host + "/recover_account/" + token;
     let style = 'background-color: green; color: white; width: 4em; text-decoration: none; padding: 1vh 1vw; border-radius: 5%;';
     let mailOptions = {
         to : email,
@@ -288,7 +257,6 @@ const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
     };
     smtpTransport.sendMail(mailOptions, function(error, response) {
         if(error) {
-            console.log(error);
             return res.status(501).json({
                 message : error
             });
@@ -348,7 +316,6 @@ const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
         algorithm : "RS256"
     };
     let token = jwt.sign(payload, privateKey, signOptions);
-    // console.log(token);
     return cryenc.encrypt(token);
  }
 
@@ -435,11 +402,10 @@ function verifyToken(token) {
     let mailOptions = {
         to : email,
         subject : "Please confirm your Meal Credit email account",
-        html : `Hello ${firstname} ${lastname},<br> Please Click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
+        html : `Hello ${firstname} ${lastname},<br> Please click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
     };
     smtpTransport.sendMail(mailOptions, function(error, response) {
         if(error) {
-            console.log(error);
             return res.status(501).json({
                 message : error
             });

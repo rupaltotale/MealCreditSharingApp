@@ -51,7 +51,6 @@ module.exports = class DataAccess {
         if(size != -1) {
             myQuery += ` LIMIT ${size}`;
         }
-        console.log(myQuery);
 
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
@@ -174,14 +173,8 @@ module.exports = class DataAccess {
         return users;
     }
 
-    async getUser(username, firstname = null, lastname = null) {
-        let myQuery
-        if (username !== null){
-            myQuery = `Select * from Users where username = '${username}'`;
-        }
-        else{
-            myQuery = `Select * from Users where firstname = '${firstname}' AND lastname = '${lastname}'`;
-        }
+    async getUserFromEmail(email) {
+        let myQuery = `Select * from Users where email = '${email}'`;
         let users;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
@@ -205,14 +198,12 @@ module.exports = class DataAccess {
             myQuery = `INSERT INTO Users VALUES (DEFAULT, '${firstname}', '${lastname}', '${username}', '${password_hash}','${salt}',`;
             myQuery += phonenumber !== null ? `'${phonenumber}',` :  'NULL,';
             myQuery += email !== null ? `'${email}')` :  'NULL)';
-            //console.log(myQuery);
             await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
                 if (err) {
                     reject(err);
                 }
                 else {
                     user_id = result.insertId;
-                    //console.log("Last id: " + user_id);
                     if(user_id == 0 && result.affectedRows == 0) {
                         user_id = null;
                     }
@@ -308,11 +299,9 @@ module.exports = class DataAccess {
                 if(result.length > 0) {
                     let password_hash = result[0].password_hash;
                     let salt = result[0].salt;
-                    //console.log(password);
                     if(bcrypt.compareSync(password + salt, password_hash)) {
                         returnUser["id"] = result[0].user_id;
                         returnUser["matched"] = true;
-                        console.log("Password matches");
                     }
                 }
                 resolve(returnUser);
@@ -326,7 +315,6 @@ module.exports = class DataAccess {
         let myQuery = `Select * from Users where username = '${username}'`;
         let unique = true;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            //console.log(result.length);
             if (err) {
                 reject(err);
             }
@@ -343,7 +331,6 @@ module.exports = class DataAccess {
         let myQuery = `Select * from Users where email = '${email}'`;
         let unique = true;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
-            //console.log(result.length);
             if (err) {
                 reject(err);
             }
@@ -358,7 +345,6 @@ module.exports = class DataAccess {
 
     async changeTable(table_name, col_name, value, id, id_name){
         let myQuery = `UPDATE ${table_name} SET ${col_name} = '${value}' WHERE ${id_name} = '${id}'`;
-        console.log(myQuery);
         let retResult;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
