@@ -201,7 +201,7 @@ app.get('/confirmation/:token', (req, res) => {
 app.get('/send_recovery_mail/:email', function(req, res) {
     let email = req.params.email;
     wrapper.getUserFromEmail(email).then((users) => {
-        if (users == []){
+        if (users == []) {
             return res.json({
                 "message" : "Email is not registered."
             });
