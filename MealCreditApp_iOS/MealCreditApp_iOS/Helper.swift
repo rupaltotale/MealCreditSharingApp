@@ -56,7 +56,7 @@ class Helper: UIViewController {
                 
             }}));
         view.present(alert, animated: true, completion: nil);
-        //        return returnMsg;
+        print(returnMsg)
     }
     
     static func convertFromDateTimeToDate(dateTime: String) -> Date?{

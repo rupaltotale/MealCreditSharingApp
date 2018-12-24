@@ -12,19 +12,27 @@ class HungerObjsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setStyle()
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func setStyle(){
+        self.navigationController?.navigationBar.barTintColor = GlobalVariables.mainColor;
+        self.navigationController?.navigationBar.tintColor = UIColor.white;
+        self.navigationController?.navigationBar.isTranslucent = false;
+        self.title = "Hungry?";
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white,
+            NSAttributedString.Key.font:  GlobalVariables.navBarTitle
+        ]
+        self.navigationController?.navigationBar.frame = CGRect(x: 0, y: 0, width: 100, height: 500)
+        
+        self.tabBarController?.tabBar.barTintColor = UIColor.darkGray;
+        self.tabBarController?.view.tintColor = GlobalVariables.mainColor;
+        self.tabBarController?.view.isOpaque = true;
+//        self.tabBarItem = UITabBarItem(title: "Hungry?", image: UIImage(named: "hungry"), selectedImage: UIImage(named: "hungry"))
+//        let addButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addAvObject(sender:)))
+//        self.navigationItem.rightBarButtonItem = addButton
+        
     }
-    */
 
 }

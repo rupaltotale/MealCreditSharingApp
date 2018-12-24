@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad();
-        UserDefaults.standard.removeObject(forKey: "user_id")
+//        UserDefaults.standard.removeObject(forKey: "user_id")
         if UserDefaults.standard.string(forKey: "user_id") != nil {
            self.performSegue(withIdentifier: "goToAppFromLogin", sender: self)
         }
@@ -113,7 +113,6 @@ class ViewController: UIViewController {
         loginButton.layer.cornerRadius = 2;
         signupButton.layer.cornerRadius = 2;
         
-        print(loginButton.titleLabel?.font)
         let textfields = [usernameTextField, passwordTextField];
         for i in textfields{
             Helper.setTextFieldStyle(i!);

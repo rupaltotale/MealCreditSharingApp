@@ -11,10 +11,9 @@
 		39C4CCC121CD8DBF006242F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCC021CD8DBF006242F3 /* AppDelegate.swift */; };
 		39C4CCC321CD8DBF006242F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCC221CD8DBF006242F3 /* ViewController.swift */; };
 		39C4CCC621CD8DBF006242F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CCC421CD8DBF006242F3 /* Main.storyboard */; };
-		39C4CCC821CD8DC0006242F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CCC721CD8DC0006242F3 /* Assets.xcassets */; };
 		39C4CCCB21CD8DC0006242F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CCC921CD8DC0006242F3 /* LaunchScreen.storyboard */; };
-		39C4CCD621CD8DC0006242F3 /* AF_testTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCD521CD8DC0006242F3 /* AF_testTests.swift */; };
-		39C4CCE121CD8DC0006242F3 /* AF_testUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCE021CD8DC0006242F3 /* AF_testUITests.swift */; };
+		39C4CCD621CD8DC0006242F3 /* MealCreditApp_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCD521CD8DC0006242F3 /* MealCreditApp_iOSTests.swift */; };
+		39C4CCE121CD8DC0006242F3 /* MealCreditApp_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCE021CD8DC0006242F3 /* MealCreditApp_iOSTests.swift */; };
 		39C4CCEF21CDA28A006242F3 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCEE21CDA28A006242F3 /* GlobalVariables.swift */; };
 		39C4CCF121CDCB39006242F3 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF021CDCB39006242F3 /* SignUpViewController.swift */; };
 		39C4CCF321CE0476006242F3 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF221CE0476006242F3 /* Helper.swift */; };
@@ -23,6 +22,7 @@
 		39C4CCF921CEAA4A006242F3 /* AvailableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF821CEAA4A006242F3 /* AvailableObject.swift */; };
 		39C4CCFD21CF670F006242F3 /* EditObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCFC21CF670F006242F3 /* EditObjectViewController.swift */; };
 		39C4CD3921D176D6006242F3 /* AddObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CD3821D176D6006242F3 /* AddObjectViewController.swift */; };
+		39C4CD3B21D19207006242F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CD3A21D19207006242F3 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,14 +50,13 @@
 		39C4CCC021CD8DBF006242F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		39C4CCC221CD8DBF006242F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		39C4CCC521CD8DBF006242F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		39C4CCC721CD8DC0006242F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		39C4CCCA21CD8DC0006242F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		39C4CCCC21CD8DC0006242F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39C4CCD121CD8DC0006242F3 /* MealCreditApp_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MealCreditApp_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		39C4CCD521CD8DC0006242F3 /* AF_testTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AF_testTests.swift; sourceTree = "<group>"; };
+		39C4CCD521CD8DC0006242F3 /* MealCreditApp_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCreditApp_iOSTests.swift; sourceTree = "<group>"; };
 		39C4CCD721CD8DC0006242F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39C4CCDC21CD8DC0006242F3 /* MealCreditApp_iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MealCreditApp_iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		39C4CCE021CD8DC0006242F3 /* AF_testUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AF_testUITests.swift; sourceTree = "<group>"; };
+		39C4CCE021CD8DC0006242F3 /* MealCreditApp_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCreditApp_iOSTests.swift; sourceTree = "<group>"; };
 		39C4CCE221CD8DC0006242F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		39C4CCEE21CDA28A006242F3 /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		39C4CCF021CDCB39006242F3 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +66,7 @@
 		39C4CCF821CEAA4A006242F3 /* AvailableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableObject.swift; sourceTree = "<group>"; };
 		39C4CCFC21CF670F006242F3 /* EditObjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditObjectViewController.swift; path = ../../../AF_test/AF_test/EditObjectViewController.swift; sourceTree = "<group>"; };
 		39C4CD3821D176D6006242F3 /* AddObjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddObjectViewController.swift; sourceTree = "<group>"; };
+		39C4CD3A21D19207006242F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4E8260EAAEA5AB37148256BD /* Pods-MealCreditApp_iOSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOSUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOSUITests/Pods-MealCreditApp_iOSUITests.release.xcconfig"; sourceTree = "<group>"; };
 		76F178B180DFB4CDF3413382 /* Pods-MealCreditApp_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOS/Pods-MealCreditApp_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		886C86A34AEE5B6E264ECD5B /* Pods-MealCreditApp_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOSTests/Pods-MealCreditApp_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -156,9 +156,9 @@
 				39C4CCFC21CF670F006242F3 /* EditObjectViewController.swift */,
 				39C4CD3821D176D6006242F3 /* AddObjectViewController.swift */,
 				39C4CCF621CE1111006242F3 /* HungerObjsViewController.swift */,
-				39C4CCC721CD8DC0006242F3 /* Assets.xcassets */,
 				39C4CCC921CD8DC0006242F3 /* LaunchScreen.storyboard */,
 				39C4CCCC21CD8DC0006242F3 /* Info.plist */,
+				39C4CD3A21D19207006242F3 /* Assets.xcassets */,
 			);
 			path = MealCreditApp_iOS;
 			sourceTree = "<group>";
@@ -166,7 +166,7 @@
 		39C4CCD421CD8DC0006242F3 /* MealCreditApp_iOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				39C4CCD521CD8DC0006242F3 /* AF_testTests.swift */,
+				39C4CCD521CD8DC0006242F3 /* MealCreditApp_iOSTests.swift */,
 				39C4CCD721CD8DC0006242F3 /* Info.plist */,
 			);
 			path = MealCreditApp_iOSTests;
@@ -175,7 +175,7 @@
 		39C4CCDF21CD8DC0006242F3 /* MealCreditApp_iOSUITests */ = {
 			isa = PBXGroup;
 			children = (
-				39C4CCE021CD8DC0006242F3 /* AF_testUITests.swift */,
+				39C4CCE021CD8DC0006242F3 /* MealCreditApp_iOSTests.swift */,
 				39C4CCE221CD8DC0006242F3 /* Info.plist */,
 			);
 			name = MealCreditApp_iOSUITests;
@@ -291,7 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				39C4CCCB21CD8DC0006242F3 /* LaunchScreen.storyboard in Resources */,
-				39C4CCC821CD8DC0006242F3 /* Assets.xcassets in Resources */,
+				39C4CD3B21D19207006242F3 /* Assets.xcassets in Resources */,
 				39C4CCC621CD8DBF006242F3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,7 +425,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39C4CCD621CD8DC0006242F3 /* AF_testTests.swift in Sources */,
+				39C4CCD621CD8DC0006242F3 /* MealCreditApp_iOSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,7 +433,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39C4CCE121CD8DC0006242F3 /* AF_testUITests.swift in Sources */,
+				39C4CCE121CD8DC0006242F3 /* MealCreditApp_iOSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

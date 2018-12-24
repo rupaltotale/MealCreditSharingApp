@@ -7,9 +7,9 @@
 //
 
 import XCTest
-@testable import AF_test
+@testable import MealCreditApp_iOS
 
-class AF_testTests: XCTestCase {
+class MealCreditApp_iOSTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
