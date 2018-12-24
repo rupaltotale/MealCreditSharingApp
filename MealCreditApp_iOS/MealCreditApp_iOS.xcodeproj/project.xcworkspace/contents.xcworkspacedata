@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:MealCreditApp_iOS.xcodeproj">
+      location = "self:/Users/rupalt/Desktop/Personal Projects/MealCreditApp/MealCreditApp_iOS/MealCreditApp_iOS.xcodeproj">
    </FileRef>
 </Workspace>

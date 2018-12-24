@@ -28,6 +28,7 @@ const tokenReturn = function(sendName, user_id) {
     if(user_id !== null) {
         let tokenMade = makeTokenUser(user_id);
         return sendName.json({
+            status : 200,
             "message" : "User created",
             "user_id" : user_id,
             "token" : tokenMade
@@ -35,6 +36,7 @@ const tokenReturn = function(sendName, user_id) {
     }
     else {
         return sendName.status(500).json({
+            status : 500,
             message : "error in user database creation"
         });
     }
@@ -362,7 +364,8 @@ function verifyToken(token) {
     }
     if(!pass) {
         return res.status(401).json({
-            message : "invalid username or password input"
+            message : "invalid username or password input",
+            status : 401
         });
     }
 
@@ -374,20 +377,25 @@ function verifyToken(token) {
             if(loginChecked["matched"] && "id" in loginChecked) {
                 let retToken = makeTokenUser(loginChecked["id"]);
                 return res.status(200).json({
+                    username: loginChecked["username"],
+                    user_id: loginChecked["id"],
                     message: "OAuth successful",
-                    token : retToken
+                    token : retToken,
+                    status: 200
                 });
             }
             // Login or password does not match
             else {
                 return res.status(401).json({
-                    message : "OAuth failed 1"
+                    message : "OAuth failed 1",
+                    status: 401
                 });
             }
         }
         else {
             return res.status(401).json({
-                message : "OAuth failed 2"
+                message : "OAuth failed 2",
+                status: 401
             });
         }
     });
@@ -434,6 +442,7 @@ app.post('/register/', function(req, res) {
     
     if(username.length == 0 || username === undefined) {
         return res.status(401).json({
+            status : 401,
             "message" : "invalid username"
         });
     }
@@ -442,6 +451,7 @@ app.post('/register/', function(req, res) {
     wrapper.isUniqueUsername(username).then((unique) => {
         if(!unique) {
             return res.status(401).json({
+                status : 401,
                 "message" : "username taken"
             });
         }
@@ -451,6 +461,7 @@ app.post('/register/', function(req, res) {
                 wrapper.isUniqueEmail(email).then((unique) => {
                     if(!unique) {
                         return res.status(401).json({
+                            status : 401,
                             message : "email taken"
                         });
                     }
@@ -464,6 +475,7 @@ app.post('/register/', function(req, res) {
                 wrapper.isUniqueEmail(email).then((unique) => {
                     if(!unique) {
                         return res.status(401).json({
+                            status : 401,
                             message : "email taken"
                         });
                     }
@@ -585,6 +597,7 @@ app.put('/change/availability/', (req, res) => {
     let authentic = authenticate(token, res, user_id);
     if (authentic != true) {
         // This means that the user does not have permission or that something went wrong
+        console.log("HACKER!!");
         return authentic;
     }
     let avObj = {
@@ -601,6 +614,7 @@ app.put('/change/availability/', (req, res) => {
             wrapper.changeTable("Availability", key, value, availability_id, "av_id")
             .then((result) => {
                 if (!result){
+                    console.log("unsuccessful")
                     return res.status(500).json({
                         "message" : "insertion failure"
                     });
@@ -608,6 +622,7 @@ app.put('/change/availability/', (req, res) => {
             });
         }
     }
+    console.log("successful");
     return res.status(200).json({
         "message" : "insertion success"
     });

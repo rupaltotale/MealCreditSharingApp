@@ -7,64 +7,89 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		39FDD38021C730E300D092E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39FDD37F21C730E300D092E8 /* AppDelegate.swift */; };
-		39FDD38221C730E300D092E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39FDD38121C730E300D092E8 /* ViewController.swift */; };
-		39FDD38521C730E300D092E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39FDD38321C730E300D092E8 /* Main.storyboard */; };
-		39FDD38721C730E500D092E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39FDD38621C730E500D092E8 /* Assets.xcassets */; };
-		39FDD38A21C730E500D092E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39FDD38821C730E500D092E8 /* LaunchScreen.storyboard */; };
-		39FDD39521C730E600D092E8 /* MealCreditApp_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39FDD39421C730E600D092E8 /* MealCreditApp_iOSTests.swift */; };
-		39FDD3A021C730E600D092E8 /* MealCreditApp_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39FDD39F21C730E600D092E8 /* MealCreditApp_iOSUITests.swift */; };
+		2A12AA08B195A4C323E8AEA8 /* Pods_MealCreditApp_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28EC1D0642FDFB9D3E6A79F4 /* Pods_MealCreditApp_iOS.framework */; };
+		39C4CCC121CD8DBF006242F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCC021CD8DBF006242F3 /* AppDelegate.swift */; };
+		39C4CCC321CD8DBF006242F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCC221CD8DBF006242F3 /* ViewController.swift */; };
+		39C4CCC621CD8DBF006242F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CCC421CD8DBF006242F3 /* Main.storyboard */; };
+		39C4CCC821CD8DC0006242F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CCC721CD8DC0006242F3 /* Assets.xcassets */; };
+		39C4CCCB21CD8DC0006242F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CCC921CD8DC0006242F3 /* LaunchScreen.storyboard */; };
+		39C4CCD621CD8DC0006242F3 /* AF_testTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCD521CD8DC0006242F3 /* AF_testTests.swift */; };
+		39C4CCE121CD8DC0006242F3 /* AF_testUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCE021CD8DC0006242F3 /* AF_testUITests.swift */; };
+		39C4CCEF21CDA28A006242F3 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCEE21CDA28A006242F3 /* GlobalVariables.swift */; };
+		39C4CCF121CDCB39006242F3 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF021CDCB39006242F3 /* SignUpViewController.swift */; };
+		39C4CCF321CE0476006242F3 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF221CE0476006242F3 /* Helper.swift */; };
+		39C4CCF521CE10F2006242F3 /* AvailableObjsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF421CE10F2006242F3 /* AvailableObjsViewController.swift */; };
+		39C4CCF721CE1111006242F3 /* HungerObjsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF621CE1111006242F3 /* HungerObjsViewController.swift */; };
+		39C4CCF921CEAA4A006242F3 /* AvailableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF821CEAA4A006242F3 /* AvailableObject.swift */; };
+		39C4CCFD21CF670F006242F3 /* EditObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCFC21CF670F006242F3 /* EditObjectViewController.swift */; };
+		39C4CD3921D176D6006242F3 /* AddObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CD3821D176D6006242F3 /* AddObjectViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		39FDD39121C730E600D092E8 /* PBXContainerItemProxy */ = {
+		39C4CCD221CD8DC0006242F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 39FDD37421C730E300D092E8 /* Project object */;
+			containerPortal = 39C4CCB521CD8DBF006242F3 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 39FDD37B21C730E300D092E8;
-			remoteInfo = MealCreditApp_iOS;
+			remoteGlobalIDString = 39C4CCBC21CD8DBF006242F3;
+			remoteInfo = AF_test;
 		};
-		39FDD39C21C730E600D092E8 /* PBXContainerItemProxy */ = {
+		39C4CCDD21CD8DC0006242F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 39FDD37421C730E300D092E8 /* Project object */;
+			containerPortal = 39C4CCB521CD8DBF006242F3 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 39FDD37B21C730E300D092E8;
-			remoteInfo = MealCreditApp_iOS;
+			remoteGlobalIDString = 39C4CCBC21CD8DBF006242F3;
+			remoteInfo = AF_test;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		39FDD37C21C730E300D092E8 /* MealCreditApp_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MealCreditApp_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		39FDD37F21C730E300D092E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		39FDD38121C730E300D092E8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		39FDD38421C730E300D092E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		39FDD38621C730E500D092E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		39FDD38921C730E500D092E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		39FDD38B21C730E500D092E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		39FDD39021C730E600D092E8 /* MealCreditApp_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MealCreditApp_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		39FDD39421C730E600D092E8 /* MealCreditApp_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCreditApp_iOSTests.swift; sourceTree = "<group>"; };
-		39FDD39621C730E600D092E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		39FDD39B21C730E600D092E8 /* MealCreditApp_iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MealCreditApp_iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		39FDD39F21C730E600D092E8 /* MealCreditApp_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCreditApp_iOSUITests.swift; sourceTree = "<group>"; };
-		39FDD3A121C730E600D092E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		043D190AD779244DDBC67285 /* Pods-MealCreditApp_iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOSTests/Pods-MealCreditApp_iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		1E71F58FD769A1807AE76AE0 /* Pods-MealCreditApp_iOSUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOSUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOSUITests/Pods-MealCreditApp_iOSUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		28EC1D0642FDFB9D3E6A79F4 /* Pods_MealCreditApp_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MealCreditApp_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		39C4CCBD21CD8DBF006242F3 /* MealCreditApp_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MealCreditApp_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		39C4CCC021CD8DBF006242F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		39C4CCC221CD8DBF006242F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		39C4CCC521CD8DBF006242F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		39C4CCC721CD8DC0006242F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		39C4CCCA21CD8DC0006242F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		39C4CCCC21CD8DC0006242F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		39C4CCD121CD8DC0006242F3 /* MealCreditApp_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MealCreditApp_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		39C4CCD521CD8DC0006242F3 /* AF_testTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AF_testTests.swift; sourceTree = "<group>"; };
+		39C4CCD721CD8DC0006242F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		39C4CCDC21CD8DC0006242F3 /* MealCreditApp_iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MealCreditApp_iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		39C4CCE021CD8DC0006242F3 /* AF_testUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AF_testUITests.swift; sourceTree = "<group>"; };
+		39C4CCE221CD8DC0006242F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		39C4CCEE21CDA28A006242F3 /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
+		39C4CCF021CDCB39006242F3 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		39C4CCF221CE0476006242F3 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		39C4CCF421CE10F2006242F3 /* AvailableObjsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableObjsViewController.swift; sourceTree = "<group>"; };
+		39C4CCF621CE1111006242F3 /* HungerObjsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HungerObjsViewController.swift; sourceTree = "<group>"; };
+		39C4CCF821CEAA4A006242F3 /* AvailableObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableObject.swift; sourceTree = "<group>"; };
+		39C4CCFC21CF670F006242F3 /* EditObjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditObjectViewController.swift; path = ../../../AF_test/AF_test/EditObjectViewController.swift; sourceTree = "<group>"; };
+		39C4CD3821D176D6006242F3 /* AddObjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddObjectViewController.swift; sourceTree = "<group>"; };
+		4E8260EAAEA5AB37148256BD /* Pods-MealCreditApp_iOSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOSUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOSUITests/Pods-MealCreditApp_iOSUITests.release.xcconfig"; sourceTree = "<group>"; };
+		76F178B180DFB4CDF3413382 /* Pods-MealCreditApp_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOS/Pods-MealCreditApp_iOS.release.xcconfig"; sourceTree = "<group>"; };
+		886C86A34AEE5B6E264ECD5B /* Pods-MealCreditApp_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOSTests/Pods-MealCreditApp_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		F9884153D4327E1DFAB90252 /* Pods-MealCreditApp_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOS/Pods-MealCreditApp_iOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		39FDD37921C730E300D092E8 /* Frameworks */ = {
+		39C4CCBA21CD8DBF006242F3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A12AA08B195A4C323E8AEA8 /* Pods_MealCreditApp_iOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		39C4CCCE21CD8DC0006242F3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		39FDD38D21C730E600D092E8 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		39FDD39821C730E600D092E8 /* Frameworks */ = {
+		39C4CCD921CD8DC0006242F3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -74,137 +99,173 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		39FDD37321C730E300D092E8 = {
+		0C71EE238D35CB10287C1179 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				39FDD37E21C730E300D092E8 /* MealCreditApp_iOS */,
-				39FDD39321C730E600D092E8 /* MealCreditApp_iOSTests */,
-				39FDD39E21C730E600D092E8 /* MealCreditApp_iOSUITests */,
-				39FDD37D21C730E300D092E8 /* Products */,
+				F9884153D4327E1DFAB90252 /* Pods-MealCreditApp_iOS.debug.xcconfig */,
+				76F178B180DFB4CDF3413382 /* Pods-MealCreditApp_iOS.release.xcconfig */,
+				043D190AD779244DDBC67285 /* Pods-MealCreditApp_iOSTests.debug.xcconfig */,
+				886C86A34AEE5B6E264ECD5B /* Pods-MealCreditApp_iOSTests.release.xcconfig */,
+				1E71F58FD769A1807AE76AE0 /* Pods-MealCreditApp_iOSUITests.debug.xcconfig */,
+				4E8260EAAEA5AB37148256BD /* Pods-MealCreditApp_iOSUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		1A3AA924567CA953BD0D8520 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				28EC1D0642FDFB9D3E6A79F4 /* Pods_MealCreditApp_iOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		39C4CCB421CD8DBF006242F3 = {
+			isa = PBXGroup;
+			children = (
+				39C4CCBF21CD8DBF006242F3 /* MealCreditApp_iOS */,
+				39C4CCD421CD8DC0006242F3 /* MealCreditApp_iOSTests */,
+				39C4CCDF21CD8DC0006242F3 /* MealCreditApp_iOSUITests */,
+				39C4CCBE21CD8DBF006242F3 /* Products */,
+				0C71EE238D35CB10287C1179 /* Pods */,
+				1A3AA924567CA953BD0D8520 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		39FDD37D21C730E300D092E8 /* Products */ = {
+		39C4CCBE21CD8DBF006242F3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				39FDD37C21C730E300D092E8 /* MealCreditApp_iOS.app */,
-				39FDD39021C730E600D092E8 /* MealCreditApp_iOSTests.xctest */,
-				39FDD39B21C730E600D092E8 /* MealCreditApp_iOSUITests.xctest */,
+				39C4CCBD21CD8DBF006242F3 /* MealCreditApp_iOS.app */,
+				39C4CCD121CD8DC0006242F3 /* MealCreditApp_iOSTests.xctest */,
+				39C4CCDC21CD8DC0006242F3 /* MealCreditApp_iOSUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		39FDD37E21C730E300D092E8 /* MealCreditApp_iOS */ = {
+		39C4CCBF21CD8DBF006242F3 /* MealCreditApp_iOS */ = {
 			isa = PBXGroup;
 			children = (
-				39FDD37F21C730E300D092E8 /* AppDelegate.swift */,
-				39FDD38121C730E300D092E8 /* ViewController.swift */,
-				39FDD38321C730E300D092E8 /* Main.storyboard */,
-				39FDD38621C730E500D092E8 /* Assets.xcassets */,
-				39FDD38821C730E500D092E8 /* LaunchScreen.storyboard */,
-				39FDD38B21C730E500D092E8 /* Info.plist */,
+				39C4CCC021CD8DBF006242F3 /* AppDelegate.swift */,
+				39C4CCEE21CDA28A006242F3 /* GlobalVariables.swift */,
+				39C4CCF221CE0476006242F3 /* Helper.swift */,
+				39C4CCC421CD8DBF006242F3 /* Main.storyboard */,
+				39C4CCC221CD8DBF006242F3 /* ViewController.swift */,
+				39C4CCF021CDCB39006242F3 /* SignUpViewController.swift */,
+				39C4CCF421CE10F2006242F3 /* AvailableObjsViewController.swift */,
+				39C4CCF821CEAA4A006242F3 /* AvailableObject.swift */,
+				39C4CCFC21CF670F006242F3 /* EditObjectViewController.swift */,
+				39C4CD3821D176D6006242F3 /* AddObjectViewController.swift */,
+				39C4CCF621CE1111006242F3 /* HungerObjsViewController.swift */,
+				39C4CCC721CD8DC0006242F3 /* Assets.xcassets */,
+				39C4CCC921CD8DC0006242F3 /* LaunchScreen.storyboard */,
+				39C4CCCC21CD8DC0006242F3 /* Info.plist */,
 			);
 			path = MealCreditApp_iOS;
 			sourceTree = "<group>";
 		};
-		39FDD39321C730E600D092E8 /* MealCreditApp_iOSTests */ = {
+		39C4CCD421CD8DC0006242F3 /* MealCreditApp_iOSTests */ = {
 			isa = PBXGroup;
 			children = (
-				39FDD39421C730E600D092E8 /* MealCreditApp_iOSTests.swift */,
-				39FDD39621C730E600D092E8 /* Info.plist */,
+				39C4CCD521CD8DC0006242F3 /* AF_testTests.swift */,
+				39C4CCD721CD8DC0006242F3 /* Info.plist */,
 			);
 			path = MealCreditApp_iOSTests;
 			sourceTree = "<group>";
 		};
-		39FDD39E21C730E600D092E8 /* MealCreditApp_iOSUITests */ = {
+		39C4CCDF21CD8DC0006242F3 /* MealCreditApp_iOSUITests */ = {
 			isa = PBXGroup;
 			children = (
-				39FDD39F21C730E600D092E8 /* MealCreditApp_iOSUITests.swift */,
-				39FDD3A121C730E600D092E8 /* Info.plist */,
+				39C4CCE021CD8DC0006242F3 /* AF_testUITests.swift */,
+				39C4CCE221CD8DC0006242F3 /* Info.plist */,
 			);
-			path = MealCreditApp_iOSUITests;
+			name = MealCreditApp_iOSUITests;
+			path = AF_testUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		39FDD37B21C730E300D092E8 /* MealCreditApp_iOS */ = {
+		39C4CCBC21CD8DBF006242F3 /* MealCreditApp_iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 39FDD3A421C730E600D092E8 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOS" */;
+			buildConfigurationList = 39C4CCE521CD8DC0006242F3 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOS" */;
 			buildPhases = (
-				39FDD37821C730E300D092E8 /* Sources */,
-				39FDD37921C730E300D092E8 /* Frameworks */,
-				39FDD37A21C730E300D092E8 /* Resources */,
+				39BB3ECF52739A02A5BE423A /* [CP] Check Pods Manifest.lock */,
+				39C4CCB921CD8DBF006242F3 /* Sources */,
+				39C4CCBA21CD8DBF006242F3 /* Frameworks */,
+				39C4CCBB21CD8DBF006242F3 /* Resources */,
+				AC3E83AAC687940AE77E8378 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = MealCreditApp_iOS;
-			productName = MealCreditApp_iOS;
-			productReference = 39FDD37C21C730E300D092E8 /* MealCreditApp_iOS.app */;
+			productName = AF_test;
+			productReference = 39C4CCBD21CD8DBF006242F3 /* MealCreditApp_iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		39FDD38F21C730E600D092E8 /* MealCreditApp_iOSTests */ = {
+		39C4CCD021CD8DC0006242F3 /* MealCreditApp_iOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 39FDD3A721C730E600D092E8 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOSTests" */;
+			buildConfigurationList = 39C4CCE821CD8DC0006242F3 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOSTests" */;
 			buildPhases = (
-				39FDD38C21C730E600D092E8 /* Sources */,
-				39FDD38D21C730E600D092E8 /* Frameworks */,
-				39FDD38E21C730E600D092E8 /* Resources */,
+				3B2B3417B691049FEB8CBA8C /* [CP] Check Pods Manifest.lock */,
+				39C4CCCD21CD8DC0006242F3 /* Sources */,
+				39C4CCCE21CD8DC0006242F3 /* Frameworks */,
+				39C4CCCF21CD8DC0006242F3 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				39FDD39221C730E600D092E8 /* PBXTargetDependency */,
+				39C4CCD321CD8DC0006242F3 /* PBXTargetDependency */,
 			);
 			name = MealCreditApp_iOSTests;
-			productName = MealCreditApp_iOSTests;
-			productReference = 39FDD39021C730E600D092E8 /* MealCreditApp_iOSTests.xctest */;
+			productName = AF_testTests;
+			productReference = 39C4CCD121CD8DC0006242F3 /* MealCreditApp_iOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		39FDD39A21C730E600D092E8 /* MealCreditApp_iOSUITests */ = {
+		39C4CCDB21CD8DC0006242F3 /* MealCreditApp_iOSUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 39FDD3AA21C730E600D092E8 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOSUITests" */;
+			buildConfigurationList = 39C4CCEB21CD8DC0006242F3 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOSUITests" */;
 			buildPhases = (
-				39FDD39721C730E600D092E8 /* Sources */,
-				39FDD39821C730E600D092E8 /* Frameworks */,
-				39FDD39921C730E600D092E8 /* Resources */,
+				B5925533D31991C87BDB404B /* [CP] Check Pods Manifest.lock */,
+				39C4CCD821CD8DC0006242F3 /* Sources */,
+				39C4CCD921CD8DC0006242F3 /* Frameworks */,
+				39C4CCDA21CD8DC0006242F3 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				39FDD39D21C730E600D092E8 /* PBXTargetDependency */,
+				39C4CCDE21CD8DC0006242F3 /* PBXTargetDependency */,
 			);
 			name = MealCreditApp_iOSUITests;
-			productName = MealCreditApp_iOSUITests;
-			productReference = 39FDD39B21C730E600D092E8 /* MealCreditApp_iOSUITests.xctest */;
+			productName = AF_testUITests;
+			productReference = 39C4CCDC21CD8DC0006242F3 /* MealCreditApp_iOSUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		39FDD37421C730E300D092E8 /* Project object */ = {
+		39C4CCB521CD8DBF006242F3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = RupalT;
 				TargetAttributes = {
-					39FDD37B21C730E300D092E8 = {
+					39C4CCBC21CD8DBF006242F3 = {
 						CreatedOnToolsVersion = 10.1;
 					};
-					39FDD38F21C730E600D092E8 = {
+					39C4CCD021CD8DC0006242F3 = {
 						CreatedOnToolsVersion = 10.1;
-						TestTargetID = 39FDD37B21C730E300D092E8;
+						TestTargetID = 39C4CCBC21CD8DBF006242F3;
 					};
-					39FDD39A21C730E600D092E8 = {
+					39C4CCDB21CD8DC0006242F3 = {
 						CreatedOnToolsVersion = 10.1;
-						TestTargetID = 39FDD37B21C730E300D092E8;
+						TestTargetID = 39C4CCBC21CD8DBF006242F3;
 					};
 				};
 			};
-			buildConfigurationList = 39FDD37721C730E300D092E8 /* Build configuration list for PBXProject "MealCreditApp_iOS" */;
+			buildConfigurationList = 39C4CCB821CD8DBF006242F3 /* Build configuration list for PBXProject "MealCreditApp_iOS" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -212,37 +273,37 @@
 				en,
 				Base,
 			);
-			mainGroup = 39FDD37321C730E300D092E8;
-			productRefGroup = 39FDD37D21C730E300D092E8 /* Products */;
+			mainGroup = 39C4CCB421CD8DBF006242F3;
+			productRefGroup = 39C4CCBE21CD8DBF006242F3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				39FDD37B21C730E300D092E8 /* MealCreditApp_iOS */,
-				39FDD38F21C730E600D092E8 /* MealCreditApp_iOSTests */,
-				39FDD39A21C730E600D092E8 /* MealCreditApp_iOSUITests */,
+				39C4CCBC21CD8DBF006242F3 /* MealCreditApp_iOS */,
+				39C4CCD021CD8DC0006242F3 /* MealCreditApp_iOSTests */,
+				39C4CCDB21CD8DC0006242F3 /* MealCreditApp_iOSUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		39FDD37A21C730E300D092E8 /* Resources */ = {
+		39C4CCBB21CD8DBF006242F3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39FDD38A21C730E500D092E8 /* LaunchScreen.storyboard in Resources */,
-				39FDD38721C730E500D092E8 /* Assets.xcassets in Resources */,
-				39FDD38521C730E300D092E8 /* Main.storyboard in Resources */,
+				39C4CCCB21CD8DC0006242F3 /* LaunchScreen.storyboard in Resources */,
+				39C4CCC821CD8DC0006242F3 /* Assets.xcassets in Resources */,
+				39C4CCC621CD8DBF006242F3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		39FDD38E21C730E600D092E8 /* Resources */ = {
+		39C4CCCF21CD8DC0006242F3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		39FDD39921C730E600D092E8 /* Resources */ = {
+		39C4CCDA21CD8DC0006242F3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -251,60 +312,159 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		39BB3ECF52739A02A5BE423A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MealCreditApp_iOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3B2B3417B691049FEB8CBA8C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MealCreditApp_iOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC3E83AAC687940AE77E8378 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MealCreditApp_iOS/Pods-MealCreditApp_iOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MealCreditApp_iOS/Pods-MealCreditApp_iOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B5925533D31991C87BDB404B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MealCreditApp_iOSUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		39FDD37821C730E300D092E8 /* Sources */ = {
+		39C4CCB921CD8DBF006242F3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39FDD38221C730E300D092E8 /* ViewController.swift in Sources */,
-				39FDD38021C730E300D092E8 /* AppDelegate.swift in Sources */,
+				39C4CCFD21CF670F006242F3 /* EditObjectViewController.swift in Sources */,
+				39C4CCF921CEAA4A006242F3 /* AvailableObject.swift in Sources */,
+				39C4CCEF21CDA28A006242F3 /* GlobalVariables.swift in Sources */,
+				39C4CCC321CD8DBF006242F3 /* ViewController.swift in Sources */,
+				39C4CCF521CE10F2006242F3 /* AvailableObjsViewController.swift in Sources */,
+				39C4CCF321CE0476006242F3 /* Helper.swift in Sources */,
+				39C4CCF121CDCB39006242F3 /* SignUpViewController.swift in Sources */,
+				39C4CCC121CD8DBF006242F3 /* AppDelegate.swift in Sources */,
+				39C4CCF721CE1111006242F3 /* HungerObjsViewController.swift in Sources */,
+				39C4CD3921D176D6006242F3 /* AddObjectViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		39FDD38C21C730E600D092E8 /* Sources */ = {
+		39C4CCCD21CD8DC0006242F3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39FDD39521C730E600D092E8 /* MealCreditApp_iOSTests.swift in Sources */,
+				39C4CCD621CD8DC0006242F3 /* AF_testTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		39FDD39721C730E600D092E8 /* Sources */ = {
+		39C4CCD821CD8DC0006242F3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39FDD3A021C730E600D092E8 /* MealCreditApp_iOSUITests.swift in Sources */,
+				39C4CCE121CD8DC0006242F3 /* AF_testUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		39FDD39221C730E600D092E8 /* PBXTargetDependency */ = {
+		39C4CCD321CD8DC0006242F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 39FDD37B21C730E300D092E8 /* MealCreditApp_iOS */;
-			targetProxy = 39FDD39121C730E600D092E8 /* PBXContainerItemProxy */;
+			target = 39C4CCBC21CD8DBF006242F3 /* MealCreditApp_iOS */;
+			targetProxy = 39C4CCD221CD8DC0006242F3 /* PBXContainerItemProxy */;
 		};
-		39FDD39D21C730E600D092E8 /* PBXTargetDependency */ = {
+		39C4CCDE21CD8DC0006242F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 39FDD37B21C730E300D092E8 /* MealCreditApp_iOS */;
-			targetProxy = 39FDD39C21C730E600D092E8 /* PBXContainerItemProxy */;
+			target = 39C4CCBC21CD8DBF006242F3 /* MealCreditApp_iOS */;
+			targetProxy = 39C4CCDD21CD8DC0006242F3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		39FDD38321C730E300D092E8 /* Main.storyboard */ = {
+		39C4CCC421CD8DBF006242F3 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				39FDD38421C730E300D092E8 /* Base */,
+				39C4CCC521CD8DBF006242F3 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		39FDD38821C730E500D092E8 /* LaunchScreen.storyboard */ = {
+		39C4CCC921CD8DC0006242F3 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				39FDD38921C730E500D092E8 /* Base */,
+				39C4CCCA21CD8DC0006242F3 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -312,7 +472,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		39FDD3A221C730E600D092E8 /* Debug */ = {
+		39C4CCE321CD8DC0006242F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -373,7 +533,7 @@
 			};
 			name = Debug;
 		};
-		39FDD3A321C730E600D092E8 /* Release */ = {
+		39C4CCE421CD8DC0006242F3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -428,56 +588,59 @@
 			};
 			name = Release;
 		};
-		39FDD3A521C730E600D092E8 /* Debug */ = {
+		39C4CCE621CD8DC0006242F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F9884153D4327E1DFAB90252 /* Pods-MealCreditApp_iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S36H27FPDV;
-				INFOPLIST_FILE = MealCreditApp_iOS/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/MealCreditApp_iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.MealCreditApp-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.AF-test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		39FDD3A621C730E600D092E8 /* Release */ = {
+		39C4CCE721CD8DC0006242F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 76F178B180DFB4CDF3413382 /* Pods-MealCreditApp_iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S36H27FPDV;
-				INFOPLIST_FILE = MealCreditApp_iOS/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/MealCreditApp_iOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.MealCreditApp-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.AF-test";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		39FDD3A821C730E600D092E8 /* Debug */ = {
+		39C4CCE921CD8DC0006242F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 043D190AD779244DDBC67285 /* Pods-MealCreditApp_iOSTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S36H27FPDV;
-				INFOPLIST_FILE = MealCreditApp_iOSTests/Info.plist;
+				INFOPLIST_FILE = AF_testTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.MealCreditApp-iOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.AF-testTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -485,20 +648,21 @@
 			};
 			name = Debug;
 		};
-		39FDD3A921C730E600D092E8 /* Release */ = {
+		39C4CCEA21CD8DC0006242F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 886C86A34AEE5B6E264ECD5B /* Pods-MealCreditApp_iOSTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S36H27FPDV;
-				INFOPLIST_FILE = MealCreditApp_iOSTests/Info.plist;
+				INFOPLIST_FILE = AF_testTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.MealCreditApp-iOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.AF-testTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -506,86 +670,88 @@
 			};
 			name = Release;
 		};
-		39FDD3AB21C730E600D092E8 /* Debug */ = {
+		39C4CCEC21CD8DC0006242F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1E71F58FD769A1807AE76AE0 /* Pods-MealCreditApp_iOSUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S36H27FPDV;
-				INFOPLIST_FILE = MealCreditApp_iOSUITests/Info.plist;
+				INFOPLIST_FILE = AF_testUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.MealCreditApp-iOSUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.AF-testUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MealCreditApp_iOS;
+				TEST_TARGET_NAME = AF_test;
 			};
 			name = Debug;
 		};
-		39FDD3AC21C730E600D092E8 /* Release */ = {
+		39C4CCED21CD8DC0006242F3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4E8260EAAEA5AB37148256BD /* Pods-MealCreditApp_iOSUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S36H27FPDV;
-				INFOPLIST_FILE = MealCreditApp_iOSUITests/Info.plist;
+				INFOPLIST_FILE = AF_testUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.MealCreditApp-iOSUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rupal.AF-testUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = MealCreditApp_iOS;
+				TEST_TARGET_NAME = AF_test;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		39FDD37721C730E300D092E8 /* Build configuration list for PBXProject "MealCreditApp_iOS" */ = {
+		39C4CCB821CD8DBF006242F3 /* Build configuration list for PBXProject "MealCreditApp_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				39FDD3A221C730E600D092E8 /* Debug */,
-				39FDD3A321C730E600D092E8 /* Release */,
+				39C4CCE321CD8DC0006242F3 /* Debug */,
+				39C4CCE421CD8DC0006242F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		39FDD3A421C730E600D092E8 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOS" */ = {
+		39C4CCE521CD8DC0006242F3 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				39FDD3A521C730E600D092E8 /* Debug */,
-				39FDD3A621C730E600D092E8 /* Release */,
+				39C4CCE621CD8DC0006242F3 /* Debug */,
+				39C4CCE721CD8DC0006242F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		39FDD3A721C730E600D092E8 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOSTests" */ = {
+		39C4CCE821CD8DC0006242F3 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				39FDD3A821C730E600D092E8 /* Debug */,
-				39FDD3A921C730E600D092E8 /* Release */,
+				39C4CCE921CD8DC0006242F3 /* Debug */,
+				39C4CCEA21CD8DC0006242F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		39FDD3AA21C730E600D092E8 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOSUITests" */ = {
+		39C4CCEB21CD8DC0006242F3 /* Build configuration list for PBXNativeTarget "MealCreditApp_iOSUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				39FDD3AB21C730E600D092E8 /* Debug */,
-				39FDD3AC21C730E600D092E8 /* Release */,
+				39C4CCEC21CD8DC0006242F3 /* Debug */,
+				39C4CCED21CD8DC0006242F3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 39FDD37421C730E300D092E8 /* Project object */;
+	rootObject = 39C4CCB521CD8DBF006242F3 /* Project object */;
 }

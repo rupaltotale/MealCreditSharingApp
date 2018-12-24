@@ -1,15 +1,15 @@
 //
-//  MealCreditApp_iOSTests.swift
-//  MealCreditApp_iOSTests
+//  AF_testTests.swift
+//  AF_testTests
 //
-//  Created by RupalT on 12/16/18.
+//  Created by RupalT on 12/21/18.
 //  Copyright © 2018 RupalT. All rights reserved.
 //
 
 import XCTest
-@testable import MealCreditApp_iOS
+@testable import AF_test
 
-class MealCreditApp_iOSTests: XCTestCase {
+class AF_testTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

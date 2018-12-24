@@ -302,6 +302,7 @@ module.exports = class DataAccess {
                     if(bcrypt.compareSync(password + salt, password_hash)) {
                         returnUser["id"] = result[0].user_id;
                         returnUser["matched"] = true;
+                        returnUser["username"] = result[0].username;
                     }
                 }
                 resolve(returnUser);
