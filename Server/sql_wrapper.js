@@ -75,6 +75,32 @@ module.exports = class DataAccess {
         return users;
     }
 
+    async getAvailabilityListUserId(userId) {
+        let users = [];
+
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {   
+                for(let element of result) {
+                    let userRet = {
+                        "av_id" : element.av_id,
+                        "user_id" : element.user_id,
+                        "asking_price" : element.asking_price,
+                        "location" : element.location,
+                        "start_time" : element.start_time,
+                        "end_time" : element.end_time
+                    };
+                    users.push(userRet);
+                }
+                resolve(users);
+            }
+        }));
+        
+        return users;
+    }
+
     async getUsersFromIDs(start, limit) {
         let users = [];
         let myQuery = ``;
@@ -303,6 +329,8 @@ module.exports = class DataAccess {
                         returnUser["id"] = result[0].user_id;
                         returnUser["matched"] = true;
                         returnUser["username"] = result[0].username;
+                        returnUser["firstname"] = result[0].firstname;
+                        returnUser["lastname"] = result[0].lastname;
                     }
                 }
                 resolve(returnUser);

@@ -50,6 +50,7 @@ let app = express()
  * 403 == Permission Denied
  * 401 == Unacceptable input
  * 500 == SQL error
+ * 501 == email error
  */
 
 app.use(bodyParser.urlencoded({extended: true}))
@@ -88,6 +89,7 @@ app.enable('trust proxy')
  */
 
 app.get('/', function (req, res) {
+    console.log("REACHED");
     res.send('Start');
 });
 
@@ -99,6 +101,17 @@ app.get('/availability-list', (req, res) => {
         });
     });
     // What about error handling? Catch?
+});
+
+app.get('/availability-list/:userId', (req, res) => {
+    // Creates an object representing the parameters for the SQL wrapper
+    let userId = req.params.userId;
+
+    wrapper.getAvailabilityListUser(userId).then((result) => {
+        res.status(200).json({
+            "result" : result
+        });
+    });
 });
 
 app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) => {
@@ -118,8 +131,8 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
     }
 
     wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
-        res.status(200).send({
-            result
+        res.status(200).json({
+            "result" : result
         }); 
     });
 });
@@ -287,7 +300,7 @@ const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
         issuer : "meal-server",
         subject : "meal-user",
         audience : "meal-app",
-        expiresIn : tokenAge,
+        //expiresIn : tokenAge,
         algorithm : "RS256"
     };
 
@@ -328,7 +341,7 @@ function verifyToken(token) {
         "issuer" : "meal-server",
         "subject" : "meal-user",
         "audience" : "meal-app",
-        maxAge : tokenAge,
+        //maxAge : tokenAge,
         "algorithm" : ["RS256"]
     };
     let payload;
@@ -369,6 +382,8 @@ function verifyToken(token) {
         });
     }
 
+    //console.log("Login attempt: " + username);
+
     // LoginChecked is an object returned by checkUser. 
     wrapper.checkUser(username, email, password).then((loginChecked) => {
         // if matched exists..
@@ -379,9 +394,10 @@ function verifyToken(token) {
                 return res.status(200).json({
                     username: loginChecked["username"],
                     user_id: loginChecked["id"],
+                    firstname : loginChecked["firstname"],
+                    lastname : loginChecked["lastname"],
                     message: "OAuth successful",
                     token : retToken,
-                    status: 200
                 });
             }
             // Login or password does not match
@@ -407,10 +423,18 @@ function verifyToken(token) {
     let link = "http://" + host + "/confirmation/" + token;
     let hover = ''; //`onmouseover="() => { this.style.opacity = "0.7"; }"`; // Cant get this to work
     let style = 'background-color: green; color: white; width: 4em; text-decoration: none; padding: 1vh 1vw; border-radius: 5%;';
+    let htmlToUse;
+    if(firstname != null && firstname != "") {
+       htmlToUse = `Hello ${firstname} ${lastname},<br> Please click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`;
+    }
+    else {
+        htmlToUse = `Hello,<br> Please click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
+    }
+
     let mailOptions = {
         to : email,
         subject : "Please confirm your Meal Credit email account",
-        html : `Hello ${firstname} ${lastname},<br> Please click on the button to verify your email.<br><br><a ${hover} style="${style}" href="${link}">Click here to verify</a><br><br>`
+        html : htmlToUse
     };
     smtpTransport.sendMail(mailOptions, function(error, response) {
         if(error) {
@@ -439,6 +463,7 @@ app.post('/register/', function(req, res) {
     var password = req.body.password; // Will be hashed with salt
     var phonenumber = req.body.phonenumber; // Make sure on the front end that this is a number!
     var email = req.body.email; // Do email regex checking on front end
+    //console.log("REACHED");
     
     if(username.length == 0 || username === undefined) {
         return res.status(401).json({
@@ -544,6 +569,11 @@ app.post('/create/availability/', function(req, res) {
     let start_time = req.body.start_time;
     let end_time = req.body.end_time;
     let token = req.body.token;
+    /*console.log(user_id + " " + asking_price + " " + location + " " + start_time + " " + end_time);
+    res.json({
+        "message" : "got it"
+    });
+    return;*/
     
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
@@ -573,12 +603,6 @@ app.post('/create/hunger/', function(req, res) {
     }
     
     wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).then((result) => sendResult(res, result));
-});
-
-app.post('/recover', (req, res) => {
-    let email = req.body.email;
-
-
 });
 
 

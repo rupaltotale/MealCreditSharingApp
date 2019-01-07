@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Cal Poly Meal Sharer</string>
+    <string name="title_home">Give</string>
+    <string name="title_dashboard">Eat</string>
+    <string name="title_notifications">Message</string>
+
+    <string-array name="avs">
+        <item>Item 1</item>
+        <item>Item 2</item>
+    </string-array>
+
+    <string-array name="locations">
+        <item>Mustang Station</item>
+        <item>Red Radish</item>
+        <item>805</item>
+        <item>Avenue</item>
+        <item>Canyon Cafe</item>
+        <item>Subway</item>
+        <item>Shake Smart</item>
+    </string-array>
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_availability">Available Posts</string>
+    <string name="title_activity_availability_dialog">availability_dialog</string>
+    <string name="account_type">user_info</string>
+    <string name="email_message">An email has been sent to you</string>
+    <string name="email_confirm_text1">Please confirm your email and then click the button below to start</string>
+    <string name="email_confirm_text2">Please confirm your email and then click the button below to start or click the button below it
+    if you\'d rather not confirm email and risk no possible account recovery.</string>
+    <string name="email_confirm_confirm">I\'ve Confirmed My Email</string>
+    <string name="email_confirm_cancel">I do not wish to confirm</string>
+</resources>
