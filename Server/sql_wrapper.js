@@ -10,7 +10,7 @@ module.exports = class DataAccess {
         this._connection = mysql.createConnection(connectionOptions);
     }
 
-    async getAvailabilityList(size, where, who, startTime, endTime, price) {
+    async getAvailabilityList(size, where, who, startTime, endTime, price, sort) {
         let users = [];
         let myQuery = `SELECT * FROM Availability`;
 
@@ -46,7 +46,7 @@ module.exports = class DataAccess {
             }
         }
 
-        myQuery += ` ORDER BY asking_price ASC`;
+        myQuery += ` ORDER BY ${sort} ASC`;
 
         if(size != -1) {
             myQuery += ` LIMIT ${size}`;
@@ -75,8 +75,9 @@ module.exports = class DataAccess {
         return users;
     }
 
-    async getAvailabilityListUserId(userId) {
+    async getAvailabilityListUser(userId) {
         let users = [];
+        let myQuery = `SELECT * FROM Availability WHERE user_id = ${userId}`;
 
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {

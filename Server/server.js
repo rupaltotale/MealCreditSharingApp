@@ -114,7 +114,7 @@ app.get('/availability-list/:userId', (req, res) => {
     });
 });
 
-app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) => {
+app.get('/availability-list/:size/:where/:who/:start/:end/:price/:sortBy', (req, res) => {
     // Creates an object representing the parameters for the SQL wrapper
     let holder = {
         "size" : req.params.size,
@@ -122,7 +122,8 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
         "who" : req.params.who,
         "start" : req.params.start,
         "end" : req.params.end,
-        "price" : req.params.price
+        "price" : req.params.price,
+        "sort" : req.params.sortBy;
     }
     for(let key in holder) {
         if(holder[key] == "false") {
@@ -130,7 +131,7 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price', (req, res) =>
         }
     }
 
-    wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"]).then((result) => {
+    wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"], holder["sort"]).then((result) => {
         res.status(200).json({
             "result" : result
         }); 

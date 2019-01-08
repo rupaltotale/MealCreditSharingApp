@@ -20,7 +20,7 @@
     </string-array>
 
     <string name="title_activity_settings">Settings</string>
-    <string name="title_availability">Available Posts</string>
+    <string name="title_availability">Your Available Posts</string>
     <string name="title_activity_availability_dialog">availability_dialog</string>
     <string name="account_type">user_info</string>
     <string name="email_message">An email has been sent to you</string>
@@ -29,4 +29,7 @@
     if you\'d rather not confirm email and risk no possible account recovery.</string>
     <string name="email_confirm_confirm">I\'ve Confirmed My Email</string>
     <string name="email_confirm_cancel">I do not wish to confirm</string>
+    <string name="av_post_title">Availability Post</string>
+    <string name="av_post_concise">Concise Details</string>
+    <string name="av_post_into">\></string>
 </resources>

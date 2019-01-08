@@ -50,12 +50,18 @@
                 android:textColor="@color/white"
                 android:id="@+id/toolbar_title"
                 android:layout_centerInParent="true" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/app_bar"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/av_layout"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </LinearLayout>
+            </RelativeLayout>
         </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </LinearLayout>
 
         <Spinner
             android:id="@+id/av_list"
