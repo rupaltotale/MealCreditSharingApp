@@ -1,0 +1,17 @@
+EASIER TO CHANGE
+    -- Change time so it makes sure the user cant enter bullshit data
+    -- Make it so that when EditAvPost screen times are clicked, it reflects not the current time, but the one on the post insteead
+            Right now, it uses the calendar rather than the actual given datetimes
+    
+UNKNOWN DIFFICULTY BUT IMPORTANT
+    -- Check user connectedness to internet when trying to connect to server
+
+SCREENS
+    -- Hunger
+        See Hunger & Make hunger post
+    -- See Availability Posts
+    -- Settings
+    -- Match
+
+NOT MVP (Do later)
+    -- Chat stuff

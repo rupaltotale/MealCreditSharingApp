@@ -26,4 +26,71 @@ public class DateParser {
         String year = date.substring(lastIndex + 1, date.length());
         return year + "-" + date.substring(0, lastIndex);
     }
+
+    public static String reverseParseServerDateTime(String dateTime) {
+        int tIndex = dateTime.indexOf("T") + 1;
+        if(tIndex > 0) {
+            String date = dateTime.substring(0, tIndex - 1);
+            String formattedDate = reverseDateServer(date);
+
+            String time = dateTime.substring(tIndex);
+            String formattedTime = reverseTimeServer(time);
+
+            if(!formattedDate.equals("") && !formattedTime.equals("")) {
+                return formattedDate + "|" + formattedTime;
+            }
+        }
+
+        return null;
+    }
+
+    public static String reverseDateServer(String date) {
+        int firstHyphenIndex = date.indexOf("-");
+        int secondHyphenIndex = date.lastIndexOf("-");
+        if(firstHyphenIndex != secondHyphenIndex) {
+            String year = date.substring(0, firstHyphenIndex);
+            String month = date.substring(firstHyphenIndex + 1, secondHyphenIndex);
+            String day = date.substring(secondHyphenIndex + 1);
+
+            return month + "/" + day + "/" + year;
+        }
+        else { // IN CASE A DATE INPUT ISNT A DATE
+            return "";
+        }
+    }
+
+    public static String reverseTimeServer(String time) {
+        int firstColonIndex = time.indexOf(":");
+        System.out.println(time);
+        int secondColonIndex = time.substring(firstColonIndex + 1).indexOf(":") + firstColonIndex + 1;
+        if(firstColonIndex > -1 && secondColonIndex > -1) {
+            String hour = time.substring(0, firstColonIndex);
+            String minute = time.substring(firstColonIndex + 1, secondColonIndex);
+            int parsedHour = Integer.parseInt(hour);
+            String relation = getHourTimeRelation(hour);
+            String correctHour = getAppropriateHourFrom24(relation, parsedHour);
+
+            return correctHour + ":" + minute + " " + relation;
+        }
+        return "";
+    }
+
+    public static String getHourTimeRelation(String hour) {
+        return Integer.parseInt(hour) >= 12 ? "PM" : "AM";
+    }
+
+    protected static String getAppropriateHourFrom24(String relation, int hourOfDay) {
+        if(hourOfDay == 0 || hourOfDay == 12) {
+            return "12";
+        }
+        else if(relation.equals("PM")) {
+            return Integer.toString(hourOfDay % 12);
+        }
+
+        return Integer.toString(hourOfDay);
+    }
+
+    /*private String getCorrectDateTimeFromServer(String dateTime, int tIndexPlus1, ) {
+
+    }*/
 }

@@ -6,6 +6,7 @@ require('dotenv').load()
 const tokenAge = "2h";
 const WrapperObj = require('./sql_wrapper');
 const cryenc = require('./cryptoencryption');
+const dateParser = require('./dateParsing');
 
 // Instance of sql_swapper.js. Allows us to use function within it. 
 let wrapper = new WrapperObj({
@@ -62,26 +63,15 @@ app.enable('trust proxy')
  */
 
  // Have a regular every hour to delete old availability/hunger
- const makeDateTime = (year, month, day, hour, minute, second) => {
-    return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
- };
 
  function deleteOld() {
-    let dateObj = new Date();
-    let day = dateObj.getDay();
-    let month = dateObj.getMonth();
-    let year = dateObj.getFullYear();
-    let currDateTime = makeDateTime(year, month, day, dateObj.getHours(), dateObj.getMinutes(), dateObj.getSeconds());
-    let prevDay = day == 0 ? 31 : day - 1; // Test if end of month
-    let newMonth = (prevDay == 31 && month == 0) ? 12 : month; // When month needs to change to last year (Dec 31)
-    newMonth = (newMonth == month && prevDay == 31) ? month - 1 : newMonth; // When month needs to change but not to last year
-    let newYear = (newMonth == 12 && prevDay == 31) ? year - 1 : year;
-    let pastDateTime = makeDateTime(newYear, newMonth, prevDay, dateObj.getHours(), dateObj.getMinutes(), dateObj.getSeconds());
-    
+    let pastDateTime = dateParser.getCurrentDayOffset();
+    let currDateTime = dateParser.getCurrentDate();
     wrapper.deleteOldObjects(pastDateTime, currDateTime);
+    console.log("DELETING OLD OBJECTS");
  }
  deleteOld();
- setInterval(deleteOld, 3600000);
+ setInterval(deleteOld, 600000);
 
 /** GET requests -- getting any data from the database
  * Availability
@@ -108,6 +98,9 @@ app.get('/availability-list/:userId', (req, res) => {
     let userId = req.params.userId;
 
     wrapper.getAvailabilityListUser(userId).then((result) => {
+        /*for(let i = 0; i < result.length; i++) {
+            console.log(result[i].start_time);
+        }*/
         res.status(200).json({
             "result" : result
         });
@@ -123,7 +116,7 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price/:sortBy', (req,
         "start" : req.params.start,
         "end" : req.params.end,
         "price" : req.params.price,
-        "sort" : req.params.sortBy;
+        "sort" : req.params.sortBy
     }
     for(let key in holder) {
         if(holder[key] == "false") {
@@ -294,7 +287,7 @@ const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
  function makeTokenUser(user_id) {
     let privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
     let payload = {
-        "user-id" : user_id,
+        "user_id" : user_id,
         "login" : "yes"
     };
     let signOptions = {
@@ -353,7 +346,7 @@ function verifyToken(token) {
         return false;
     }
     if((payload["login"] == "yes")) {
-        return Number(payload["user-id"]);
+        return Number(payload["user_id"]);
     }
     else {
         // Implies that User does not have permission.
@@ -551,10 +544,18 @@ function authenticate(token, res, user_id){
 }
 
 function sendResult(res, result){
-    if(result) {
-        return res.status(200).json({
-            "message" : "success"
-        });
+    if(result.retResult || result === true) {
+        if(result.retResult) {
+            return res.status(200).json({
+                "message" : "success",
+                "add_info" : (result.add_info).toString()
+            });
+        }
+        else {
+            return res.status(200).json({
+                "message" : "success" 
+            });
+        }
     }
     else {
         return res.status(500).json({
@@ -583,8 +584,9 @@ app.post('/create/availability/', function(req, res) {
         return authentic;
     }
 
-    wrapper.postAvailabilityObject(Number(user_id), Number(asking_price), location, start_time, end_time).
-    then((result) => sendResult(res, result));
+    wrapper.postAvailabilityObject(Number(user_id), Number(asking_price), location, start_time, end_time).then((result) => {
+        sendResult(res, result);
+    });
 });
 
 // Creates a new hunger object
@@ -617,6 +619,7 @@ app.put('/change/availability/', (req, res) => {
     let user_id = Number(req.body.user_id);
     let availability_id = Number(req.body.av_id);
     let token = req.body.token;
+    //console.log("CHANGING");
 
     // Authentiates if the user has the permission to do an action. 
     let authentic = authenticate(token, res, user_id);
@@ -647,7 +650,7 @@ app.put('/change/availability/', (req, res) => {
             });
         }
     }
-    console.log("successful");
+    //console.log("successful");
     return res.status(200).json({
         "message" : "insertion success"
     });

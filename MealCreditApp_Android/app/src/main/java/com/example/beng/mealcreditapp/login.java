@@ -68,14 +68,14 @@ public class login extends AppCompatActivity {
                                     try {
                                         String res = response.body().string();
                                         JSONObject jsonRes = new JSONObject(res);
-                                        User.setUser(jsonRes.getString("token"), jsonRes.getString("user_id"), jsonRes.getString("username"),
+                                        User.setUser(jsonRes.getString("token"), jsonRes.get("user_id").toString(), jsonRes.getString("username"),
                                                 jsonRes.getString("firstname"), jsonRes.getString("lastname"));
                                         UserCheck.setUserSharedPreferences(jsonRes);
                                         Intent intent = new Intent(login.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();
 
-                                    } catch(Exception e) { return; }
+                                    } catch(Exception e) {  }
                                 }
                             }
                         });

@@ -51,4 +51,9 @@ public class User {
     public static void setUsername(String username) {
         User.username = username;
     }
+
+    public static String getAllInfoAsJSONString() {
+        return JsonMethods.convertJSONToString(JsonMethods.makeJsonObjectFromStrings(new String[]{"username", "firstname", "lastname", "jwt", "userId"},
+                new String[]{getUsername(), User.firstname, User.lastname, User.jwt, User.userId}));
+    }
 }

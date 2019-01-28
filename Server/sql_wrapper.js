@@ -1,5 +1,7 @@
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
+const dateParser = require('./dateParsing');
+const timeOff = 16;
 require('dotenv').config()
 const saltRounds = 10;
 
@@ -93,6 +95,8 @@ module.exports = class DataAccess {
                         "start_time" : element.start_time,
                         "end_time" : element.end_time
                     };
+                    userRet.start_time = dateParser.getHourOffset(userRet.start_time, timeOff);
+                    userRet.end_time = dateParser.getHourOffset(userRet.end_time, timeOff);
                     users.push(userRet);
                 }
                 resolve(users);
@@ -263,18 +267,21 @@ module.exports = class DataAccess {
 
     async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ) {
         let myQuery = `INSERT INTO Availability VALUES (DEFAULT, ${user_id}, ${asking_price}, '${location}', '${start_time}', '${end_time}')`;
-        let retResult;
+        let retObj;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
                 reject(err);
             }
             else {
-                retResult = result.affectedRows > 0;
+                retObj = {
+                    retResult : result.affectedRows > 0,
+                    add_info : result.insertId
+                }
             }
             resolve(result);
         }));
 
-        return retResult;
+        return retObj;
     }
 
     async postHungerObject(user_id, max_price, location, start_time, end_time ) {

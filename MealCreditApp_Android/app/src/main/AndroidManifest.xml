@@ -13,7 +13,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".MainActivity"
-            android:label="" >
+            android:label="">
         </activity>
         <activity
             android:name=".settings"
@@ -32,12 +32,16 @@
         <activity
             android:name=".signup"
             android:parentActivityName=".login"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".EmailConfirm"
             android:parentActivityName=".signup"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name=".EditAvPost"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
-
 </manifest>

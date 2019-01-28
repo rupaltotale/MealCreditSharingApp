@@ -96,10 +96,10 @@ public class signup extends AppCompatActivity {
 
                     if (response.code() == 200 && email.equals("")) {
                         try {
-                            String userId = jsonRes.getString("user_id");
+                            String userId = jsonRes.get("user_id").toString();
                             String jwt = jsonRes.getString("token");
                             User.setUser(jwt, userId, username, firstName, lastName);
-                            JSONObject forSharedPrefs = JsonMethods.makeJsonObjectFromStrings(new String[]{"firstname", "lastname", "username", "userId", "jwt", "email"},
+                            JSONObject forSharedPrefs = JsonMethods.makeJsonObjectFromStrings(new String[]{"firstname", "lastname", "username", "user_id", "jwt", "email"},
                                     new String[]{firstName, lastName, username, userId, jwt, email});
                             UserCheck.setUserSharedPreferences(forSharedPrefs);
                             Intent intent = new Intent(signup.this, MainActivity.class);
@@ -125,6 +125,17 @@ public class signup extends AppCompatActivity {
                                     try {
                                         if (jsonRes.getString("message").equals("email sent")) {
                                             Intent intent = new Intent(signup.this, EmailConfirm.class);
+                                            JSONObject forSharedPrefs = JsonMethods.makeJsonObjectFromStrings(new String[]{"firstname", "lastname", "username", "email", "password"},
+                                                    new String[]{firstName, lastName, username, email, password});
+                                            String jsonString = forSharedPrefs.toString();
+                                            Bundle b = new Bundle();
+                                            b.putString("user_info", jsonString);
+                                            intent.putExtras(b); //Put your id to your next Intent
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        else {
+                                            Intent intent = new Intent(signup.this, MainActivity.class);
                                             JSONObject forSharedPrefs = JsonMethods.makeJsonObjectFromStrings(new String[]{"firstname", "lastname", "username", "email", "password"},
                                                     new String[]{firstName, lastName, username, email, password});
                                             String jsonString = forSharedPrefs.toString();

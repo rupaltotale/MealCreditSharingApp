@@ -20,7 +20,7 @@ public class UserCheck {
 
     public static void initializeUserCheck(Context context) {
         sp = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
-        jwt = sp.getString("storedjwt", "");
+        jwt = sp.getString("jwt", "");
         /*if(setJwt) {
             jwt = sp.getString("storedjwt", "");
         }*/
@@ -48,11 +48,13 @@ public class UserCheck {
             String jwtBody;
             try {
                 jwtBody = JsonMethods.decoded(jwt);
+                System.out.println(jwtBody);
                 JSONObject json = new JSONObject(jwtBody);
                 String userIdFound;
                 if(!json.isNull("user_id")) {
-                    userIdFound = json.getString("userId");
-                    String userId = sp.getString("userId", "");
+                    userIdFound = json.getString("user_id");
+                    String userId = sp.getString("user_id", "");
+                    System.out.println("UserID: " + userId);
                     if(!userId.equals(userIdFound)) {
                         return false;
                     }
@@ -78,23 +80,45 @@ public class UserCheck {
         if(hasInitialized()) {
             Iterator<String> keys = json.keys();
             SharedPreferences.Editor sPEditor = sp.edit();
-
-            while(keys.hasNext()) {
+            while (keys.hasNext()) {
                 try {
                     String key = keys.next();
-                    if(key.equals("token")) {
-                        key = "jwt";
+                    switch(key) {
+                        case "token":
+                            sPEditor.putString("jwt", json.getString("token"));
+                            break;
+                        case "message":
+                            break;
+                        case "user_id":
+                            sPEditor.putString("user_id", json.get("user_id").toString());
+                            break;
+                        default:
+                            String newValue = json.getString(key);
+                            sPEditor.putString(key, newValue);
+                            break;
                     }
-                    String newValue = json.getString(key);
-                    sPEditor.putString(key, newValue);
+                } catch (JSONException e) {
+                    continue;
                 }
-                catch (JSONException e) { continue; }
             }
 
             sPEditor.apply();
         }
     }
 
+    protected static void setPasswordNull() {
+        SharedPreferences.Editor sPEditor = sp.edit();
+        sPEditor.putString("password", "");
+        sPEditor.apply();
+    }
+
+    protected static boolean isPasswordSet() {
+        String password = sp.getString("password", "");
+        if(password == null || password.equals("")) {
+            return false;
+        }
+        return true;
+    }
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);

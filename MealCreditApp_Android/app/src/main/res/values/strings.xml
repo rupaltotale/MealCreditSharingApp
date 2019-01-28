@@ -29,7 +29,9 @@
     if you\'d rather not confirm email and risk no possible account recovery.</string>
     <string name="email_confirm_confirm">I\'ve Confirmed My Email</string>
     <string name="email_confirm_cancel">I do not wish to confirm</string>
-    <string name="av_post_title">Availability Post</string>
-    <string name="av_post_concise">Concise Details</string>
+    <string name="av_post_title">Post</string>
+    <string name="av_post_concise">Edit/Delete</string>
     <string name="av_post_into">\></string>
+    <string name="edit_post_title">Edit Post</string>
+    <string name="bwatt">Email or Username</string>
 </resources>

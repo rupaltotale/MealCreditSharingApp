@@ -79,9 +79,10 @@ public class EmailConfirm extends AppCompatActivity {
                                     try {
                                         String res = response.body().string();
                                         JSONObject jsonRes = new JSONObject(res);
-                                        User.setUser(jsonRes.getString("token"), jsonRes.getString("user_id"), jsonRes.getString("username"),
+                                        User.setUser(jsonRes.getString("token"), jsonRes.get("user_id").toString(), jsonRes.getString("username"),
                                                 jsonRes.getString("firstname"), jsonRes.getString("lastname"));
                                         UserCheck.setUserSharedPreferences(jsonRes);
+                                        UserCheck.setPasswordNull();
                                         Intent intent = new Intent(EmailConfirm.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();
@@ -102,6 +103,7 @@ public class EmailConfirm extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(EmailConfirm.this, signup.class);
                 Bundle b = new Bundle();
+                UserCheck.setPasswordNull();
                 b.putString("user_info", prefs);
                 intent.putExtras(b); //Put your id to your next Intent
                 startActivity(intent);
@@ -128,5 +130,13 @@ public class EmailConfirm extends AppCompatActivity {
 
         Button bottomBut = (Button) findViewById(R.id.email_cancel_but);
         bottomBut.setText(R.string.email_confirm_cancel);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(UserCheck.isPasswordSet()) {
+            UserCheck.setPasswordNull();
+        }
     }
 }
