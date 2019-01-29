@@ -1,6 +1,6 @@
 EASIER TO CHANGE
     -- Change time so it makes sure the user cant enter bullshit data
-    -- Make it so that when EditAvPost screen times are clicked, it reflects not the current time, but the one on the post insteead
+    -- Make it so that when EditAvPost screen times are clicked, it reflects not the current time, but the one on the post instead
             Right now, it uses the calendar rather than the actual given datetimes
     
 UNKNOWN DIFFICULTY BUT IMPORTANT
@@ -15,3 +15,4 @@ SCREENS
 
 NOT MVP (Do later)
     -- Chat stuff
+    -- Maps

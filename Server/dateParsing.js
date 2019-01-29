@@ -28,8 +28,8 @@ function makeUsableDateTimeFromServer(serverDateTime) {
 
 function getCurrentDate() {
     var dateObj = new Date();
-    let day = dateObj.getDay();
-    let month = dateObj.getMonth();
+    let day = dateObj.getDate();
+    let month = dateObj.getMonth() + 1;
     let year = dateObj.getFullYear();
     let currDateTime = makeDateTime(year, month, day, dateObj.getHours(), dateObj.getMinutes(), dateObj.getSeconds());
     return currDateTime;
@@ -37,8 +37,8 @@ function getCurrentDate() {
 
 function getCurrentDayOffset() {
     var dateObj = new Date();
-    let day = dateObj.getDay();
-    let month = dateObj.getMonth();
+    let day = dateObj.getDate();
+    let month = dateObj.getMonth() + 1;
     let year = dateObj.getFullYear();
     let prevDay = day == 0 ? 31 : day - 1; // Test if end of month
     let newMonth = (prevDay == 31 && month == 0) ? 12 : month; // When month needs to change to last year (Dec 31)

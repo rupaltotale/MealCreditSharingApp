@@ -66,7 +66,9 @@ app.enable('trust proxy')
 
  function deleteOld() {
     let pastDateTime = dateParser.getCurrentDayOffset();
+    console.log(pastDateTime);
     let currDateTime = dateParser.getCurrentDate();
+    console.log(currDateTime);
     wrapper.deleteOldObjects(pastDateTime, currDateTime);
     console.log("DELETING OLD OBJECTS");
  }
