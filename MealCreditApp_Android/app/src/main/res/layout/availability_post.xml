@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="80sp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/border_bot"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_marginLeft="10sp"
+            android:textColor="@color/black"
+            android:text="@string/av_post_title"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:layout_weight="0.4"
+            android:layout_width="0dp"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:text="@string/av_post_concise"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            />
+
+        <Button
+            android:layout_weight="0.1"
+            android:layout_width="0dp"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="@string/av_post_into"
+            android:textSize="20sp"
+            />
+    </LinearLayout>
+</RelativeLayout>

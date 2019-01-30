@@ -1,5 +1,7 @@
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
+const dateParser = require('./dateParsing');
+const timeOff = 16;
 require('dotenv').config()
 const saltRounds = 10;
 
@@ -10,7 +12,7 @@ module.exports = class DataAccess {
         this._connection = mysql.createConnection(connectionOptions);
     }
 
-    async getAvailabilityList(size, where, who, startTime, endTime, price) {
+    async getAvailabilityList(size, where, who, startTime, endTime, price, sort) {
         let users = [];
         let myQuery = `SELECT * FROM Availability`;
 
@@ -46,7 +48,7 @@ module.exports = class DataAccess {
             }
         }
 
-        myQuery += ` ORDER BY asking_price ASC`;
+        myQuery += ` ORDER BY ${sort} ASC`;
 
         if(size != -1) {
             myQuery += ` LIMIT ${size}`;
@@ -66,6 +68,35 @@ module.exports = class DataAccess {
                         "start_time" : element.start_time,
                         "end_time" : element.end_time
                     };
+                    users.push(userRet);
+                }
+                resolve(users);
+            }
+        }));
+        
+        return users;
+    }
+
+    async getAvailabilityListUser(userId) {
+        let users = [];
+        let myQuery = `SELECT * FROM Availability WHERE user_id = ${userId}`;
+
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {   
+                for(let element of result) {
+                    let userRet = {
+                        "av_id" : element.av_id,
+                        "user_id" : element.user_id,
+                        "asking_price" : element.asking_price,
+                        "location" : element.location,
+                        "start_time" : element.start_time,
+                        "end_time" : element.end_time
+                    };
+                    userRet.start_time = dateParser.getHourOffset(userRet.start_time, timeOff);
+                    userRet.end_time = dateParser.getHourOffset(userRet.end_time, timeOff);
                     users.push(userRet);
                 }
                 resolve(users);
@@ -236,18 +267,21 @@ module.exports = class DataAccess {
 
     async postAvailabilityObject(user_id, asking_price, location, start_time, end_time ) {
         let myQuery = `INSERT INTO Availability VALUES (DEFAULT, ${user_id}, ${asking_price}, '${location}', '${start_time}', '${end_time}')`;
-        let retResult;
+        let retObj;
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
                 reject(err);
             }
             else {
-                retResult = result.affectedRows > 0;
+                retObj = {
+                    retResult : result.affectedRows > 0,
+                    add_info : result.insertId
+                }
             }
             resolve(result);
         }));
 
-        return retResult;
+        return retObj;
     }
 
     async postHungerObject(user_id, max_price, location, start_time, end_time ) {
@@ -303,6 +337,8 @@ module.exports = class DataAccess {
                         returnUser["id"] = result[0].user_id;
                         returnUser["matched"] = true;
                         returnUser["username"] = result[0].username;
+                        returnUser["firstname"] = result[0].firstname;
+                        returnUser["lastname"] = result[0].lastname;
                     }
                 }
                 resolve(returnUser);

@@ -1,0 +1,47 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <!--<style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>-->
+    <style name="AppTheme.AvailabilityPopup" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <style name="post_rl">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="post_t1">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_marginLeft">10sp</item>
+        <item name="android:text">@string/av_post_title</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+    <style name="post_t2">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">@string/av_post_concise</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">right</item>
+    </style>
+    <style name="post_but">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">right</item>
+        <item name="android:layout_marginRight">10sp</item>
+        <item name="android:text">@string/av_post_into</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+</resources>
