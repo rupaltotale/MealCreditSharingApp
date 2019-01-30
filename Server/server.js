@@ -248,6 +248,15 @@ app.get("/recover_account/:token/", function(req, res){
 
 
 });
+app.get('/token/:user_id', (req, res) => {
+    let token = makeTokenUser(req.params.user_id);
+    return res.json({
+        "token" : token,
+        "user_id" : req.params.user_id
+    });
+});
+
+
 const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
     let host = req.get('host');
     let link = "http://" + host + "/recover_account/" + token;

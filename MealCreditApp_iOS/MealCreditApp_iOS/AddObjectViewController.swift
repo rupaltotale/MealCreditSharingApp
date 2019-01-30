@@ -70,7 +70,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         self.view.addSubview(saveButton)
     }
     @objc func addNewObject(){
-        
+        Helper.getNewToken()
         if Double(priceTextField.text! ) == nil{
             Helper.alert("Error", "Please make sure price is in decimal format", self)
         }

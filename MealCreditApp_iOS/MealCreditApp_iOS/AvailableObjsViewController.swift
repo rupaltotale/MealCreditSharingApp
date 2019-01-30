@@ -13,12 +13,17 @@ var globalAvObject: AvailableObject!;
 
 class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var list:Array<AvailableObject> = [];
+    var filterButton: UIButton = UIButton();
     @IBOutlet weak var table: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setStyle();
         getMyAvailabilities();
+        showFilterButton();
+    }
+    func showFilterButton(){
+        
     }
     override func viewDidAppear(_ animated: Bool) {
         getMyAvailabilities();

@@ -43,6 +43,7 @@
                                 <rect key="frame" x="79" y="328" width="218" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.060558334120000001" green="0.081416560910000005" blue="0.067573329969999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <state key="normal" title="Log In">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <color key="titleShadowColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -83,7 +84,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.14878981830018767" green="1" blue="0.19735690952631524" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="LUe-w1-1IF"/>
@@ -403,8 +404,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="availabilities" width="30" height="27"/>
-        <image name="hungry" width="63" height="53.5"/>
+        <image name="availabilities" width="40" height="36"/>
+        <image name="hungry" width="45" height="38"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="xLW-D6-70A"/>
