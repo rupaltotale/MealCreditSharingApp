@@ -26,21 +26,34 @@ module.exports = class DataAccess {
                 myQuery += ` AND location = '${where.toLowerCase()}'`;
             }
             else{
-                myQuery += ` WHERE location = '${where.toLowerCase()}'`;
+                myQuery += ` WHERE location = '${where.toLowerCase()}' OR location = 'anywhere'`;
             }
         }
 
-        if(startTime) {
+        if(startTime || endTime) {
             if(who || where) {
-                myQuery += ` AND start_time >= '${startTime}' AND end_time <= '${endTime}'`;
+                if(startTime) {
+                    myQuery += ` AND end_time >= '${startTime}'`;
+                }
+                if(endTime) {
+                    myQuery += ` AND start_time <= '${endTime}'`;
+                }
             }
             else {
-                myQuery += ` WHERE start_time >= '${startTime}' AND end_time <= '${endTime}'`;
+                if(startTime) {
+                    myQuery += ` WHERE end_time >= '${endTime}'`;
+                }
+                if(endTime && !startTime) {
+                    myQuery += ` WHERE start_time <= '${startTime}'`;
+                }
+                else if(endTime) {
+                    myQuery += ` AND start_time <= '${endTime}'`;
+                }
             }
         }
 
         if(price) {
-            if(who || where || startTime) {
+            if(who || where || startTime || endTime) {
                 myQuery += ` AND asking_price <= ${price}`;
             }
             else {
@@ -68,6 +81,9 @@ module.exports = class DataAccess {
                         "start_time" : element.start_time,
                         "end_time" : element.end_time
                     };
+                    //console.log(userRet.start_time);
+                    userRet.start_time = dateParser.getHourOffset(userRet.start_time, timeOff);
+                    userRet.end_time = dateParser.getHourOffset(userRet.end_time, timeOff);
                     users.push(userRet);
                 }
                 resolve(users);
@@ -89,6 +105,37 @@ module.exports = class DataAccess {
                 for(let element of result) {
                     let userRet = {
                         "av_id" : element.av_id,
+                        "user_id" : element.user_id,
+                        "asking_price" : element.asking_price,
+                        "location" : element.location,
+                        "start_time" : element.start_time,
+                        "end_time" : element.end_time
+                    };
+                    //console.log(element.start_time);
+                    userRet.start_time = dateParser.getHourOffset(userRet.start_time, timeOff);
+                    userRet.end_time = dateParser.getHourOffset(userRet.end_time, timeOff);
+                    //console.log(userRet.start_time);
+                    users.push(userRet);
+                }
+                resolve(users);
+            }
+        }));
+        
+        return users;
+    }
+
+    async getHungerListUser(userId) {
+        let users = [];
+        let myQuery = `SELECT * FROM Hunger WHERE user_id = ${userId}`;
+
+        await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
+            if (err) {
+                reject(err);
+            }
+            else {   
+                for(let element of result) {
+                    let userRet = {
+                        "hg_id" : element.hg_id,
                         "user_id" : element.user_id,
                         "asking_price" : element.asking_price,
                         "location" : element.location,
@@ -139,34 +186,39 @@ module.exports = class DataAccess {
     async getNeedsList(limit, location, username, start_time, end_time, price){
         let users = [];
         let myQuery = `SELECT * FROM Hunger`;
-        if(user_id != "") {
+        if(username != "") {
             myQuery = `SELECT * FROM Hunger INNER JOIN Users ON Hunger.user_id = Users.user_id 
             WHERE Users.username = '${username}'`;
         }
         if(location != "") {
             if (who != ""){
-                myQuery += ` AND location = ${location.toLowerCase()}`;
+                myQuery += ` AND location = '${location.toLowerCase()}'`;
             }
             else{
-                myQuery += ` WHERE location = ${location.toLowerCase()}`;
+                myQuery += ` WHERE location = '${location.toLowerCase()}'`;
             }
             
         }
 
-        if (start_time != "") {
-            if(location != "") {
-                myQuery += ` AND start_time <= ${start_time}`;
+        if(startTime != "" || endTime != "") {
+            if(who != "" || where != "") {
+                if(startTime != "") {
+                    myQuery += ` AND end_time >= '${startTime}'`;
+                }
+                if(endTime != "") {
+                    myQuery += ` AND start_time <= '${endTime}'`;
+                }
             }
             else {
-                myQuery += ` WHERE start_time <= ${start_time}`;
-            }
-        }
-        if (end_time != "") {
-            if(start_time != "" || location != "") {
-                myQuery += ` AND end_time >= ${end_time}`;
-            }
-            else {
-                myQuery += ` WHERE end_time >= ${end_time}`;
+                if(startTime != "") {
+                    myQuery += ` WHERE end_time >= '${endTime}'`;
+                }
+                if(endTime != "" && !(startTime != "")) {
+                    myQuery += ` WHERE start_time <= '${startTime}'`;
+                }
+                else if(endTime != "") {
+                    myQuery += ` AND start_time <= '${endTime}'`;
+                }
             }
         }
 
@@ -179,7 +231,7 @@ module.exports = class DataAccess {
             }
         }
 
-        if(size != -1) {
+        if(limit != -1) {
             myQuery += ` LIMIT ${limit}`;
         }
 

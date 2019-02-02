@@ -66,11 +66,11 @@ app.enable('trust proxy')
 
  function deleteOld() {
     let pastDateTime = dateParser.getCurrentDayOffset();
-    console.log(pastDateTime);
+    //console.log(pastDateTime);
     let currDateTime = dateParser.getCurrentDate();
-    console.log(currDateTime);
-    wrapper.deleteOldObjects(pastDateTime, currDateTime);
-    console.log("DELETING OLD OBJECTS");
+    //console.log(currDateTime);
+    //wrapper.deleteOldObjects(pastDateTime, currDateTime);
+    //console.log("DELETING OLD OBJECTS");
  }
  deleteOld();
  setInterval(deleteOld, 600000);
@@ -155,6 +155,20 @@ app.get('/hunger-list/:size/:where/:who/:start/:end/:price', (req, res) => {
         res.send(res.status(200).json({
             "result" : result
         }));
+    });
+});
+
+app.get('/hunger-list/:userId', (req, res) => {
+    // Creates an object representing the parameters for the SQL wrapper
+    let userId = req.params.userId;
+
+    wrapper.getHungerListUser(userId).then((result) => {
+        /*for(let i = 0; i < result.length; i++) {
+            console.log(result[i].start_time);
+        }*/
+        res.status(200).json({
+            "result" : result
+        });
     });
 });
 
@@ -601,11 +615,11 @@ app.post('/create/hunger/', function(req, res) {
     let token = req.body.token;
     
     // Authentiates if the user has the permission to do an action. 
-    let authentic = authenticate(token, res, user_id);
+    /*let authentic = authenticate(token, res, user_id);
     if (authentic != true){
         // This means that the user does not have permission or that something went wrong
         return authentic;
-    }
+    }*/
     
     wrapper.postHungerObject(Number(user_id), Number(max_price), location, start_time, end_time).then((result) => sendResult(res, result));
 });
@@ -642,6 +656,48 @@ app.put('/change/availability/', (req, res) => {
         let value = avObj[key];
         if (value != null){
             wrapper.changeTable("Availability", key, value, availability_id, "av_id")
+            .then((result) => {
+                if (!result){
+                    console.log("unsuccessful")
+                    return res.status(500).json({
+                        "message" : "insertion failure"
+                    });
+                }
+            });
+        }
+    }
+    //console.log("successful");
+    return res.status(200).json({
+        "message" : "insertion success"
+    });
+
+});
+
+app.put('/change/hunger/', (req, res) => {
+    let user_id = Number(req.body.user_id);
+    let hunger_id = Number(req.body.hg_id);
+    let token = req.body.token;
+    //console.log("CHANGING");
+
+    // Authentiates if the user has the permission to do an action. 
+    let authentic = authenticate(token, res, user_id);
+    if (authentic != true) {
+        // This means that the user does not have permission or that something went wrong
+        console.log("HACKER!!");
+        return authentic;
+    }
+    let avObj = {
+        "max_price": req.body.max_price,
+        "location":req.body.location,
+        "start_time":req.body.start_time,
+        "end_time":req.body.end_time
+    }
+    const keys = Object.keys(avObj)
+    for (let i in keys){
+        let key = keys[i];
+        let value = avObj[key];
+        if (value != null){
+            wrapper.changeTable("Hunger", key, value, hunger_id, "hg_id")
             .then((result) => {
                 if (!result){
                     console.log("unsuccessful")

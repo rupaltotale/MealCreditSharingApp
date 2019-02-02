@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:weightSum="1"
+    android:layout_height="match_parent">
+    <HorizontalScrollView
+        android:layout_width="fill_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:background="@color/colorPrimary"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/filter-location"
+                style="@style/filter_av_but"
+                android:text="@string/locationStr" />
+            <Button
+                android:id="@+id/filter-price"
+                style="@style/filter_av_but"
+                android:text="@string/price"
+                />
+            <Button
+                android:id="@+id/filter-start-time"
+                style="@style/filter_av_but"
+                android:text="@string/startTimeStr" />
+            <Button
+                android:id="@+id/filter-end-time"
+                style="@style/filter_av_but"
+                android:text="@string/endTimeStr" />
+            <Button
+                android:id="@+id/filter-username"
+                style="@style/filter_av_but"
+                android:text="@string/usernameStr" />
+            <Button
+                android:id="@+id/filter-other"
+                style="@style/filter_av_but"
+                android:text="@string/others" />
+        </LinearLayout>
+    </HorizontalScrollView>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_weight="0.15"
+        android:layout_height="0dp">
+    </View>
+    <LinearLayout
+        android:id="@+id/lin-layout-filter-av"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:weightSum="1"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+    </LinearLayout>
+</LinearLayout>

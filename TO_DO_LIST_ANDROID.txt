@@ -7,12 +7,9 @@ UNKNOWN DIFFICULTY BUT IMPORTANT
     -- Check user connectedness to internet when trying to connect to server
 
 SCREENS
-    -- Hunger
-        See Hunger & Make hunger post
-    -- See Availability Posts
     -- Settings
-    -- Match
 
 NOT MVP (Do later)
     -- Chat stuff
     -- Maps
+    -- See Availability Posts

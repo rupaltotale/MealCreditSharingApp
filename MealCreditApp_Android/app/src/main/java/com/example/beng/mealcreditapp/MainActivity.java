@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     int width, height;
     int totalPosts;
     private boolean availabilitiesSet = false;
-    private static ArrayList<Integer> needUpdate = new ArrayList<Integer>();
-    private static ArrayList<Integer> needRemoval = new ArrayList<Integer>();
+    private static ArrayList<Integer> needUpdateAv = new ArrayList<Integer>();
+    private static ArrayList<Integer> needRemovalAv = new ArrayList<Integer>();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title_hg);
         //System.out.println("HERE...");
         //System.out.println(User.getAllInfoAsJSONString());
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
            }
         );
 
-        Button addAvailability = (Button) findViewById(R.id.add_availability);
+        Button addAvailability = (Button) findViewById(R.id.add_hunger);
         addAvailability.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View v) {
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
            }
         );
 
-        linearLayout = findViewById(R.id.av_layout);
+        linearLayout = findViewById(R.id.hg_layout);
         setAvailabilities();
     }
 
@@ -180,6 +180,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        removeAll();
+        if(availabilitiesSet) {
+            setAvailabilities();
+        }
+    }
+
     /*private void removePostView(final int childIndex) {
         runOnUiThread(new Runnable() {
             @Override
@@ -204,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < myAvailabilities.size(); i++) {
             if(JsonMethods.get(myAvailabilities.get(i), "av_id").equals(avId)) {
                 myAvailabilities.set(i, newAvPost);
-                needUpdate.add(i);
+                needUpdateAv.add(i);
                 return true;
             }
         }
@@ -214,14 +223,14 @@ public class MainActivity extends AppCompatActivity {
 
     public static void addAvPost(JSONObject avPost) {
         myAvailabilities.add(avPost);
-        needUpdate.add(myAvailabilities.size() - 1);
+        needUpdateAv.add(myAvailabilities.size() - 1);
     }
 
     public static boolean removeAvPost(String avId) {
         for(int i = 0; i < myAvailabilities.size(); i++) {
             if(JsonMethods.get(myAvailabilities.get(i), "av_id").equals(avId)) {
                 myAvailabilities.remove(i);
-                needRemoval.add(i);
+                needRemovalAv.add(i);
                 return true;
             }
         }
@@ -230,24 +239,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doUIRemoval() {
-        for(int i = 0; i < needRemoval.size(); i++) {
-            removePostView(needRemoval.get(i));
+        for(int i = 0; i < needRemovalAv.size(); i++) {
+            removePostView(needRemovalAv.get(i));
             i--;
         }
     }
 
     private void doUIAddition() {
-        for(int i = 0; i < needUpdate.size(); i++) {
+        for(int i = 0; i < needUpdateAv.size(); i++) {
 
         }
     }*/
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        removeAll();
-        if(availabilitiesSet) {
-            setAvailabilities();
-        }
-    }
 }

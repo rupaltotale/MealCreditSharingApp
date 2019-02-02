@@ -11,35 +11,41 @@
         android:weightSum="1">
 
         <TextView
-            android:layout_weight="0.5"
+            android:layout_weight="0.25"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:layout_marginLeft="10sp"
             android:textColor="@color/black"
-            android:text="@string/av_post_title"
             android:textSize="20sp"
             />
 
         <TextView
-            android:layout_weight="0.4"
+            android:layout_weight="0.15"
             android:layout_width="0dp"
-            android:gravity="right"
+            android:gravity="left"
             android:layout_height="wrap_content"
-            android:text="@string/av_post_concise"
+            android:text="@string/priceStr"
             android:textColor="@color/black"
             android:textSize="20sp"
             />
 
-        <Button
-            android:layout_weight="0.1"
+        <TextView
+            android:layout_weight="0.25"
             android:layout_width="0dp"
             android:gravity="center"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="@string/av_post_into"
+            android:text="@string/timeLeftStr"
             android:textSize="20sp"
             />
+        <Button
+            android:layout_width="0sp"
+            android:gravity="right"
+            android:layout_weight="0.35"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="@string/more_details"
+            android:textSize="20sp"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </RelativeLayout>
