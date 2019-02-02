@@ -35,6 +35,7 @@ public class EditAvPost extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener1, mDateSetListener2;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener1, mTimeSetListener2;
     private DateParser dateParser = new DateParser();
+    private boolean isAvEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +49,30 @@ public class EditAvPost extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         String postInfo = ""; // or other values
         if(b != null) {
-            postInfo = b.getString("post_info");
-            setUpPage(postInfo);
+            if("hunger".equals(b.getString("screen"))) {
+                isAvEdit = false;
+            }
+            else {
+                isAvEdit = true;
+                postInfo = b.getString("post_info");
+                setUpPage(postInfo);
+            }
         }
         else {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            /*Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);*/
             finish();
         }
     }
 
     private void setUpPage(String info) {
+        System.out.println(info);
         final JSONObject jsonPostInfo = JsonMethods.convertToJSONFromString(info);
         final String compareValue = JsonMethods.getString(jsonPostInfo, "location");
         final Spinner locList = (Spinner) findViewById(R.id.location_list_edit);
+        int locationListToUse = isAvEdit ? R.array.locations : R.array.locations2;
         ArrayAdapter<String> locAdapter = new ArrayAdapter<String>(EditAvPost.this,
-                R.layout.location_spinner_item, getResources().getStringArray(R.array.locations));
+                R.layout.location_spinner_item, getResources().getStringArray(locationListToUse));
         locAdapter.setDropDownViewResource((android.R.layout.simple_spinner_dropdown_item));
         locList.setAdapter(locAdapter);
         int spinnerPosition = locAdapter.getPosition(compareValue);
@@ -78,15 +87,22 @@ public class EditAvPost extends AppCompatActivity {
                 String endDate = ((TextView) findViewById(R.id.datepick2_edit)).getText().toString();
                 String startTime = ((TextView) findViewById(R.id.timepick1_edit)).getText().toString();
                 String endTime = ((TextView) findViewById(R.id.timepick2_edit)).getText().toString();
-                final String formattedStartDate = dateParser.convertSlashDateTime(startDate, startTime);
-                final String formattedEndDate = dateParser.convertSlashDateTime(endDate, endTime);
+                final String formattedStartDate = DateParser.convertSlashDateTime(startDate, startTime);
+                final String formattedEndDate = DateParser.convertSlashDateTime(endDate, endTime);
                 final String location = locList.getSelectedItem().toString();
-                final String avId = JsonMethods.get(jsonPostInfo, "av_id");
+                final String associatedId = isAvEdit ? JsonMethods.get(jsonPostInfo, "av_id") : JsonMethods.get(jsonPostInfo, "hg_id");
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("asking_price", price); json.put("location", location); json.put("user_id", User.getUserId());
-                    json.put("start_time", formattedStartDate); json.put("end_time", formattedEndDate);
-                    json.put("av_id", avId); json.put("token", User.getJwt());
+                    if(isAvEdit) {
+                        json.put("asking_price", price);
+                        json.put("av_id", associatedId);
+                    }
+                    else {
+                        json.put("max_price", price);
+                        json.put("hg_id", associatedId);
+                    }
+                    json.put("location", location); json.put("user_id", User.getUserId());
+                    json.put("start_time", formattedStartDate); json.put("end_time", formattedEndDate); json.put("token", User.getJwt());
                 } catch (JSONException e) {}
 
                 final String jsonText = json.toString();
@@ -94,7 +110,8 @@ public class EditAvPost extends AppCompatActivity {
                 Thread newRequestThread = new Thread() {
                     @Override
                     public void run() {
-                        ServerCommunicationPut scp = new ServerCommunicationPut("change/availability/", jsonText);
+                        String serverUrl = isAvEdit ? "change/availability/" : "change/hunger/";
+                        ServerCommunicationPut scp = new ServerCommunicationPut(serverUrl, jsonText);
                         Response response = scp.sendPutRequest();
                         try {
                             //System.out.println(response.code());
@@ -117,14 +134,19 @@ public class EditAvPost extends AppCompatActivity {
             public void onClick(View v) {
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("user_id", User.getUserId()); json.put("av_id", JsonMethods.get(jsonPostInfo, "av_id"));
-                    json.put("token", User.getJwt());
+                    if(isAvEdit) {
+                        json.put("av_id", JsonMethods.get(jsonPostInfo, "av_id"));
+                    } else {
+                        json.put("hg_id", JsonMethods.get(jsonPostInfo, "hg_id"));
+                    }
+                    json.put("user_id", User.getUserId()); json.put("token", User.getJwt());
                 } catch (JSONException e) { return; }
                 final String jsonText = JsonMethods.convertJSONToString(json);
                 Thread newRequestThread = new Thread() {
                     @Override
                     public void run() {
-                        ServerCommunicationDelete scp = new ServerCommunicationDelete("delete/availability/", jsonText);
+                        String serverUrl = isAvEdit ? "delete/availability/" : "delete/hunger/";
+                        ServerCommunicationDelete scp = new ServerCommunicationDelete(serverUrl, jsonText);
                         Response response = scp.sendDeleteRequest();
                         try {
                             System.out.println(response.code());

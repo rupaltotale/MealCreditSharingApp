@@ -36,15 +36,12 @@ function getCurrentDate() {
 }
 
 function getCurrentDayOffset() {
-    var dateObj = new Date();
-    let day = dateObj.getDate();
-    let month = dateObj.getMonth() + 1;
-    let year = dateObj.getFullYear();
-    let prevDay = day == 0 ? 31 : day - 1; // Test if end of month
-    let newMonth = (prevDay == 31 && month == 0) ? 12 : month; // When month needs to change to last year (Dec 31)
-    newMonth = (newMonth == month && prevDay == 31) ? month - 1 : newMonth; // When month needs to change but not to last year
-    let newYear = (newMonth == 12 && prevDay == 31) ? year - 1 : year;
-    let pastDateTime = makeDateTime(newYear, newMonth, prevDay, dateObj.getHours(), dateObj.getMinutes(), dateObj.getSeconds());
+    let dateObj = new Date();
+    let dateMill = dateObj.getTime();
+    const MS_PER_DAY = 3600000 * 24;
+    let newDate = new Date(dateMill - MS_PER_DAY);
+    let pastDateTime = makeDateTime(newDate.getFullYear(), newDate.getMonth(), newDate.getDate(), 
+        newDate.getHours(), newDate.getMinutes(), newDate.getSeconds());
     return pastDateTime;
 }
 

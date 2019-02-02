@@ -4,12 +4,18 @@
     <string name="title_dashboard">Eat</string>
     <string name="title_notifications">Message</string>
 
-    <string-array name="avs">
-        <item>Item 1</item>
-        <item>Item 2</item>
+    <string-array name="locations">
+        <item>Mustang Station</item>
+        <item>Red Radish</item>
+        <item>805</item>
+        <item>Avenue</item>
+        <item>Canyon Cafe</item>
+        <item>Subway</item>
+        <item>Shake Smart</item>
     </string-array>
 
-    <string-array name="locations">
+    <string-array name="locations2">
+        <item>Anywhere</item>
         <item>Mustang Station</item>
         <item>Red Radish</item>
         <item>805</item>
@@ -21,17 +27,47 @@
 
     <string name="title_activity_settings">Settings</string>
     <string name="title_availability">Your Available Posts</string>
+    <string name="title_hunger">Your Hunger Posts</string>
     <string name="title_activity_availability_dialog">availability_dialog</string>
     <string name="account_type">user_info</string>
+
     <string name="email_message">An email has been sent to you</string>
     <string name="email_confirm_text1">Please confirm your email and then click the button below to start</string>
     <string name="email_confirm_text2">Please confirm your email and then click the button below to start or click the button below it
     if you\'d rather not confirm email and risk no possible account recovery.</string>
     <string name="email_confirm_confirm">I\'ve Confirmed My Email</string>
     <string name="email_confirm_cancel">I do not wish to confirm</string>
+
+    <!-- For Av-post Resource file -->
     <string name="av_post_title">Post</string>
     <string name="av_post_concise">Edit/Delete</string>
     <string name="av_post_into">\></string>
     <string name="edit_post_title">Edit Post</string>
+
     <string name="bwatt">Email or Username</string>
+
+    <!-- For Hunger page -->
+    <string name="title_activity_hunger">Hunger</string>
+    <string name="hg_posts_label">My Posts</string>
+    <string name="hg_match_label">Find Matches</string>
+
+    <!-- For Matching layout resource file -->
+    <string name="priceStr">$</string>
+    <string name="timeLeftStr">Time Left: </string>
+    <string name="fromStr">From: </string>
+    <string name="toStr">To: </string>
+    <string name="more_details">More -></string>
+
+    <!-- For Filtering Av -->
+    <string name="filter_activity_name">Filter Availabilities</string>
+    <string name="locationStr">Location</string>
+    <string name="startTimeStr">Start Time</string>
+    <string name="endTimeStr">End Time</string>
+    <string name="price">Price</string>
+    <string name="usernameStr">Username</string>
+    <string name="others">Other</string>
+    <string name="locPageStr">If you\'d like to filter by location, select the location below</string>
+    <string name="pricePageStr">If you\'d like to filter by price, enter your MAX price below</string>
+    <string name="timePageStr">Indicate, if wanted, your time filter below</string>
+    <string name="dateFormat">MM/DD/YYYY HH:MM (AM/PM)</string>
 </resources>

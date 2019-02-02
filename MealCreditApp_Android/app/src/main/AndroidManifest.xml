@@ -13,8 +13,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".MainActivity"
-            android:label="">
-        </activity>
+            android:label="" />
         <activity
             android:name=".settings"
             android:label="" />
@@ -22,13 +21,7 @@
             android:name=".availability_dialog"
             android:label=""
             android:theme="@style/AppTheme.AvailabilityPopup" />
-        <activity android:name=".login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".login" />
         <activity
             android:name=".signup"
             android:parentActivityName=".login"
@@ -36,12 +29,28 @@
         <activity
             android:name=".EmailConfirm"
             android:parentActivityName=".signup"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".EditAvPost"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Hunger"
+            android:label="">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".hunger_creation"
+            android:label=""
+            android:theme="@style/AppTheme.AvailabilityPopup"></activity>
+        <activity android:name=".FilterAvailability"
+            android:parentActivityName=".Hunger"
             android:theme="@style/AppTheme">
         </activity>
     </application>
+
 </manifest>
