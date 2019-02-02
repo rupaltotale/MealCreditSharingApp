@@ -19,6 +19,13 @@ class Helper: UIViewController {
         button.titleLabel?.textColor = GlobalVariables.mainColor
         button.backgroundColor =  UIColor.darkGray
         button.layer.cornerRadius = 3
+ 
+    }
+    static func setNormalButtonStyle(_ button:UIButton, _ view: UIViewController){
+        button.titleLabel?.font = UIFont(name: GlobalVariables.buttonFont, size: 22)
+        button.titleLabel?.textColor = UIColor.white
+        button.backgroundColor = GlobalVariables.mainColor
+        button.layer.cornerRadius = 3
     }
     static func setTextFieldStyle(_ i:UITextField){
         i.textAlignment = .center;
@@ -92,5 +99,9 @@ class Helper: UIViewController {
         }
         
     }
+    
+//    static func setButtonStyle(){
+//
+//    }
 
 }

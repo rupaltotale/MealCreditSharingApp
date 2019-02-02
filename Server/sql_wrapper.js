@@ -48,8 +48,10 @@ module.exports = class DataAccess {
             }
         }
 
-        myQuery += ` ORDER BY ${sort} ASC`;
-
+        if (sort){
+            myQuery += ` ORDER BY ${sort} ASC`;
+        }
+        
         if(size != -1) {
             myQuery += ` LIMIT ${size}`;
         }

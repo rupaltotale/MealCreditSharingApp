@@ -58,15 +58,11 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         
     }
     func createAddButton(){
+        Helper.setNormalButtonStyle(saveButton, self)
         saveButton.setTitle("Add", for: .normal)
-        saveButton.titleLabel?.font = UIFont(name: GlobalVariables.buttonFont, size: 24)
-        saveButton.titleLabel?.textColor = UIColor.white
-        saveButton.backgroundColor = GlobalVariables.mainColor
         saveButton.sizeToFit()
         saveButton.frame = CGRect(x: (self.view.frame.width - saveButton.frame.width * 1.5)/2, y: table.frame.origin.y + table.frame.height + 25, width: saveButton.frame.width * 1.5, height: saveButton.frame.height * 1)
-        saveButton.layer.cornerRadius = 3
         saveButton.addTarget(self, action: #selector(addNewObject), for: .touchUpInside)
-        
         self.view.addSubview(saveButton)
     }
     @objc func addNewObject(){

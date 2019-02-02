@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad();
-        UserDefaults.standard.removeObject(forKey: "user_id")
+//        UserDefaults.standard.removeObject(forKey: "user_id")
         if UserDefaults.standard.string(forKey: "user_id") != nil {
            self.performSegue(withIdentifier: "goToAppFromLogin", sender: self)
         }
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
             Alamofire.request(urlString, method: .post, parameters: parameters, encoding: JSONEncoding.default)
                 .responseJSON { response in
                     if let jsonObj: Dictionary = response.result.value as? Dictionary<String, Any>{
-                        let status:Int = jsonObj["status"] as! Int;
+                        let status:Int = (response.response?.statusCode)!;
                         if (status == 200){
                             print(jsonObj)
                             UserDefaults.standard.set(jsonObj["token"] as! String, forKey: "token");

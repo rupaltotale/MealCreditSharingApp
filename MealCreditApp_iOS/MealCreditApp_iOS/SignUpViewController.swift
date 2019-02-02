@@ -59,7 +59,7 @@ class SignUpViewController: UIViewController {
         Alamofire.request(urlString, method: .post, parameters: parameters, encoding: JSONEncoding.default)
             .responseJSON { response in
                 if let jsonObj: Dictionary = response.result.value as? Dictionary<String, Any>{
-                    let status:Int = jsonObj["status"] as! Int;
+                    let status:Int = (response.response?.statusCode)!;
                     let message:String = jsonObj["message"] as! String;
                     if (status == 200){
                         UserDefaults.standard.set(jsonObj["token"] as! String, forKey: "token");
