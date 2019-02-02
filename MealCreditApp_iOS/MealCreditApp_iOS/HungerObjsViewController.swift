@@ -17,7 +17,7 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         return list.count;
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "avObj")
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "hgObj")
         let avObj = list[indexPath.row];
         // Location Label
         let locationLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
@@ -47,8 +47,9 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         timeLabel.sizeToFit()
         timeLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + 15, y: table.rowHeight - timeLabel.frame.height - 15, width: timeLabel.frame.width, height: timeLabel.frame.height)
         cell.addSubview(timeLabel)
+        
+        // cell
         cell.sizeToFit()
-//        cell.accessoryType = .disclosureIndicator
         
         return cell;
     }
@@ -96,7 +97,6 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
                 self.table.reloadData();
             }
         }
-        print(urlString)
     }
 
 }
