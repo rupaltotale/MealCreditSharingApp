@@ -15,6 +15,8 @@
         android:layout_height="wrap_content" />
     <RelativeLayout
         android:layout_width="wrap_content"
+        android:layout_marginTop="40sp"
+        android:gravity="center"
         android:layout_height="match_parent">
         <TextView
             android:layout_width="wrap_content"
@@ -25,11 +27,11 @@
             android:id="@+id/pic-price-filter" />
         <EditText
             android:layout_width="100sp"
-            android:layout_marginTop="40sp"
+            android:layout_toEndOf="@+id/pic-price-filter"
             android:layout_toRightOf="@id/pic-price-filter"
             android:layout_marginLeft="5sp"
             android:maxLines="1"
-            android:hint="Price:"
+            android:hint="Price"
             android:maxLength="4"
             android:singleLine="true"
             android:textSize="30sp"

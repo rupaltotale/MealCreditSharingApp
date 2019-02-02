@@ -69,5 +69,8 @@
     <string name="locPageStr">If you\'d like to filter by location, select the location below</string>
     <string name="pricePageStr">If you\'d like to filter by price, enter your MAX price below</string>
     <string name="timePageStr">Indicate, if wanted, your time filter below</string>
-    <string name="dateFormat">MM/DD/YYYY HH:MM (AM/PM)</string>
+    <string name="dateFormat">M/D/YYYY H:MM (AM/PM)</string>
+    <string name="reset">Reset</string>
+    <string name="pmStr">PM</string>
+    <string name="amStr">AM</string>
 </resources>
