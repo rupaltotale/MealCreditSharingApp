@@ -8,10 +8,24 @@
 
 import Foundation
 import UIKit
+import Alamofire
 class Helper: UIViewController {
     enum LINE_POSITION {
         case LINE_POSITION_TOP
         case LINE_POSITION_BOTTOM
+    }
+    static func setButtonStyle(_ button:UIButton){
+        button.titleLabel?.font = UIFont(name: GlobalVariables.buttonFont, size: 24)
+        button.titleLabel?.textColor = GlobalVariables.mainColor
+        button.backgroundColor =  UIColor.darkGray
+        button.layer.cornerRadius = 3
+ 
+    }
+    static func setNormalButtonStyle(_ button:UIButton, _ view: UIViewController){
+        button.titleLabel?.font = UIFont(name: GlobalVariables.buttonFont, size: 22)
+        button.titleLabel?.textColor = UIColor.white
+        button.backgroundColor = GlobalVariables.mainColor
+        button.layer.cornerRadius = 3
     }
     static func setTextFieldStyle(_ i:UITextField){
         i.textAlignment = .center;
@@ -61,7 +75,6 @@ class Helper: UIViewController {
     
     static func convertFromDateTimeToDate(dateTime: String) -> Date?{
         
-        print(dateTime)
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -73,5 +86,28 @@ class Helper: UIViewController {
         }
         return nil
     }
+//    static func convertFromDateToDateTime(dateTime: Date) -> String?{
+//
+////        let date = ""
+////        date += dateTime.
+////        return nil
+//    }
+    
+    
+    static func getNewToken(){
+        var token = "";
+        let user_id = UserDefaults.standard.string(forKey: "user_id")
+        let urlString = "http://" + "127.0.0.1:8000/" + "token/" + user_id! ;
+        Alamofire.request(urlString).responseJSON{response in
+            let obj:Dictionary = response.result.value! as! Dictionary<String, Any>
+            token = obj["token"]! as! String
+            UserDefaults.standard.set(token, forKey: "token")
+        }
+        
+    }
+    
+//    static func setButtonStyle(){
+//
+//    }
 
 }

@@ -111,6 +111,7 @@ app.get('/availability-list/:userId', (req, res) => {
 
 app.get('/availability-list/:size/:where/:who/:start/:end/:price/:sortBy', (req, res) => {
     // Creates an object representing the parameters for the SQL wrapper
+    
     let holder = {
         "size" : req.params.size,
         "where" : req.params.where,
@@ -127,6 +128,7 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price/:sortBy', (req,
     }
 
     wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"], holder["sort"]).then((result) => {
+        // console.log("working");
         res.status(200).json({
             "result" : result
         }); 
@@ -271,6 +273,15 @@ app.get("/recover_account/:token/", function(req, res){
 
 
 });
+app.get('/token/:user_id', (req, res) => {
+    let token = makeTokenUser(req.params.user_id);
+    return res.json({
+        "token" : token,
+        "user_id" : req.params.user_id
+    });
+});
+
+
 const sendRecoveryEmail = (firstname, lastname, email, token, req, res) => {
     let host = req.get('host');
     let link = "http://" + host + "/recover_account/" + token;

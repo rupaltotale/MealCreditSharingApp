@@ -13,16 +13,24 @@ var globalAvObject: AvailableObject!;
 
 class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var list:Array<AvailableObject> = [];
+    var filterButton: UIButton = UIButton();
     @IBOutlet weak var table: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setStyle();
-        getMyAvailabilities();
+        let username: String = UserDefaults.standard.string(forKey: "username")!;
+        getAvailabilities(username: username);
+        showFilterButton();
+    }
+    func showFilterButton(){
+       // IMPLEMENT
     }
     override func viewDidAppear(_ animated: Bool) {
-        getMyAvailabilities();
+        let username: String = UserDefaults.standard.string(forKey: "username")!;
+        getAvailabilities(username: username);
     }
+    
      // TABLE FUNCTIONS -->
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count;
@@ -65,6 +73,7 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
         return cell;
     }
     
+    // WHEN A TABLE ROW IS CLICKED
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         globalAvObject = list[indexPath.row]
         let backItem = UIBarButtonItem()
@@ -99,10 +108,9 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
         self.navigationItem.rightBarButtonItem = addButton
         
     }
-    func getMyAvailabilities(limit:Int = -1, location:Any = false, start_time:Any = false, end_time:Any = false, price:Any = false) {
+    func getAvailabilities(limit:Int = -1, location:Any = false, start_time:Any = false, end_time:Any = false, price:Any = false, sortBy:Any = false, username:Any = false) {
         var avList:Array<AvailableObject> = [];
-        let username: String = UserDefaults.standard.string(forKey: "username")!;
-        let urlString = "http://" + "127.0.0.1:8000/" + "availability-list/" + "\(limit)/\(location)/\(username)/\(start_time)/\(end_time)/\(price)"
+        let urlString = "http://" + "127.0.0.1:8000/" + "availability-list/" + "\(limit)/\(location)/\(username)/\(start_time)/\(end_time)/\(price)/\(sortBy)"
         Alamofire.request(urlString).responseJSON{response in
             if let jsonObj = response.result.value{
                 let avObjs:Dictionary = jsonObj as! Dictionary<String, Any>;
