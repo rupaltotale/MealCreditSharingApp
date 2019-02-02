@@ -75,7 +75,6 @@ class Helper: UIViewController {
     
     static func convertFromDateTimeToDate(dateTime: String) -> Date?{
         
-        print(dateTime)
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -87,6 +86,13 @@ class Helper: UIViewController {
         }
         return nil
     }
+//    static func convertFromDateToDateTime(dateTime: Date) -> String?{
+//
+////        let date = ""
+////        date += dateTime.
+////        return nil
+//    }
+    
     
     static func getNewToken(){
         var token = "";

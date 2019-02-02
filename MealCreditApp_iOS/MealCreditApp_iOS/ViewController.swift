@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad();
-//        UserDefaults.standard.removeObject(forKey: "user_id")
+        UserDefaults.standard.removeObject(forKey: "user_id")
         if UserDefaults.standard.string(forKey: "user_id") != nil {
            self.performSegue(withIdentifier: "goToAppFromLogin", sender: self)
         }

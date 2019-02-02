@@ -48,14 +48,18 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         timeLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + 15, y: table.rowHeight - timeLabel.frame.height - 15, width: timeLabel.frame.width, height: timeLabel.frame.height)
         cell.addSubview(timeLabel)
         cell.sizeToFit()
-        cell.accessoryType = .disclosureIndicator
+//        cell.accessoryType = .disclosureIndicator
         
         return cell;
     }
     override func viewDidLoad() {
         super.viewDidLoad();
         setStyle();
-        getAvailabilities();
+        let date = Date()
+//        getAvailabilities(start_time: date, end_time: date);
+        var strDate = "\(date)"
+        strDate = strDate.replacingOccurrences(of: " ", with: "")
+        getAvailabilities(start_time: strDate, end_time: strDate)
         // Do any additional setup after loading the view.
     }
     
@@ -75,9 +79,8 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         self.tabBarController?.view.isOpaque = true;
         
     }
-    func getAvailabilities(limit:Int = -1, location:Any = false, start_time:Any = false, end_time:Any = false, price:Any = false, sortBy:Any = false) {
+    func getAvailabilities(limit:Int = -1, location:Any = false, start_time:Any = false, end_time:Any = false, price:Any = false, sortBy:Any = false, username:Any = false) {
         var avList:Array<AvailableObject> = [];
-        let username: String = UserDefaults.standard.string(forKey: "username")!;
         let urlString = "http://" + "127.0.0.1:8000/" + "availability-list/" + "\(limit)/\(location)/\(username)/\(start_time)/\(end_time)/\(price)/\(sortBy)"
         Alamofire.request(urlString).responseJSON{response in
             if let jsonObj = response.result.value{
@@ -88,11 +91,12 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
                     let avObj:AvailableObject = AvailableObject(av_id: obj["av_id"] as! Int, price: obj["asking_price"] as? Double, start_time: Helper.convertFromDateTimeToDate(dateTime: obj["start_time"] as! String), end_time: Helper.convertFromDateTimeToDate(dateTime: obj["end_time"] as! String), user_id: obj["user_id"] as? Int, location: obj["location"] as? String);
                     avList.append(avObj)
                 }
-                
+            
                 self.list = avList;
                 self.table.reloadData();
             }
         }
+        print(urlString)
     }
 
 }
