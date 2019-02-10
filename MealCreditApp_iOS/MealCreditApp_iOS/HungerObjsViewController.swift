@@ -12,7 +12,11 @@ import Alamofire
 class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var table: UITableView!
+    let filterButton: UIButton = UIButton(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
     var list:Array<AvailableObject> = [];
+    var sortBy = UIPickerView()
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count;
     }
@@ -56,12 +60,26 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad();
         setStyle();
-        let date = Date()
-//        getAvailabilities(start_time: date, end_time: date);
-        var strDate = "\(date)"
+        Helper.addFilterButton(filterButton, self);
+        filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
+        table.tableFooterView = UIView()
+        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.7)
+//        self.view.backgroundColor = GlobalVariables.mainColor
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        var strDate = "\(Date())"
         strDate = strDate.replacingOccurrences(of: " ", with: "")
-        getAvailabilities(start_time: strDate, end_time: strDate)
-        // Do any additional setup after loading the view.
+        if !applyFilterAndSortG{
+            print("Filter list is empty!")
+            getAvailabilities(end_time: strDate)
+        }
+        else{
+            self.list = FilterViewController.list
+        }
+        self.table.reloadData();
+    }
+    @objc func goToFilterPage() {
+        self.performSegue(withIdentifier: "goToFilter", sender: self);
     }
     
     func setStyle(){

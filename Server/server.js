@@ -128,7 +128,7 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price/:sortBy', (req,
     }
 
     wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"], holder["sort"]).then((result) => {
-        // console.log("working");
+        console.log(result)
         res.status(200).json({
             "result" : result
         }); 

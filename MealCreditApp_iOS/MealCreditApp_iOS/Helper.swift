@@ -105,6 +105,19 @@ class Helper: UIViewController {
         }
         
     }
+    static func addFilterButton(_ filterButton: UIButton, _ view : UIViewController) {
+        filterButton.setTitle("Filter and Sort", for: .normal)
+        Helper.setNormalButtonStyle(filterButton, view)
+        filterButton.sizeToFit()
+        filterButton.frame = CGRect(x: (view.view.frame.width - filterButton.frame.width * 1.5)/2, y: view.view.frame.height * 0.725, width: filterButton.frame.width * 1.5, height: filterButton.frame.height * 1)
+        filterButton.layer.cornerRadius = filterButton.frame.size.width / 11
+        filterButton.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
+        filterButton.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
+        filterButton.layer.shadowOpacity = 0.7
+        filterButton.layer.shadowRadius = 0.0
+        view.view.addSubview(filterButton)
+    }
+    
     
 //    static func setButtonStyle(){
 //

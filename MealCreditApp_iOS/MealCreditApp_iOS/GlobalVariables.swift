@@ -17,6 +17,7 @@ struct GlobalVariables {
     static var navBarTitle:UIFont =  UIFont(name: "Marker Felt", size: 28.0)!
     static var normalFont = "Avenir";
     static var buttonFont = "Arial";
+    static var locations = ["Mustang", "Red Radish", "Canyon Cafe", "The Avenue", "805"]
    
     
     

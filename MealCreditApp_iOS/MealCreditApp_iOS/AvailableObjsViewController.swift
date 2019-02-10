@@ -13,19 +13,22 @@ var globalAvObject: AvailableObject!;
 
 class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var list:Array<AvailableObject> = [];
-    var filterButton: UIButton = UIButton();
+    let filterButton: UIButton = UIButton(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
     @IBOutlet weak var table: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setStyle();
-        let username: String = UserDefaults.standard.string(forKey: "username")!;
-        getAvailabilities(username: username);
-        showFilterButton();
+        Helper.addFilterButton(filterButton, self);
+        filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
+        table.tableFooterView = UIView()
+        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.7)
+        
     }
-    func showFilterButton(){
-       // IMPLEMENT
+    @objc func goToFilterPage() {
+        
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         let username: String = UserDefaults.standard.string(forKey: "username")!;
         getAvailabilities(username: username);

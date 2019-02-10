@@ -33,7 +33,6 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         ["Start Time Label", "End Time Label"],
         ["Location Label"]
     ]
-    let locations = ["Mustang", "Red Radish", "Canyon Cafe", "The Avenue", "805"]
     var showStartTimePicker = false
     var showEndTimePicker = false
     var showLocationPicker = false
@@ -61,7 +60,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         Helper.setNormalButtonStyle(saveButton, self)
         saveButton.setTitle("Add", for: .normal)
         saveButton.sizeToFit()
-        saveButton.frame = CGRect(x: (self.view.frame.width - saveButton.frame.width * 1.5)/2, y: table.frame.origin.y + table.frame.height + 25, width: saveButton.frame.width * 1.5, height: saveButton.frame.height * 1)
+        saveButton.frame = CGRect(x: (self.view.frame.width - saveButton.frame.width * 1.5)/2, y: table.frame.origin.y + table.frame.height + 25, width: saveButton.frame.width * 1.5, height: saveButton.frame.height)
         saveButton.addTarget(self, action: #selector(addNewObject), for: .touchUpInside)
         self.view.addSubview(saveButton)
     }
@@ -102,21 +101,21 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
             }
         }
     }
-    // Picker Functions
+    // Mark: Picker Functions
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return locations.count
+        return GlobalVariables.locations.count
     }
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        let string = locations[row]
+        let string = GlobalVariables.locations[row]
         return NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: GlobalVariables.mainColor])
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        locationLabel.text = locations[row]
+        locationLabel.text = GlobalVariables.locations[row]
     }
     
     // Table Functions
