@@ -12,10 +12,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.support.v4.content.res.ResourcesCompat;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.Date;
 
@@ -61,7 +64,7 @@ public class FilterAvailability extends AppCompatActivity {
         setUpLocationPage();
         setUpPricePage();
         setUpTimePage();
-        //setUpTimePage();
+        setUpTimePage();
 
         currentSelection = R.id.filter_location;
         setUnderline(currentSelection, false);
@@ -153,7 +156,25 @@ public class FilterAvailability extends AppCompatActivity {
         LayoutInflater inflator = FilterAvailability.this.getLayoutInflater();
         View rowView = inflator.inflate(R.layout.time_page_filter, null);
         final EditText et = rowView.findViewById(R.id.date_edit_filter);
-        et.setText(DateParser.getCurrentDateTime());
+        final String currentDate = DateParser.getCurrentDateTime();
+        final String newText = currentDate.substring(0, currentDate.indexOf("M") - 2);
+        final TextView tvRelation = rowView.findViewById(R.id.relation_time_filter);
+        final Switch relationSwitch = rowView.findViewById(R.id.ampmtoggle);
+        if(currentDate.contains("PM")) {
+            tvRelation.setText(R.string.pmStr);
+            relationSwitch.setChecked(true);
+        }
+        relationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    tvRelation.setText(R.string.pmStr);
+                } else {
+                    tvRelation.setText(R.string.amStr);
+                }
+            }
+        });
+        et.setText(newText);
         et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -209,6 +230,19 @@ public class FilterAvailability extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+
+        Button resetBut = rowView.findViewById(R.id.reset_time_filter);
+        resetBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et.setText(newText);
+                if(currentDate.contains("PM")) {
+                    tvRelation.setText(R.string.pmStr);
+                    relationSwitch.setChecked(true);
+                }
+            }
+        });
+
         final View newRowView = rowView;
         runOnUiThread(new Runnable() {
             @Override

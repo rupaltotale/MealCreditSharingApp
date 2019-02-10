@@ -37,11 +37,6 @@
         <activity
             android:name=".Hunger"
             android:label="">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".hunger_creation"
@@ -50,7 +45,11 @@
         <activity android:name=".FilterAvailability"
             android:parentActivityName=".Hunger"
             android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
-
 </manifest>

@@ -16,19 +16,54 @@
     <TextView
         android:layout_width="wrap_content"
         android:gravity="center"
+        android:layout_marginTop="40sp"
         android:text="@string/dateFormat"
         android:textColor="@color/grayish"
-        android:textSize="30sp"
+        android:textSize="18sp"
         android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/date-edit-filter"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:minWidth="150sp"
-        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/date-edit-filter"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:minWidth="80sp"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:hint="@string/dateFormat"
+            android:maxLines="1"
+            android:maxLength="16"
+            android:inputType="number"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="5sp"
+            android:layout_width="wrap_content"
+            android:id="@+id/relation-time-filter"
+            android:layout_toRightOf="@+id/date-edit-filter"
+            android:text="@string/amStr"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_height="wrap_content" />
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_marginTop="5sp"
+            android:thumbTextPadding="0sp"
+            android:layout_toRightOf="@+id/relation-time-filter"
+            android:id="@+id/ampmtoggle"
+            android:showText="false"
+            android:textOn="@string/pmStr"
+            android:textOff="@string/amStr"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/reset-time-filter"
         android:textColor="@color/black"
-        android:hint="@string/dateFormat"
-        android:maxLines="1"
-        android:maxLength="16"
-        android:inputType="number"
+        android:layout_marginTop="40sp"
+        android:background="@color/colorPrimary"
+        android:text="@string/reset"
+        android:textSize="15sp"
         android:layout_height="wrap_content" />
 </LinearLayout>

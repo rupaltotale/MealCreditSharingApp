@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Website</title>
+        <style>
+            h1 {
+                padding-bottom: 30px;
+            }
+            img#other {
+                float: right;
+                width: 600px;
+                height: 330px;
+            }
+            div {
+                border: 5px dashed blue;
+                text-align: center;
+                font-size: 112%;
+                vertical-align: middle;
+            }
+            p#go {
+                padding-top: 130px;
+                width:auto;
+                height:170px;
+                vertical-align: middle;
+            }
+            span#keyword {
+                font-size: 20px;
+                background-color: yellow;
+                font-weight: bold;
+            }
+            img#alg {
+                border: 4px solid black;
+                float: center;
+                width: 250px;
+                height: 250px;
+            }
+            div.Back {
+                border: 0;
+                padding-top: 30px;
+                font-size: 17.5px;
+                padding-bottom: 30px;
+            }
+            img#abs {
+                float: left;
+                width: 325px;
+                height: 250px;
+                padding-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 style="text-align:center">Abstraction/Algorithm Image Gallery</h1>
+        <div><img class="test2" style="float: none" src="Nice-Audi-R-Car-Desktop-Background-HD-Photo-93788304.jpg" />
+        <img class="test2" src="https://i.ytimg.com/vi/3EMkTtk9MU8/maxresdefault.jpg" />
+        <img class="test2" src="Abstract%20Class%20in%20Java%20with%20Example.png" />
+        <img class="test2" src="FireGrader_Bil_xray.jpg" />
+        <p id="go" style="padding-top: 40px; height: 60px;"><span id="keyword">Abstraction</span> - the hiding of all but essential details for the user.</p>
+        </div>
+        <div>
+            <img id="other" src="Screen%20Shot%202017-09-13%20at%209.08.40%20PM.png" />
+            <p id="go"><span id="keyword">Data Abstraction</span> - the separation of the logical view of data from its representation.</p>
+        </div>
+        <div>
+            <img id="other" src="proceduralAbstractionExample.jpg" />
+            <p id="go" style="padding-top: 105px; height: 195px;"><span id="keyword">Procedural Abstraction</span> - the separation of the logical view of an action from its implentation.<br><br><br>Ex: When our phone starts up, we see the screens telling us "hey, it's booting up" by showing the phone model loading screen. We don't see the thousands of lines of code being run through that do checks and startup processes required.</p>
+        </div>
+        <div style="height: 475px;">
+            <p id="go" style="padding-top: 50px; height: 125px;"><span id="keyword">Algorithm</span> - a process or set of rules to be followed in calculations or other problem-solving operations.<br><br>We see algorithms everywhere: deciding what to wear in the morning, opening an computer application, doing multiplication, fixing a bike.<br>Algorithms allow us to quickly, and efficiently with computers, do a set task or find solutions to a given problem.</p>
+            <img id="alg" src="http://study.com/cimages/multimages/16/algoprop2.png" />
+            <img id="alg" src="https://si.wsj.net/public/resources/images/BN-IN346_ALGOAR_J_20150520144910.jpg" />
+            <img id="alg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Mergesort_algorithm_diagram.png/220px-Mergesort_algorithm_diagram.png" />
+            <img id="alg" src="https://puzzle.ics.hut.fi/ICS-A1120/2016/notes/_images/binarySearch.svg" />
+            <img id="alg" style ="width:275px;" src="http://theforestscout.com/assets/uploads/2016/09/getting-ready-the-judgment-and-implications-behind-our-morning-routines.jpg" />
+        </div>
+        <CENTER><hr style="border:3px solid black;background-color: black;">
+        <script>
+            function getWidth(num)
+            {
+                return (screen.width - 84) / num;
+            }
+            var x = document.getElementsByClassName("test2");
+            for(i = 0; i < x.length; i++){
+                x[i].style.width = getWidth(4) +"px";
+                x[i].style.height = "250px";
+                if(i == 0) {
+                    x[i].style.float = "none";
+                }
+                else {
+                   x[i].style.float = "left"; 
+                }
+                x[i].style.paddingBottom = "10px";   
+            }
+        </script>
+        <div class="Back"><a href="MyWebsiteHome.html">Back to Homepage</a></div></CENTER>
+    </body>
+</html>

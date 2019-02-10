@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="websitesty.css">
+        <title>Ben Glossner</title>
+        <script src="websitejs.js"></script>
+    </head>
+    <body>
+        <div id="maindiv">
+            <p id="title">Benjamin Glossner</p>
+            <script src="stick.js"></script>
+            <hr class="hline">
+            <nav class="mainlinks">
+                <a>Home</a>
+                <p class="divider">|</p>
+                <a>About Me</a>
+                <p class="divider">|</p>
+                <a>Projects</a>
+                <p class="divider">|</p>
+                <a onclick="goToGithub()">GitHub</a>
+                <p class="divider">|</p>
+                <a onclick="openContactPage()">Contact Me</a>
+            </nav>
+        </div>
+        <hr class="outer"/>
+        <!-- FOR HOME TAB -->
+        <div id="homepage">
+            
+        </div>
+        <!-- FOR CONTACT TAB -->
+        <div id="contactpage">
+            <img src="contacts.png">
+            <div id="myinfo">
+                <p onmouseover="showIcon('gmail')" class="left"><img src="gmail2.png" class="contacticon" />Email</p>
+                <a class="right" href="mailto:benglossner@gmail.com" target="_blank">benglossner@gmail.com</a>
+                <br><hr><br>
+                <p onmouseover="showIcon('phone')" class="left"><img src="phone2.jpg" class="contacticon" />Phone</p>
+                <a class="right">(805) 610-6696</a>
+                <br><hr><br>
+                <p onmouseover="showIcon('linkedin')" class="left"><img src="linkedin2.png" class="contacticon" />Linkedin</p>
+                <a class="right" href="https://www.linkedin.com/in/benjamim-glossner" target="_blank">linkedin.com/in/benjamim-glossner</a>
+                <br><hr><br>
+                <p onmouseover="showIcon('github')" class="left"><img src="github2-2.png" class="contacticon" />GitHub</p>
+                <a class="right" href="https://github.com/bglossner" target="_blank">github.com/bglossner</a>
+                <br><hr>
+            </div>
+        </div>
+        <div class="footer">
+            <p><span id="spanyear"></span>&nbsp; --&nbsp; Ben Glossner.<span style="padding-left: 1em;">Thanks for visiting!</span></p>
+        </div>
+        <script src="footer.js"></script>
+    </body>
+</html>

@@ -304,9 +304,10 @@ public class Hunger extends AppCompatActivity {
             public void run() {
                 for(int i = 0; i < linearLayout.getChildCount(); i++) {
                     linearLayout.removeViewAt(i);
-                    myHungerPosts = new ArrayList<JSONObject>();
                     i--;
                 }
+                myHungerPosts = new ArrayList<JSONObject>();
+                myMatches = new ArrayList<JSONObject>();
             }
         });
     }

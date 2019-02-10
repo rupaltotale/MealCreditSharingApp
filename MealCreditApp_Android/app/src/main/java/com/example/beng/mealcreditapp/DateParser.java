@@ -1,7 +1,10 @@
 package com.example.beng.mealcreditapp;
 
+import android.service.autofill.RegexValidator;
+
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DateParser {
@@ -109,6 +112,14 @@ public class DateParser {
         return convertSlashDateTime(month + "/" + day + "/" + year, newHour + ":" + minute + " " + relation);
     }
 
+    public static String padNumberString(String s, int places) {
+        return String.format("%0" + places + "d", s);
+    }
+
+    public static String padNumberInteger(int i, int places) {
+        return String.format("%0" + places + "d", i);
+    }
+
     public static String getCurrentDateTime() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -119,7 +130,7 @@ public class DateParser {
         String relation = getHourTimeRelation(hour);
         String newHour = getAppropriateHourFrom24(relation, hour);
 
-        return month + "/" + day + "/" + year + " " + newHour + ":" + minute + " " + relation;
+        return month + "/" + day + "/" + year + " " + newHour + ":" + padNumberInteger(minute, 2) + " " + relation;
     }
 
     public static int[] getValuesFromServerDateTimeFormat(String dateTime) {
@@ -151,8 +162,6 @@ public class DateParser {
     }
 
     public static long getMillisDifference(String dt1, String dt2) {
-        /*System.out.println(dt1);
-        System.out.println(dt2);*/
         int[] dt1Vals = getValuesFromServerDateTimeFormat(dt1);
         int[] dt2Vals = getValuesFromServerDateTimeFormat(dt2);
         GeneralUtility.printArray(dt2Vals);
@@ -191,7 +200,23 @@ public class DateParser {
         return daysToDisplay + hoursToDisplay + minutesToDisplay;
     }
 
-    /*private String getCorrectDateTimeFromServer(String dateTime, int tIndexPlus1, ) {
-
-    }*/
+    public static boolean isAcceptableFilterTime(String dateTime) {
+        int spaceIndex = dateTime.indexOf(" ");
+        int lastSlashIndex = dateTime.lastIndexOf("/");
+        if(spaceIndex == -1 || lastSlashIndex == -1) {
+            return false;
+        }
+        String year = dateTime.substring(lastSlashIndex + 1, spaceIndex);
+        if(year.length() == 2) {
+            year = "20" + year;
+            dateTime = dateTime.substring(0, lastSlashIndex + 1) + year + dateTime.substring(spaceIndex);
+        }
+        String date = dateTime.substring(0, spaceIndex);
+        String time = dateTime.substring(spaceIndex + 1);
+        Pattern VALID_DATE = Pattern.compile("^(((0?[1-9]|1[012])/(0?[1-9]|1\\d|2[0-8])|(0?[13456789]|1[012])/(29|30)|(0?[13578]|1[02])/31)/(19|[2-9]\\d)\\d{2}|0?2/29/((19|[2-9]\\d)(0[48]|[2468][048]|[13579][26])|(([2468][048]|[3579][26])00)))$");
+        boolean matched = VALID_DATE.matcher(date).find();
+        if(!matched) return false;
+        Pattern VALID_TIME = Pattern.compile("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9] (PM|AM)$");
+        return VALID_TIME.matcher(time).find();
+    }
 }
