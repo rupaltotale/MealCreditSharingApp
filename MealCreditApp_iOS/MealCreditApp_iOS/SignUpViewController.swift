@@ -49,7 +49,7 @@ class SignUpViewController: UIViewController {
             Helper.alert("Last name missing", "Please enter your last name", self);
         }
         if (username != "" && password != "" && firstname != "" && lastname != ""){
-        let urlString = "http://" + "127.0.0.1:8000/" + "register/" ;
+        let urlString = GlobalVariables.rootUrl  + "register/" ;
         let parameters: [String: Any] = [
             "firstname": firstname!,
             "lastname": lastname!,

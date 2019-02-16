@@ -50,7 +50,7 @@ class ViewController: UIViewController {
             Helper.alert("Password missing", "Please enter password", self);
         }
         if (username != "" && password != ""){
-            let urlString = "http://" + "127.0.0.1:8000/" + "login/" ;
+            let urlString = GlobalVariables.rootUrl + "login/" ;
             let parameters: [String: Any] = [
                 "username" : username!,
                 "password" : password!

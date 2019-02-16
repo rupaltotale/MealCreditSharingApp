@@ -253,7 +253,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         FilterViewController.list = [];
         for l in locationsChecked{
             location = l.trimmingCharacters(in: .whitespacesAndNewlines) // locations have a tab at the start
-            let urlString = "http://" + "127.0.0.1:8000/" + "availability-list/" + "\(limit)/\(location)/\(username)/\(start)/\(end)/\(price)/\(sort)"
+            let urlString = GlobalVariables.rootUrl + "availability-list/" + "\(limit)/\(location)/\(username)/\(start)/\(end)/\(price)/\(sort)"
             Alamofire.request(urlString).responseJSON{response in
                 if let jsonObj = response.result.value{
                     let avObjs:Dictionary = jsonObj as! Dictionary<String, Any>;

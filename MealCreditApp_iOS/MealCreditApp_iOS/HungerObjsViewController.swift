@@ -16,7 +16,27 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
     var list:Array<AvailableObject> = [];
     var sortBy = UIPickerView()
     
-    
+    override func viewDidLoad() {
+        super.viewDidLoad();
+        setStyle();
+        Helper.addFilterButton(filterButton, self);
+        filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
+        table.tableFooterView = UIView()
+        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.7)
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        var strDate = "\(Date())"
+        strDate = strDate.replacingOccurrences(of: " ", with: "")
+        if !applyFilterAndSortG{
+            print("Filter list is empty!")
+            getAvailabilities(end_time: strDate)
+        }
+        else{
+            self.list = FilterViewController.list
+        }
+    }
+    // TABLE FUNCTIONS -->
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count;
     }
@@ -45,7 +65,9 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         let timeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         timeLabel.font = UIFont(name: GlobalVariables.normalFont, size: 18)
         timeLabel.textColor = UIColor.gray;
-        timeLabel.text = "\(avObj.start_time!)\n\(avObj.end_time!)"
+        let start_time = Helper.getFormattedDate(avObj.start_time!)
+        let end_time = Helper.getFormattedDate(avObj.end_time!)
+        timeLabel.text = "\(start_time)\n\(end_time)"
         timeLabel.lineBreakMode = .byWordWrapping
         timeLabel.numberOfLines = 0
         timeLabel.sizeToFit()
@@ -57,27 +79,14 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         
         return cell;
     }
-    override func viewDidLoad() {
-        super.viewDidLoad();
-        setStyle();
-        Helper.addFilterButton(filterButton, self);
-        filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
-        table.tableFooterView = UIView()
-        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.7)
-//        self.view.backgroundColor = GlobalVariables.mainColor
+    // <-- TABLE Functions
+    
+    // Add Button Pressed
+    @objc func addObject(sender: AnyObject) {
+//        self.performSegue(withIdentifier: "goToAddAv", sender: self);
     }
-    override func viewDidAppear(_ animated: Bool) {
-        var strDate = "\(Date())"
-        strDate = strDate.replacingOccurrences(of: " ", with: "")
-        if !applyFilterAndSortG{
-            print("Filter list is empty!")
-            getAvailabilities(end_time: strDate)
-        }
-        else{
-            self.list = FilterViewController.list
-        }
-        self.table.reloadData();
-    }
+    
+    // Filter and sort button pressed
     @objc func goToFilterPage() {
         self.performSegue(withIdentifier: "goToFilter", sender: self);
     }
@@ -96,11 +105,14 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         self.tabBarController?.tabBar.barTintColor = UIColor.darkGray;
         self.tabBarController?.view.tintColor = GlobalVariables.mainColor;
         self.tabBarController?.view.isOpaque = true;
+        self.tabBarItem = UITabBarItem(title: "Hungry?", image: UIImage(named: "hungry"), selectedImage: UIImage(named: "hungry"))
+        let addButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addObject(sender:)))
+        self.navigationItem.rightBarButtonItem = addButton
         
     }
     func getAvailabilities(limit:Int = -1, location:Any = false, start_time:Any = false, end_time:Any = false, price:Any = false, sortBy:Any = false, username:Any = false) {
         var avList:Array<AvailableObject> = [];
-        let urlString = "http://" + "127.0.0.1:8000/" + "availability-list/" + "\(limit)/\(location)/\(username)/\(start_time)/\(end_time)/\(price)/\(sortBy)"
+        let urlString = GlobalVariables.rootUrl + "availability-list/" + "\(limit)/\(location)/\(username)/\(start_time)/\(end_time)/\(price)/\(sortBy)"
         Alamofire.request(urlString).responseJSON{response in
             if let jsonObj = response.result.value{
                 let avObjs:Dictionary = jsonObj as! Dictionary<String, Any>;
