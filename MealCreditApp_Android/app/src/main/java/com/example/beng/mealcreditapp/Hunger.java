@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,6 +38,8 @@ public class Hunger extends AppCompatActivity {
     private boolean onPostScreen = true;
     private static int NUM_START_POSTS = 3;
     private boolean resumed = false;
+    private boolean hasBeenStarted = false;
+    public static JSONObject newFilters;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -88,8 +91,17 @@ public class Hunger extends AppCompatActivity {
                    Intent intent = new Intent(Hunger.this, hunger_creation.class);
                    startActivity(intent);
                }
-           }
-        );
+           });
+
+        Button doFilter = findViewById(R.id.go_filter_page);
+        doFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("LEAVING");
+                Intent intent = new Intent(Hunger.this, FilterAvailability.class);
+                startActivity(intent);
+            }
+        });
 
         Button postsScreen = (Button) findViewById(R.id.hg_posts_but);
         postsScreen.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +231,7 @@ public class Hunger extends AppCompatActivity {
     }
 
     private void addMatch(JSONObject newMatch, String currDate) {
-        System.out.println(JsonMethods.getString(newMatch, "end_time"));
+        //System.out.println(JsonMethods.getString(newMatch, "end_time"));
         String readableTimeDifference = DateParser.getHumanTimeDifference(currDate, JsonMethods.getString(newMatch, "end_time"));
         if(readableTimeDifference.contains("0m")) {
             return;
@@ -312,14 +324,68 @@ public class Hunger extends AppCompatActivity {
         });
     }
 
+    public void setMatches(final JSONObject filters) {
+        Thread get_matches = new Thread() {
+            @Override
+            public void run() {
+                final String currentTime = DateParser.getCurrentDateTimeServer();
+                //String size = JsonMethods.getString(filters, "Size");
+                String size = "-1/"; // FOR NOW
+                String location = JsonMethods.getString(filters, "Location") + "/";
+                if(location.equals("/")) location = "false/";
+                String maxPrice = JsonMethods.getString(filters, "Price") + "/";
+                if(maxPrice.equals("/")) maxPrice = "false/";
+                String startTime = JsonMethods.getString(filters, "Start Time") + "/";
+                if(startTime.equals("/")) startTime = "false/";
+                String endTime = JsonMethods.getString(filters, "End Time") + "/";
+                if(endTime.equals("/")) endTime = "false/";
+                String username = JsonMethods.getString(filters, "Username") + "/";
+                if(username.equals("/")) username = "false/";
+                GeneralUtility.setHashIfDoesntExist();
+                ServerCommunicationGet scg = new ServerCommunicationGet("availability-list/" + size +
+                        location + username + startTime + endTime + maxPrice +
+                        GeneralUtility.getAssociatedStringForSort(JsonMethods.getString(filters,"sortby")));
+                final Response response = scg.sendGetRequest();
+
+                if(response == null) {
+                    return;
+                }
+
+                try {
+                    //System.out.println(response.code());
+                    if(response.code() == 200) {
+                        String responseBody = response.body().string();
+                        JSONObject matchObj = new JSONObject(responseBody);
+                        JSONArray matches = matchObj.getJSONArray("result");
+                        //System.out.println(matches.length());
+                        for(int i = 0; i < matches.length(); i++) {
+                            JSONObject newMatch = matches.getJSONObject(i);
+                            addMatch(newMatch, currentTime);
+                        }
+                    }
+                } catch (Exception e) { e.printStackTrace(); }
+            }
+        };
+        get_matches.start();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        resumed = true;
-        if(hungerPostsSet && onPostScreen) {
-            removeAllPosts();
-            setHungerPosts();
+        if(hasBeenStarted) {
+            resumed = true;
+            if (hungerPostsSet && onPostScreen) {
+                removeAllPosts();
+                setHungerPosts();
+            } else {
+                if (newFilters.length() > 0) {
+                    removeAllPosts();
+                    setMatches(newFilters);
+                }
+            }
+        }
+        else {
+            hasBeenStarted = true;
         }
     }
-
 }

@@ -16,6 +16,10 @@
             android:orientation="horizontal"
             android:layout_height="wrap_content">
             <Button
+                android:id="@+id/filter-filter"
+                style="@style/filter_av_but"
+                android:text="@string/filterStr" />
+            <Button
                 android:id="@+id/filter-location"
                 style="@style/filter_av_but"
                 android:text="@string/locationStr" />

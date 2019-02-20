@@ -25,6 +25,14 @@
         <item>Shake Smart</item>
     </string-array>
 
+    <string-array name="sortByOptions">
+        <item>Price</item>
+        <item>Location</item>
+        <item>Recency</item>
+        <item>Start Time</item>
+        <item>End Time</item>
+    </string-array>
+
     <string name="title_activity_settings">Settings</string>
     <string name="title_availability">Your Available Posts</string>
     <string name="title_hunger">Your Hunger Posts</string>
@@ -64,13 +72,18 @@
     <string name="startTimeStr">Start Time</string>
     <string name="endTimeStr">End Time</string>
     <string name="price">Price</string>
+    <string name="filterStr">Filter</string>
     <string name="usernameStr">Username</string>
+    <string name="sortStr">Sort By: </string>
     <string name="others">Other</string>
-    <string name="locPageStr">If you\'d like to filter by location, select the location below</string>
-    <string name="pricePageStr">If you\'d like to filter by price, enter your MAX price below</string>
-    <string name="timePageStr">Indicate, if wanted, your time filter below</string>
+    <string name="locPageStr">If you\'d like to filter by location, select the location below.</string>
+    <string name="pricePageStr">If you\'d like to filter by price, enter your MAX price below.</string>
+    <string name="timePageStr">Indicate, if wanted, your time filter below.</string>
     <string name="dateFormat">M/D/YYYY H:MM (AM/PM)</string>
     <string name="reset">Reset</string>
     <string name="pmStr">PM</string>
     <string name="amStr">AM</string>
+    <string name="usernamePageStr">If you\'d like to filter by username, enter the username below.</string>
+    <string name="filterPageStr">When ready to filter, click the button below.</string>
+    <string name="filterByStr">You are currently filtering by:</string>
 </resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:visibility="gone"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:paddingHorizontal="20sp"
+        android:text="@string/usernamePageStr"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:id="@+id/username-edit-filter"
+        android:hint="@string/usernameStr"
+        android:textSize="20sp"
+        android:minWidth="100sp"
+        android:layout_marginTop="40sp"
+        android:maxLines="1"
+        android:inputType="text"
+        android:layout_height="wrap_content" />
+</LinearLayout>

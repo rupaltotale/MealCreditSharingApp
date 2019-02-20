@@ -77,18 +77,21 @@
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+        <Button
+            style="@style/basic_but_primary"
+            android:id="@+id/go-filter-page"
+            android:layout_below="@+id/upper_nav_menu"
+            android:paddingLeft="5sp"
+            android:textSize="20sp"
+            android:paddingRight="5sp"
+            android:text="@string/filterStr" />
         <LinearLayout
-            android:layout_below="@id/upper_nav_menu"
+            android:layout_below="@id/go-filter-page"
             android:id="@+id/hg_layout"
             android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
         </LinearLayout>
-
-        <!--<Spinner
-            android:id="@+id/av_list"
-            android:layout_width="368dp"
-            android:layout_height="0dp" />-->
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

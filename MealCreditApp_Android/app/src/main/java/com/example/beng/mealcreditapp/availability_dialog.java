@@ -48,7 +48,7 @@ public class availability_dialog extends AppCompatActivity {
         exitPopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             finish();
+                finish();
             }
         });
 

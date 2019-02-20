@@ -69,6 +69,8 @@ module.exports = class DataAccess {
             myQuery += ` LIMIT ${size}`;
         }
 
+        console.log(myQuery);
+
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
                 reject(err);

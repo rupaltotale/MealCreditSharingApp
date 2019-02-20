@@ -37,19 +37,25 @@
         <activity
             android:name=".Hunger"
             android:label="">
-        </activity>
-        <activity
-            android:name=".hunger_creation"
-            android:label=""
-            android:theme="@style/AppTheme.AvailabilityPopup"></activity>
-        <activity android:name=".FilterAvailability"
-            android:parentActivityName=".Hunger"
-            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".hunger_creation"
+            android:label=""
+            android:theme="@style/AppTheme.AvailabilityPopup" />
+        <activity
+            android:name=".FilterAvailability"
+            android:parentActivityName=".Hunger"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity
+            android:name=".FilterItems"
+            android:label=""
+            android:theme="@style/AppTheme.AvailabilityPopup"></activity>
     </application>
+
 </manifest>

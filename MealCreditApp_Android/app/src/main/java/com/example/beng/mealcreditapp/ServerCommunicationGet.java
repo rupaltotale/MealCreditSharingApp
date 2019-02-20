@@ -41,7 +41,7 @@ public class ServerCommunicationGet {
         try {
             //System.out.println("HERE...");
             Response response = client.newCall(request).execute();
-            System.out.println(response);
+            //System.out.println(response);
             return response;
         }
         catch(IOException e) {

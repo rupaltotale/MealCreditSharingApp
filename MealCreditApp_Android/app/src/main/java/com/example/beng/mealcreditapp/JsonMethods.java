@@ -47,7 +47,7 @@ public class JsonMethods {
         try {
             return json.getString(str);
         }
-        catch (JSONException e) { return null; }
+        catch (JSONException e) { return ""; }
     }
 
     protected static String get(JSONObject json, String str) {
@@ -59,5 +59,11 @@ public class JsonMethods {
 
     protected static String convertJSONToString(JSONObject json) {
         return json.toString();
+    }
+
+    protected static void put(JSONObject json, String s, String s1) {
+        try {
+            json.put(s, s1);
+        } catch (JSONException e) { System.out.println("JSON Exception"); }
     }
 }

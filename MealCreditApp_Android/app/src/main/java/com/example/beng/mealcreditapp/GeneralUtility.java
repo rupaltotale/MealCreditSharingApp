@@ -5,9 +5,26 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
+import java.util.HashMap;
+
 public class GeneralUtility {
 
     public static final int version = Build.VERSION.SDK_INT;
+    static private HashMap h = new HashMap();
+
+    public static String getAssociatedStringForSort(String s) {
+        return h.get(s).toString();
+    }
+
+    public static void setHashIfDoesntExist() {
+        if(h.isEmpty()) {
+            h.put("Price", "asking_price");
+            h.put("Start Time", "start_time");
+            h.put("End Time", "end_time");
+            h.put("Location", "location");
+            h.put("Username", "username");
+        }
+    }
 
     public static void printArray(int[] arr) {
         System.out.println();
@@ -34,5 +51,13 @@ public class GeneralUtility {
         } else {
             return context.getResources().getDrawable(id);
         }
+    }
+
+    public static boolean checkPrice(String price) {
+        try {
+            Double.parseDouble(price);
+        } catch (Exception e) { return false; }
+
+        return true;
     }
 }

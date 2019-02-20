@@ -1,7 +1,8 @@
+import java.util.ArrayList;
+
 public class test {
+   
     public static void main(String[] args) {
-	String a = "hello";
-	a = a + " ben";
-	System.out.println(a);
+	System.out.println(java.util.Objects.equals(null, "null"));
     }
 }

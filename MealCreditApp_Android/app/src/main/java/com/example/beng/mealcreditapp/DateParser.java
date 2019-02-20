@@ -164,7 +164,7 @@ public class DateParser {
     public static long getMillisDifference(String dt1, String dt2) {
         int[] dt1Vals = getValuesFromServerDateTimeFormat(dt1);
         int[] dt2Vals = getValuesFromServerDateTimeFormat(dt2);
-        GeneralUtility.printArray(dt2Vals);
+        //GeneralUtility.printArray(dt2Vals);
 
         Calendar c1 = (Calendar) Calendar.getInstance().clone();
         c1.clear();
@@ -183,9 +183,9 @@ public class DateParser {
 
     public static String getHumanTimeDifference(String dt1, String dt2) {
         long timeDifference = DateParser.getMillisDifference(dt1, dt2);
-        System.out.println(timeDifference);
+        //System.out.println(timeDifference);
         int minuteDifference = (int)(timeDifference / 60000);
-        System.out.println(minuteDifference);
+        //System.out.println(minuteDifference);
         if(minuteDifference < 3) {
             return "0m";
         }

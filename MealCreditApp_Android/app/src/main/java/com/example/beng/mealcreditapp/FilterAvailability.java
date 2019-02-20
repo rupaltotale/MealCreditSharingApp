@@ -1,14 +1,15 @@
 package com.example.beng.mealcreditapp;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
-import android.text.method.KeyListener;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.support.v4.content.res.ResourcesCompat;
@@ -18,8 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class FilterAvailability extends AppCompatActivity {
@@ -27,8 +30,13 @@ public class FilterAvailability extends AppCompatActivity {
     private int currentSelection;
     private int lastSelected;
     private int[] buttonIds;
+    private String[] associatedStrings;
     private LinearLayout mainLayout;
+    private String initialDateTime;
     private int lastLength;
+    private ArrayList<String> hasBeenEdited = new ArrayList<String>();
+    private String recordedCurrentDate;
+    public static JSONObject filtersToUse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +53,16 @@ public class FilterAvailability extends AppCompatActivity {
             R.id.filter_start_time,
             R.id.filter_end_time,
             R.id.filter_username,
-            R.id.filter_other
+            R.id.filter_other,
+            R.id.filter_filter
+        };
+        associatedStrings = new String[] {
+            "Location",
+            "Price",
+            "Start Time",
+            "End Time",
+            "Username",
+            "Other"
         };
         mainLayout = findViewById(R.id.lin_layout_filter_av);
         lastSelected = 0;
@@ -61,10 +78,14 @@ public class FilterAvailability extends AppCompatActivity {
             });
         }
 
+        recordedCurrentDate = DateParser.getCurrentDateTime();
+
         setUpLocationPage();
         setUpPricePage();
-        setUpTimePage();
-        setUpTimePage();
+        setUpTimePage(0);
+        setUpTimePage(1);
+        setUpUsernamePage();
+        setUpFilterPage();
 
         currentSelection = R.id.filter_location;
         setUnderline(currentSelection, false);
@@ -111,9 +132,12 @@ public class FilterAvailability extends AppCompatActivity {
             case R.id.filter_end_time:
                 setVisiblePage(3);
                 break;
-            /*case R.id.filter_username:
-                setUpUsernamePage();
-                break;*/
+            case R.id.filter_username:
+                setVisiblePage(4);
+                break;
+            case R.id.filter_filter:
+                setVisiblePage(5); //6 cuz of below
+                break;
             default:
                 //setUpOtherPage();
                 break;
@@ -152,15 +176,15 @@ public class FilterAvailability extends AppCompatActivity {
         });
     }
 
-    private void setUpTimePage() {
+    private void setUpTimePage(int which) {
+        final String whichStr = which == 0 ? "Start Time" : "End Time";
         LayoutInflater inflator = FilterAvailability.this.getLayoutInflater();
         View rowView = inflator.inflate(R.layout.time_page_filter, null);
         final EditText et = rowView.findViewById(R.id.date_edit_filter);
-        final String currentDate = DateParser.getCurrentDateTime();
-        final String newText = currentDate.substring(0, currentDate.indexOf("M") - 2);
+        final String newText = recordedCurrentDate.substring(0, recordedCurrentDate.indexOf("M") - 2);
         final TextView tvRelation = rowView.findViewById(R.id.relation_time_filter);
         final Switch relationSwitch = rowView.findViewById(R.id.ampmtoggle);
-        if(currentDate.contains("PM")) {
+        if(recordedCurrentDate.contains("PM")) {
             tvRelation.setText(R.string.pmStr);
             relationSwitch.setChecked(true);
         }
@@ -178,7 +202,6 @@ public class FilterAvailability extends AppCompatActivity {
         et.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //System.out.println(s + " " + start + " " + after);
                 if(after == 0) {
                     char toDelete = s.charAt(start);
                     switch(toDelete) {
@@ -236,7 +259,7 @@ public class FilterAvailability extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 et.setText(newText);
-                if(currentDate.contains("PM")) {
+                if(recordedCurrentDate.contains("PM")) {
                     tvRelation.setText(R.string.pmStr);
                     relationSwitch.setChecked(true);
                 }
@@ -244,6 +267,7 @@ public class FilterAvailability extends AppCompatActivity {
         });
 
         final View newRowView = rowView;
+        newRowView.setId(30 + which);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -252,8 +276,82 @@ public class FilterAvailability extends AppCompatActivity {
         });
     }
 
+    private void setUpUsernamePage() {
+        LayoutInflater inflater = FilterAvailability.this.getLayoutInflater();
+        final View rowView = inflater.inflate(R.layout.username_page_filter, null);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainLayout.addView(rowView);
+            }
+        });
+    }
+
+    private void setUpFilterPage() {
+        LayoutInflater inflater = FilterAvailability.this.getLayoutInflater();
+        final View rowView = inflater.inflate(R.layout.filter_page_filter, null);
+        final Button filterBut = rowView.findViewById(R.id.filter_but_filter);
+        filterBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                JSONObject json = new JSONObject();
+                String username =  ((EditText) findViewById(R.id.username_edit_filter)).getText().toString();
+                if(!username.equals("")) {
+                    JsonMethods.put(json, "Username", username);
+                }
+                if(!recordedCurrentDate.equals(getDateTimeFromTimePage(0))) {
+                    JsonMethods.put(json, "Start Time", getDateTimeFromTimePage(0));
+                }
+                if(!recordedCurrentDate.equals(getDateTimeFromTimePage(1))) {
+                    JsonMethods.put(json, "End Time", getDateTimeFromTimePage(1));
+                }
+                String price = ((EditText) findViewById(R.id.price_page_filter)).getText().toString();
+                if(!price.equals("")) {
+                    JsonMethods.put(json, "Price", price);
+                }
+                String location = ((Spinner) findViewById(R.id.location_list_filter)).getSelectedItem().toString();
+                if(!location.equalsIgnoreCase("anywhere")) {
+                    JsonMethods.put(json, "Location", location);
+                }
+
+                if(json.length() == 0) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DoAlert.doBasicAlert("You must enter something to filter!", FilterAvailability.this);
+                        }
+                    });
+                    return;
+                }
+
+                b.putString("filter_info", JsonMethods.convertJSONToString(json));
+                Intent intent = new Intent(FilterAvailability.this, FilterItems.class);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainLayout.addView(rowView);
+            }
+        });
+    }
+
     private int getLength(EditText e) {
         return e.getText().toString().length();
+    }
+
+    private void addIfNotInEdited(String s) {
+        if(!hasBeenEdited.contains(s)) {
+            hasBeenEdited.add(s);
+        }
+    }
+
+    private void removeIfExistsInEdit(String s) {
+        hasBeenEdited.remove(s);
     }
 
     private void addToEditText(CharSequence cs, EditText e, String s, int index) {
@@ -289,9 +387,29 @@ public class FilterAvailability extends AppCompatActivity {
             case R.id.filter_username:
                 return 4;
             case R.id.filter_other:
+                return 6;
+            case R.id.filter_filter:
                 return 5;
             default:
                 return -1;
+        }
+    }
+
+    private String getDateTimeFromTimePage(int which) {
+        View view = findViewById(30 + which);
+        EditText et = view.findViewById(R.id.date_edit_filter);
+        String tv = ((TextView) view.findViewById(R.id.relation_time_filter)).getText().toString();
+
+        return et.getText().toString() + " " + tv;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(filtersToUse != null && filtersToUse.length() > 0) {
+            Hunger.newFilters = filtersToUse;
+            filtersToUse = new JSONObject();
+            finish();
         }
     }
 }
