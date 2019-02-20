@@ -105,6 +105,44 @@ class Helper: UIViewController {
         }
         
     }
+    static func addFilterButton(_ filterButton: UIButton, _ view : UIViewController) {
+        filterButton.setTitle("Filter and Sort", for: .normal)
+        Helper.setNormalButtonStyle(filterButton, view)
+        filterButton.sizeToFit()
+        filterButton.frame = CGRect(x: (view.view.frame.width - filterButton.frame.width * 1.5)/2, y: view.view.frame.height * 0.725, width: filterButton.frame.width * 1.5, height: filterButton.frame.height * 1)
+        filterButton.layer.cornerRadius = filterButton.frame.size.width / 11
+        filterButton.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
+        filterButton.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
+        filterButton.layer.shadowOpacity = 0.7
+        filterButton.layer.shadowRadius = 0.0
+        view.view.addSubview(filterButton)
+    }
+    static func getAvailabilities(limit:Int = -1, location:Any = false, start_time:Any = false, end_time:Any = false, price:Any = false, sortBy:Any = false, username:Any = false) -> Array<AvailableObject>{
+        var avList:Array<AvailableObject> = [];
+        let urlString = GlobalVariables.rootUrl + "availability-list/" + "\(limit)/\(location)/\(username)/\(start_time)/\(end_time)/\(price)/\(sortBy)"
+        Alamofire.request(urlString).responseJSON{response in
+            if let jsonObj = response.result.value{
+                let avObjs:Dictionary = jsonObj as! Dictionary<String, Any>;
+                let resultArray:NSArray = avObjs["result"] as! NSArray;
+                for i in resultArray{
+                    let obj:Dictionary = i as! Dictionary<String, Any>
+                    let avObj:AvailableObject = AvailableObject(av_id: obj["av_id"] as! Int, price: obj["asking_price"] as? Double, start_time: Helper.convertFromDateTimeToDate(dateTime: obj["start_time"] as! String), end_time: Helper.convertFromDateTimeToDate(dateTime: obj["end_time"] as! String), user_id: obj["user_id"] as? Int, location: obj["location"] as? String);
+                    avList.append(avObj)
+                }
+                
+                
+            }
+        }
+        return avList;
+    }
+    
+    static func getFormattedDate(_ datePicker: Date) -> String{
+        let dateformatter = DateFormatter()
+        dateformatter.dateStyle = DateFormatter.Style.medium
+        dateformatter.timeStyle = DateFormatter.Style.short
+        let dateTime = dateformatter.string(from: datePicker)
+        return dateTime
+    }
     
 //    static func setButtonStyle(){
 //

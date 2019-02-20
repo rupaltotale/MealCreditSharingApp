@@ -17,7 +17,9 @@ struct GlobalVariables {
     static var navBarTitle:UIFont =  UIFont(name: "Marker Felt", size: 28.0)!
     static var normalFont = "Avenir";
     static var buttonFont = "Arial";
-   
+    static var locations = ["Mustang", "Red Radish", "Canyon Cafe", "The Avenue", "805"]
+    static var rootUrl = "http://" + "127.0.0.1:8000/"
+    static var timeInterval: Double = -8*3600;
     
     
     

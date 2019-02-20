@@ -33,7 +33,6 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         ["Start Time Label", "End Time Label"],
         ["Location Label"]
     ]
-    let locations = ["Mustang", "Red Radish", "Canyon Cafe", "The Avenue", "805"]
     var showStartTimePicker = false
     var showEndTimePicker = false
     var showLocationPicker = false
@@ -47,8 +46,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         self.locationPicker.dataSource = self
         self.locationPicker.delegate = self
         priceTextField.text = "0.0"
-        startLabel.text = "\(startDatePicker.date)"
-        endLabel.text = "\(endDatePicker.date)"
+        changeDate()
         locationLabel.text = "Select"
         
         table.reloadData()
@@ -61,7 +59,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         Helper.setNormalButtonStyle(saveButton, self)
         saveButton.setTitle("Add", for: .normal)
         saveButton.sizeToFit()
-        saveButton.frame = CGRect(x: (self.view.frame.width - saveButton.frame.width * 1.5)/2, y: table.frame.origin.y + table.frame.height + 25, width: saveButton.frame.width * 1.5, height: saveButton.frame.height * 1)
+        saveButton.frame = CGRect(x: (self.view.frame.width - saveButton.frame.width * 1.5)/2, y: table.frame.origin.y + table.frame.height + 25, width: saveButton.frame.width * 1.5, height: saveButton.frame.height)
         saveButton.addTarget(self, action: #selector(addNewObject), for: .touchUpInside)
         self.view.addSubview(saveButton)
     }
@@ -75,13 +73,13 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         }
         else{
             let price = priceTextField.text
-            var start_time = "\(startDatePicker.date)"
+            var start_time = "\(startDatePicker.date.addingTimeInterval(GlobalVariables.timeInterval))"
             start_time = String(start_time.dropLast(6))
-            var end_time = "\(endDatePicker.date)"
+            var end_time = "\(endDatePicker.date.addingTimeInterval(GlobalVariables.timeInterval))"
             end_time = String(end_time.dropLast(6))
             let location = locationLabel.text
             
-            let urlString = "http://" + "127.0.0.1:8000/" + "create/availability/"
+            let urlString = GlobalVariables.rootUrl + "create/availability/"
             
             let parameters: [String: Any] = [
                 "user_id": UserDefaults.standard.string(forKey: "user_id")!,
@@ -102,21 +100,21 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
             }
         }
     }
-    // Picker Functions
+    // Mark: Picker Functions
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return locations.count
+        return GlobalVariables.locations.count
     }
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        let string = locations[row]
+        let string = GlobalVariables.locations[row]
         return NSAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: GlobalVariables.mainColor])
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        locationLabel.text = locations[row]
+        locationLabel.text = GlobalVariables.locations[row]
     }
     
     // Table Functions
@@ -153,7 +151,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
             cell.tag = 2
             startLabel.font = UIFont(name: GlobalVariables.normalFont, size: 20)
             startLabel.sizeToFit()
-            startLabel.text = "\(startDatePicker.date)"
+            changeDate()
             startLabel.frame = CGRect(x: 45, y: cell.frame.height/2 - startLabel.frame.height/2, width: cell.frame.width, height: startLabel.frame.height)
             cell.addSubview(startLabel)
         }
@@ -162,7 +160,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
             cell.tag = 3
             endLabel.font = UIFont(name: GlobalVariables.normalFont, size: 20)
             endLabel.sizeToFit()
-            endLabel.text = "\(endDatePicker.date)"
+            changeDate()
             endLabel.frame = CGRect(x: 45, y: cell.frame.height/2 - endLabel.frame.height/2, width: cell.frame.width, height: endLabel.frame.height)
             cell.addSubview(endLabel)
         }
@@ -211,8 +209,8 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         return cell
     }
     @objc func changeDate(){
-        startLabel.text = "\(startDatePicker.date)"
-        endLabel.text = "\(endDatePicker.date)"
+        startLabel.text = Helper.getFormattedDate(startDatePicker.date)
+        endLabel.text = Helper.getFormattedDate(endDatePicker.date)
     }
     // CLICK ROW
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
