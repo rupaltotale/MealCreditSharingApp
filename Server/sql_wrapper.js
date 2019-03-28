@@ -69,7 +69,7 @@ module.exports = class DataAccess {
             myQuery += ` LIMIT ${size}`;
         }
 
-        console.log(myQuery);
+        //console.log(myQuery);
 
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
@@ -395,6 +395,7 @@ module.exports = class DataAccess {
                         returnUser["username"] = result[0].username;
                         returnUser["firstname"] = result[0].firstname;
                         returnUser["lastname"] = result[0].lastname;
+                        returnUser["email"] = result[0].email;
                     }
                 }
                 resolve(returnUser);

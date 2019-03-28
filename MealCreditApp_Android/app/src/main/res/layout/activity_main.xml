@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                android:text="@string/title_hunger"
+                android:text="@string/title_availability"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:id="@+id/toolbar_title_hg"

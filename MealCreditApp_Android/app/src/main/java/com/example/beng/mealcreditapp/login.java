@@ -29,7 +29,14 @@ public class login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        // TEST
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ServerCommunicationGet scg = new ServerCommunicationGet("");
+//                scg.sendGetRequest();
+//            }
+//        }).start();
         Button btnLogin = (Button) findViewById(R.id.loginbut);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,12 +44,12 @@ public class login extends AppCompatActivity {
                 final String emailOrUsername = ((TextView) findViewById(R.id.login1)).getText().toString();
                 final boolean isEmail = UserCheck.validate(emailOrUsername);
                 final String password = ((TextView) findViewById(R.id.login2)).getText().toString();
-                System.out.println("Attempting login");
+                //System.out.println("Attempting login");
                 Thread trySignIn = new Thread() {
                     @Override
                     public void run() {
 
-                        JSONObject json = new JSONObject();
+                        final JSONObject json = new JSONObject();
                         try {
                             if(isEmail) {
                                 json.put("email", emailOrUsername);
@@ -57,6 +64,16 @@ public class login extends AppCompatActivity {
                         //System.out.println("JSON string: " + jsonText);
                         ServerCommunicationPost scp = new ServerCommunicationPost("login/", jsonText);
                         final Response response = scp.sendPostRequest();
+                        if(response == null) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    DoAlert.doBasicAlert("Either our server is down or you're not connected" +
+                                            " to the internet!", login.this);
+                                }
+                            });
+                            return;
+                        }
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -70,11 +87,11 @@ public class login extends AppCompatActivity {
                                         JSONObject jsonRes = new JSONObject(res);
                                         User.setUser(jsonRes.getString("token"), jsonRes.get("user_id").toString(), jsonRes.getString("username"),
                                                 jsonRes.getString("firstname"), jsonRes.getString("lastname"));
+                                        User.setEmail(jsonRes.getString("email"));
                                         UserCheck.setUserSharedPreferences(jsonRes);
                                         Intent intent = new Intent(login.this, MainActivity.class);
                                         startActivity(intent);
                                         finish();
-
                                     } catch(Exception e) {  }
                                 }
                             }
@@ -85,7 +102,6 @@ public class login extends AppCompatActivity {
             }
         });
 
-        //User u = new User("jwt", "7", "bglossner", "ben", "glossner", "12345");
         UserCheck.initializeUserCheck(getApplicationContext());
         boolean success = UserCheck.setUserInfoIfExists();
         if(success) {

@@ -13,7 +13,13 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".MainActivity"
-            android:label="" />
+            android:label="">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
         <activity
             android:name=".settings"
             android:label="" />
@@ -21,7 +27,13 @@
             android:name=".availability_dialog"
             android:label=""
             android:theme="@style/AppTheme.AvailabilityPopup" />
-        <activity android:name=".login" />
+        <activity android:name=".login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".signup"
             android:parentActivityName=".login"
@@ -37,11 +49,6 @@
         <activity
             android:name=".Hunger"
             android:label="">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".hunger_creation"

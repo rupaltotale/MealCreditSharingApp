@@ -86,4 +86,19 @@
     <string name="usernamePageStr">If you\'d like to filter by username, enter the username below.</string>
     <string name="filterPageStr">When ready to filter, click the button below.</string>
     <string name="filterByStr">You are currently filtering by:</string>
+
+    <!-- Settings Page -->
+    <string name="logoutBut">Logout</string>
+    <string name="editSetting">Edit</string>
+    <string name="settingsUsername">Username: </string>
+    <string name="settingsFirstName">Firstname: </string>
+    <string name="settingsLastName">Lastname: </string>
+    <string name="settingsEmail">Email: </string>
+    <string name="nullContent">None</string>
+
+    <!-- Confirmation -->
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
 </resources>

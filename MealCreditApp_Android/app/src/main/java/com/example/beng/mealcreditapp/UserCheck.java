@@ -36,6 +36,7 @@ public class UserCheck {
     }
 
     private static String getJwt() {
+        //System.out.println("jwt: " + jwt);
         if(userExists() && hasInitialized) {
             return jwt;
         }
@@ -48,13 +49,13 @@ public class UserCheck {
             String jwtBody;
             try {
                 jwtBody = JsonMethods.decoded(jwt);
-                System.out.println(jwtBody);
+                //System.out.println(jwtBody);
                 JSONObject json = new JSONObject(jwtBody);
                 String userIdFound;
                 if(!json.isNull("user_id")) {
                     userIdFound = json.getString("user_id");
                     String userId = sp.getString("user_id", "");
-                    System.out.println("UserID: " + userId);
+                    //System.out.println("UserID: " + userId);
                     if(!userId.equals(userIdFound)) {
                         return false;
                     }
@@ -62,7 +63,9 @@ public class UserCheck {
                         String firstname = sp.getString("firstname", "");
                         String lastname = sp.getString("lastname", "");
                         String username = sp.getString("username", "");
+                        String email = sp.getString("email", "");
                         User.setUser(jwt, userIdFound, username, firstname, lastname);
+                        User.setEmail(email);
                     }
                 }
                 else {
@@ -120,11 +123,33 @@ public class UserCheck {
         return true;
     }
 
+    public static void resetUserPreferences() {
+        if(hasInitialized()) {
+            SharedPreferences.Editor sPEditor = sp.edit();
+            sPEditor.putString("jwt", "");
+            sPEditor.putString("user_id", "");
+            sPEditor.putString("firstname", "");
+            sPEditor.putString("lastname", "");
+            sPEditor.putString("email", "");
+            sPEditor.putString("username", "");
+            sPEditor.apply();
+            User.setUser("", "", "", "", "");
+        }
+    }
+
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public static boolean validate(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
         return matcher.find();
+    }
+
+    public static void updateSinglePreference(String key, String value) {
+        if(hasInitialized()) {
+            SharedPreferences.Editor sPEditor = sp.edit();
+            sPEditor.putString(key, value);
+            sPEditor.apply();
+        }
     }
 }

@@ -18,4 +18,28 @@ public class DoAlert {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    public static void doBasicConfirm(String message, Context context, final Alertable cf1, final Alertable cf2) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if(cf1 == null) {
+                            return;
+                        }
+                        cf1.doAction();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(cf2 == null) {
+                            return;
+                        }
+                        cf2.doAction();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

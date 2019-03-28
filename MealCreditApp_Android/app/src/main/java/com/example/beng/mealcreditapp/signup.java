@@ -99,6 +99,9 @@ public class signup extends AppCompatActivity {
                             String userId = jsonRes.get("user_id").toString();
                             String jwt = jsonRes.getString("token");
                             User.setUser(jwt, userId, username, firstName, lastName);
+                            if(!email.equals("")) {
+                                User.setEmail(email);
+                            }
                             JSONObject forSharedPrefs = JsonMethods.makeJsonObjectFromStrings(new String[]{"firstname", "lastname", "username", "user_id", "jwt", "email"},
                                     new String[]{firstName, lastName, username, userId, jwt, email});
                             UserCheck.setUserSharedPreferences(forSharedPrefs);

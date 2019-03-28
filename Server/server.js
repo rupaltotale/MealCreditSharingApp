@@ -412,14 +412,27 @@ function verifyToken(token) {
             // Both matched must be set to true and "id" must exist for the returned object to be acceptable
             if(loginChecked["matched"] && "id" in loginChecked) {
                 let retToken = makeTokenUser(loginChecked["id"]);
-                return res.status(200).json({
-                    username: loginChecked["username"],
-                    user_id: loginChecked["id"],
-                    firstname : loginChecked["firstname"],
-                    lastname : loginChecked["lastname"],
-                    message: "OAuth successful",
-                    token : retToken,
-                });
+                if(loginChecked["email"] != null) {
+                    return res.status(200).json({
+                        username: loginChecked["username"],
+                        user_id: loginChecked["id"],
+                        firstname : loginChecked["firstname"],
+                        lastname : loginChecked["lastname"],
+                        email : loginChecked["email"],
+                        message: "OAuth successful",
+                        token : retToken,
+                    });
+                }
+                else {
+                    return res.status(200).json({
+                        username: loginChecked["username"],
+                        user_id: loginChecked["id"],
+                        firstname : loginChecked["firstname"],
+                        lastname : loginChecked["lastname"],
+                        message: "OAuth successful",
+                        token : retToken,
+                    });
+                }
             }
             // Login or password does not match
             else {
@@ -549,6 +562,7 @@ app.post('/register/', function(req, res) {
 
 function authenticate(token, res, user_id){
     if(token == undefined || token == "" || token == null) {
+        console.log("Error here");
         return res.status(401).json({
             "message" : "Invalid token - 1"
         });
@@ -558,11 +572,13 @@ function authenticate(token, res, user_id){
     let retToken = verifyToken(token);
     // The === on the false is important, as 0 can be a user_id
     if(retToken === false) {
+        console.log("Error here2");
         return res.status(401).json({
             "message" : "Invalid token - 2"
         });
     }
     else if(retToken != user_id) {
+        console.log("Error here3");
         return res.status(401).json({
             "message" : "Invalid user ID"
         });
@@ -740,6 +756,7 @@ app.put('/change/user/', (req, res) => {
         "firstname": req.body.firstname,
         "lastname":req.body.lastname,
         "phone":req.body.phone,
+        "username":req.body.username,
         "email":req.body.email
     }
     // Code below till the return statement should probably be converted to a func. 

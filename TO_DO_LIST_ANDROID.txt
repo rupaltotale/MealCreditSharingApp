@@ -7,7 +7,7 @@ UNKNOWN DIFFICULTY BUT IMPORTANT
     -- Check user connectedness to internet when trying to connect to server
 
 SCREENS
-    -- Settings
+    -- Settings (closer to being done now)
 
 NOT MVP (Do later)
     -- Chat stuff

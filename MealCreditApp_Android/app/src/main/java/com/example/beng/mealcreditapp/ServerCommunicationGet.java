@@ -14,7 +14,8 @@ public class ServerCommunicationGet {
 
     public ServerCommunicationGet(String url) {
         client = new OkHttpClient();
-        String fullUrl = "http://10.0.2.2:8000/" + url;
+        //String fullUrl = "http://10.0.2.2:8000/" + url;
+        String fullUrl = GeneralUtility.SERVER_IP + url;
         request = new Request.Builder()
                 .url(fullUrl)
                 .build();

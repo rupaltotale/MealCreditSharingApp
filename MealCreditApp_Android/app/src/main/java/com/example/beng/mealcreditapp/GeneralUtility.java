@@ -12,6 +12,9 @@ public class GeneralUtility {
     public static final int version = Build.VERSION.SDK_INT;
     static private HashMap h = new HashMap();
 
+    //public static final String SERVER_IP = "http://35.247.90.129/mc/";
+    public static final String SERVER_IP = "http://10.0.2.2:8000/";
+
     public static String getAssociatedStringForSort(String s) {
         return h.get(s).toString();
     }

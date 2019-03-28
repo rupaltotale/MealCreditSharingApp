@@ -18,7 +18,8 @@ public class ServerCommunicationPut {
     public ServerCommunicationPut(String url, String jsonBody) {
         client = new OkHttpClient();
         body = RequestBody.create(JSON_MEDIA, jsonBody);
-        String fullUrl = "http://10.0.2.2:8000/" + url;
+        //String fullUrl = "http://10.0.2.2:8000/" + url;
+        String fullUrl = GeneralUtility.SERVER_IP + url;
         request = new Request.Builder()
                 .url(fullUrl)
                 .put(body)
