@@ -32,10 +32,12 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     var locationLabel = UILabel()
     var scrollView = UIScrollView()
     var containerView = UIView()
+    var resetButton = UIBarButtonItem()
+    var locationButtons: Array<UIButton> = [];
     
     var lastY:CGFloat = 0
     
-    let labelFontSize:CGFloat = 22.0
+    let labelFontSize:CGFloat = 21.0
     
     let sortFactors = ["Location", "Price", "Recency", "Start Time", "End Time"]
     override func viewDidLoad() {
@@ -49,6 +51,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         setupLocationLabel()
         setupLocationCheckBoxes()
         setupApplyButton()
+        setupResetButton()
 //        self.view.backgroundColor = GlobalVariables.mainColor
         
     }
@@ -150,6 +153,36 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         containerView.addSubview(endDatePicker)
         
     }
+    func setupResetButton(){
+        resetButton.title = "Reset"
+//        resetButton.addTa
+        resetButton.target = self;
+        resetButton.action = #selector(resetAllFactors(sender:))
+        self.navigationItem.rightBarButtonItem = resetButton;
+    }
+    
+    @objc func resetAllFactors(sender: AnyObject) {
+        sortByOption = ""
+        locationsChecked = [String]()
+        start_time = false
+        end_time = false
+        max_price = ""
+        username = ""
+        applyFilterAndSortG = false
+        sortByLabel.text = "Sort By: " + sortByOption
+        maxPriceTextBox.placeholder = "eg. 5.0"
+        maxPriceTextBox.text = max_price
+        startTimeLabel.text = "Start Time:"
+        startDatePicker.setDate(Date(), animated: true)
+        endTimeLabel.text = "End Time: "
+        endDatePicker.setDate(Date(), animated: true)
+        sortByPicker.selectRow(0, inComponent: 0, animated: true)
+        for button in locationButtons{
+            if button.tag == 1{
+                self.toggleState(sender: button)
+            }
+        }
+    }
     @objc func changeStartDate() {
         start_time = startDatePicker.date
         startTimeLabel.text = "Start Time:  \(Helper.getFormattedDate(start_time as! Date))"
@@ -187,6 +220,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
             y += checkBox.frame.height + 5
             checkBox.addTarget(self, action: #selector(toggleState(sender:)), for: .touchUpInside)
             containerView.addSubview(checkBox)
+            locationButtons.append(checkBox)
         }
         lastY = y
     }
@@ -219,11 +253,9 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         let applyButton = UIButton()
         Helper.addFilterButton(applyButton, self)
         applyButton.setTitle("Apply Changes", for: .normal)
-//        Helper.setNormalButtonStyle(applyButton, self)
         applyButton.addTarget(self, action: #selector(applyChanges), for: .touchUpInside)
         applyButton.sizeToFit()
         applyButton.frame = CGRect(x: (self.view.frame.width - applyButton.frame.width * 1.5)/2, y: applyButton.frame.origin.y, width: applyButton.frame.width * 1.5, height: applyButton.frame.height)
-//        self.containerView.addSubview(applyButton)
     }
     
     @objc func applyChanges(){
