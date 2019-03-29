@@ -43,11 +43,9 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         setStyle()
         
         // Element settings
-        self.locationPicker.dataSource = self
-        self.locationPicker.delegate = self
+        setupLocationPicker()
         priceTextField.text = "0.0"
         changeDate()
-        locationLabel.text = "Select"
         
         table.reloadData()
         table.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: table.contentSize.height)
@@ -79,6 +77,20 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         locationLabel.text = GlobalVariables.locations[row]
+    }
+    func setupLocationPicker(){
+        locationLabel.text = GlobalVariables.locations[0]
+        self.locationPicker.dataSource = self
+        self.locationPicker.delegate = self
+        locationPicker.backgroundColor = UIColor.white
+        locationPicker.showsSelectionIndicator = true
+        var row = 0
+        for location in GlobalVariables.locations {
+            if location == locationLabel.text{
+                locationPicker.selectRow(row, inComponent: 0, animated: true)
+            }
+            row += 1
+        }
     }
     
     // Table Functions

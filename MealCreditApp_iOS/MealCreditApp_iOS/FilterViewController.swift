@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 
 // filter options
-var sortByOption = "Price"
+var sortByOption = ""
 var locationsChecked = [String]()
 var start_time:Any = false
 var end_time:Any = false
@@ -41,10 +41,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround() 
-        self.scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 270)
-        scrollView.addSubview(containerView)
-        view.addSubview(scrollView)
+        setupScrollView()
         setupSortByLabel()
         setupPicker()
         setupPriceLabel()
@@ -61,9 +58,15 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         scrollView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height * 0.9)
         containerView.frame = CGRect(x: 0, y: 0, width: scrollView.contentSize.width, height: scrollView.contentSize.height)
     }
+    func setupScrollView(){
+        self.scrollView.delegate = self
+        scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 270)
+        scrollView.addSubview(containerView)
+        view.addSubview(scrollView)
+    }
     func setupSortByLabel() {
         sortByLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
-        sortByLabel.text = "Sort By: "
+        sortByLabel.text = "Sort By: " + sortByOption
         sortByLabel.sizeToFit()
         sortByLabel.frame = CGRect(x: 25, y: self.view.frame.height * 0.05, width: self.view.frame.width, height: sortByLabel.frame.height)
         containerView.addSubview(sortByLabel)
@@ -76,8 +79,8 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         sortByPicker.sizeToFit()
         sortByPicker.frame = CGRect(x:(self.view.frame.width - sortByPicker.frame.width)/2, y: sortByLabel.frame.origin.y + sortByLabel.frame.height, width: sortByPicker.frame.width, height: sortByPicker.frame.height)
         var row = 0
-        for i in sortFactors {
-            if i == sortByOption{
+        for factor in sortFactors {
+            if factor == sortByOption{
                 sortByPicker.selectRow(row, inComponent: 0, animated: true)
             }
             row += 1
@@ -95,7 +98,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         maxPriceTextBox.text = max_price
         Helper.setTextFieldStyle(maxPriceTextBox)
         maxPriceTextBox.sizeToFit()
-        maxPriceTextBox.frame = CGRect(x: priceLabel.frame.origin.x + priceLabel.frame.width, y: sortByPicker.frame.origin.y + sortByPicker.frame.height, width: maxPriceTextBox.frame.width, height: priceLabel.frame.height)
+        maxPriceTextBox.frame = CGRect(x: priceLabel.frame.origin.x + priceLabel.frame.width, y: sortByPicker.frame.origin.y + sortByPicker.frame.height, width: maxPriceTextBox.frame.width * 1.1, height: priceLabel.frame.height)
         maxPriceTextBox.addTarget(self, action: #selector(updateMaxPrice(_:)), for: .editingChanged)
         containerView.addSubview(maxPriceTextBox)
     }
@@ -104,6 +107,9 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     }
     func setupTimeElements(){
         startTimeLabel.text = "Start Time:"
+        if (start_time as? Date != nil){
+            startTimeLabel.text = "Start Time:  \(Helper.getFormattedDate(start_time as! Date))"
+        }
         startTimeLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
         startTimeLabel.sizeToFit()
         startTimeLabel.frame = CGRect(x: 25, y: priceLabel.frame.origin.y + priceLabel.frame.height + 10, width: self.view.frame.width, height: startTimeLabel.frame.height)
@@ -122,7 +128,10 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         containerView.addSubview(startDatePicker)
         
         //end time label setup
-        endTimeLabel.text = "End Time:"
+        endTimeLabel.text = "End Time: "
+        if (end_time as? Date != nil){
+            endTimeLabel.text = "End Time:  \(Helper.getFormattedDate(end_time as! Date))"
+        }
         endTimeLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
         endTimeLabel.sizeToFit()
         endTimeLabel.frame = CGRect(x: 25, y: startDatePicker.frame.origin.y + startDatePicker.frame.height + 10, width: self.view.frame.width, height: endTimeLabel.frame.height)
@@ -143,11 +152,11 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     }
     @objc func changeStartDate() {
         start_time = startDatePicker.date
-//        startTimeLabel.text = "Start Time:  \(startDatePicker.date)"
+        startTimeLabel.text = "Start Time:  \(Helper.getFormattedDate(start_time as! Date))"
     }
     @objc func changeEndDate() {
         end_time = endDatePicker.date
-//        endTimeLabel.text = "End Time:  \(endDatePicker.date)"
+        endTimeLabel.text = "End Time:  \(Helper.getFormattedDate(end_time as! Date))"
     }
     func setupLocationLabel() {
         locationLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
@@ -229,8 +238,10 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         
         start = "\(start_time)".replacingOccurrences(of: " ", with: "")
         end = "\(end_time)".replacingOccurrences(of: " ", with: "")
-        if Int(max_price) != nil{
-            price = Int(max_price)!
+        if Double(max_price) != nil{
+            price = Double(max_price)!
+        } else if(max_price != ""){
+            Helper.alert("Error in Filtering", "Please enter a valid max price", self)
         }
         if sortByOption == "Location"{
             sort = "location"
@@ -247,7 +258,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         if sortByOption == "End Time"{
             sort = "end_time"
         }
-        if locationsChecked.count == 0 { // this is so that other filters can take effect if not locations were checked.
+        if locationsChecked.count == 0 { // this is so that other filters can take effect if no locations were checked.
             locationsChecked.append("false")
         }
         var avList:Array<AvailableObject> = [];
@@ -294,6 +305,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         sortByOption = sortFactors[row]
+        sortByLabel.text = "Sort By: " + sortFactors[row];
     }
 
     /*

@@ -30,11 +30,11 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         var strDate = "\(Date())"
         strDate = strDate.replacingOccurrences(of: " ", with: "")
         if !applyFilterAndSortG{
-            print("Filter list is empty!")
             getAvailabilities(end_time: strDate)
         }
         else{
             self.list = FilterViewController.list
+            table.reloadData();
         }
     }
     // TABLE FUNCTIONS -->
