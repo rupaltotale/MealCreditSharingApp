@@ -39,7 +39,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.hideKeyboardWhenTappedAround() 
         setStyle()
         
         // Element settings
@@ -63,43 +63,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         saveButton.addTarget(self, action: #selector(addNewObject), for: .touchUpInside)
         self.view.addSubview(saveButton)
     }
-    @objc func addNewObject(){
-        Helper.getNewToken()
-        if Double(priceTextField.text! ) == nil{
-            Helper.alert("Error", "Please make sure price is in decimal format", self)
-        }
-        else if locationLabel.text! == "Select"{
-            Helper.alert("Error", "Please choose a location", self)
-        }
-        else{
-            let price = priceTextField.text
-            var start_time = "\(startDatePicker.date.addingTimeInterval(GlobalVariables.timeInterval))"
-            start_time = String(start_time.dropLast(6))
-            var end_time = "\(endDatePicker.date.addingTimeInterval(GlobalVariables.timeInterval))"
-            end_time = String(end_time.dropLast(6))
-            let location = locationLabel.text
-            
-            let urlString = GlobalVariables.rootUrl + "create/availability/"
-            
-            let parameters: [String: Any] = [
-                "user_id": UserDefaults.standard.string(forKey: "user_id")!,
-                "token": UserDefaults.standard.string(forKey: "token")!,
-                "asking_price": price!,
-                "start_time": start_time,
-                "end_time" : end_time,
-                "location" : location!
-            ]
-            Alamofire.request(urlString, method: .post, parameters: parameters, encoding: JSONEncoding.default)
-                .responseJSON { response in
-                    if response.response?.statusCode != 200{
-                        Helper.alert("Error", "Could not add availability", self)
-                    }
-            }
-            if let navController = self.navigationController {
-                navController.popViewController(animated: true)
-            }
-        }
-    }
+    
     // Mark: Picker Functions
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -291,6 +255,43 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white, NSAttributedString.Key.font:  GlobalVariables.navBarTitle
         ]
         self.view.backgroundColor = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1);
+    }
+    @objc func addNewObject(){
+        Helper.getNewToken()
+        if Double(priceTextField.text! ) == nil{
+            Helper.alert("Error", "Please make sure price is in decimal format", self)
+        }
+        else if locationLabel.text! == "Select"{
+            Helper.alert("Error", "Please choose a location", self)
+        }
+        else{
+            let price = priceTextField.text
+            var start_time = "\(startDatePicker.date.addingTimeInterval(GlobalVariables.timeInterval))"
+            start_time = String(start_time.dropLast(6))
+            var end_time = "\(endDatePicker.date.addingTimeInterval(GlobalVariables.timeInterval))"
+            end_time = String(end_time.dropLast(6))
+            let location = locationLabel.text
+            
+            let urlString = GlobalVariables.rootUrl + "create/availability/"
+            
+            let parameters: [String: Any] = [
+                "user_id": UserDefaults.standard.string(forKey: "user_id")!,
+                "token": UserDefaults.standard.string(forKey: "token")!,
+                "asking_price": price!,
+                "start_time": start_time,
+                "end_time" : end_time,
+                "location" : location!
+            ]
+            Alamofire.request(urlString, method: .post, parameters: parameters, encoding: JSONEncoding.default)
+                .responseJSON { response in
+                    if response.response?.statusCode != 200{
+                        Helper.alert("Error", "Could not add availability", self)
+                    }
+            }
+            if let navController = self.navigationController {
+                navController.popViewController(animated: true)
+            }
+        }
     }
 
 }

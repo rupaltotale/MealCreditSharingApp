@@ -20,6 +20,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var signupButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad();
+        self.hideKeyboardWhenTappedAround() 
         setStyleOfElements();
         self.navigationController?.view.tintColor = UIColor.white;
 //        self.navigationController?.view.tot

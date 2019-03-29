@@ -70,7 +70,6 @@ class Helper: UIViewController {
                 
             }}));
         view.present(alert, animated: true, completion: nil);
-        print(returnMsg)
     }
     
     static func convertFromDateTimeToDate(dateTime: String) -> Date?{
@@ -86,12 +85,6 @@ class Helper: UIViewController {
         }
         return nil
     }
-//    static func convertFromDateToDateTime(dateTime: Date) -> String?{
-//
-////        let date = ""
-////        date += dateTime.
-////        return nil
-//    }
     
     
     static func getNewToken(){
@@ -148,4 +141,15 @@ class Helper: UIViewController {
 //
 //    }
 
+}
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }

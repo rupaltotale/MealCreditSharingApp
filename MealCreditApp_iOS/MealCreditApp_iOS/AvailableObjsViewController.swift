@@ -18,6 +18,7 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround() 
         setStyle();
         Helper.addFilterButton(filterButton, self);
         filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
@@ -61,8 +62,8 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
         let timeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         timeLabel.font = UIFont(name: GlobalVariables.normalFont, size: 18)
         timeLabel.textColor = UIColor.gray;
-        let start_time = Helper.getFormattedDate(avObj.start_time!)
-        let end_time = Helper.getFormattedDate(avObj.end_time!)
+        let start_time = Helper.getFormattedDate((avObj.start_time)!)
+        let end_time = Helper.getFormattedDate((avObj.end_time)!)
         timeLabel.text = "\(start_time)\n\(end_time)"
         timeLabel.lineBreakMode = .byWordWrapping
         timeLabel.numberOfLines = 0

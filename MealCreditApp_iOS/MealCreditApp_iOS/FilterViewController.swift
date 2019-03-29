@@ -40,6 +40,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     let sortFactors = ["Location", "Price", "Recency", "Start Time", "End Time"]
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround() 
         self.scrollView.delegate = self
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 270)
         scrollView.addSubview(containerView)

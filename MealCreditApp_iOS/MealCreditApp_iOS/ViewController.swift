@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad();
+        self.hideKeyboardWhenTappedAround() 
 //        UserDefaults.standard.removeObject(forKey: "user_id")
         if UserDefaults.standard.string(forKey: "user_id") != nil {
            self.performSegue(withIdentifier: "goToAppFromLogin", sender: self)
@@ -137,6 +138,8 @@ class ViewController: UIViewController {
         noAccountLabel.frame = CGRect(x: subX, y: loginHeight + subY * 3, width: subWidth, height: subHeight);
         signupButton.frame = CGRect(x: subX, y: loginHeight + subY * 3.7, width: subWidth, height: subHeight);
     }
+    
 
 }
+
 
