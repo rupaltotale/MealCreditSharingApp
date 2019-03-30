@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
 
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -24,13 +24,12 @@ class ViewController: UIViewController {
         
         super.viewDidLoad();
         self.hideKeyboardWhenTappedAround() 
-//        UserDefaults.standard.removeObject(forKey: "user_id")
+        UserDefaults.standard.removeObject(forKey: "user_id")
         if UserDefaults.standard.string(forKey: "user_id") != nil {
            self.performSegue(withIdentifier: "goToAppFromLogin", sender: self)
         }
         shiftFrameOnKeyBoardPopUp();
         setStyleOfElements();
-        
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
@@ -69,6 +68,9 @@ class ViewController: UIViewController {
                         }
                         else{
                             Helper.alert("Error logging in", "Invalid username or password", self);
+                            self.passwordTextField.text = ""
+                            self.passwordTextField.becomeFirstResponder()
+
                         }
                     }
             }
@@ -131,12 +133,33 @@ class ViewController: UIViewController {
         titleLabel.frame = CGRect(x: subX, y: loginHeight + subY * -3.7, width: titleLabel.frame.width, height: subHeight);
         
         usernameTextField.frame = CGRect(x: subX, y: loginHeight + subY * -2, width: subWidth, height: subHeight);
+        usernameTextField.autocorrectionType = .no
+        usernameTextField.autocapitalizationType = .none
+        usernameTextField.tag = 0;
+        
         passwordTextField.frame = CGRect(x: subX, y: loginHeight + subY * -1, width: subWidth, height: subHeight);
+        passwordTextField.autocorrectionType = .no
+        passwordTextField.autocapitalizationType = .none
+        passwordTextField.isSecureTextEntry = true
+        passwordTextField.tag = 1;
+        
         loginButton.frame = CGRect(x: subX, y: loginHeight, width: subWidth, height: subHeight);
         forgotPasswordButton.frame = CGRect(x: subX, y: loginHeight + subY * 1, width: subWidth, height: subHeight);
         
         noAccountLabel.frame = CGRect(x: subX, y: loginHeight + subY * 3, width: subWidth, height: subHeight);
         signupButton.frame = CGRect(x: subX, y: loginHeight + subY * 3.7, width: subWidth, height: subHeight);
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // Try to find next responder
+        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
+            nextField.becomeFirstResponder()
+        } else {
+            // Not found, so remove keyboard.
+            textField.resignFirstResponder()
+        }
+        // Do not add a line break
+        return false
     }
     
 

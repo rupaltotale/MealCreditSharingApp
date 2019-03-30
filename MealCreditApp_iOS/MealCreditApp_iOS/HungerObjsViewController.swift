@@ -111,6 +111,9 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         self.tabBarItem = UITabBarItem(title: "Hungry?", image: UIImage(named: "hungry"), selectedImage: UIImage(named: "hungry"))
         let addButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addObject(sender:)))
         self.navigationItem.rightBarButtonItem = addButton
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
         
     }
     func getAvailabilities(limit:Int = -1, location:Any = false, start_time:Any = false, end_time:Any = false, price:Any = false, sortBy:Any = false, username:Any = false) {

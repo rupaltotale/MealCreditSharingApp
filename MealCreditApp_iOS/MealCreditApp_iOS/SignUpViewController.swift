@@ -9,18 +9,19 @@
 import UIKit
 import Alamofire
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
-    @IBOutlet weak var userNameTextField: UITextField!
+    @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var signupButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad();
-        self.hideKeyboardWhenTappedAround() 
+        self.hideKeyboardWhenTappedAround()
+        shiftFrameOnKeyBoardPopUp();
         setStyleOfElements();
         self.navigationController?.view.tintColor = UIColor.white;
 //        self.navigationController?.view.tot
@@ -33,7 +34,7 @@ class SignUpViewController: UIViewController {
 
     @IBAction func signUp(_ sender: Any) {
         // Post a new user
-        let username = userNameTextField.text;
+        let username = usernameTextField.text;
         let password = passwordTextField.text;
         let firstname = firstNameTextField.text;
         let lastname = lastNameTextField.text;
@@ -95,7 +96,7 @@ class SignUpViewController: UIViewController {
         titleLabel.textColor = UIColor.white;
         titleLabel.sizeToFit();
         
-        let textfields = [firstNameTextField, lastNameTextField, userNameTextField, passwordTextField, emailTextField];
+        let textfields = [firstNameTextField, lastNameTextField, usernameTextField, passwordTextField, emailTextField];
         for i in textfields{
             Helper.setTextFieldStyle(i!);
         }
@@ -116,12 +117,66 @@ class SignUpViewController: UIViewController {
         titleLabel.frame = CGRect(x: subX, y: loginHeight + subY * -3.7, width: titleLabel.frame.width, height: subHeight);
         
         firstNameTextField.frame = CGRect(x: subX, y: loginHeight + subY * -2, width: subWidth, height: subHeight);
+        firstNameTextField.autocorrectionType = .no
+        firstNameTextField.autocapitalizationType = .words
+        firstNameTextField.delegate = self as? UITextFieldDelegate
+        firstNameTextField.tag = 0
+        
         lastNameTextField.frame = CGRect(x: subX, y: loginHeight + subY * -1, width: subWidth, height: subHeight);
-        userNameTextField.frame = CGRect(x: subX, y: loginHeight + subY * 0, width: subWidth, height: subHeight);
+        lastNameTextField.autocorrectionType = .no
+        lastNameTextField.autocapitalizationType = .words
+        lastNameTextField.delegate = self as? UITextFieldDelegate
+        lastNameTextField.tag = 1
+        
+        usernameTextField.frame = CGRect(x: subX, y: loginHeight + subY * 0, width: subWidth, height: subHeight);
+        usernameTextField.autocorrectionType = .no
+        usernameTextField.autocapitalizationType = .none
+        usernameTextField.delegate = self as? UITextFieldDelegate
+        usernameTextField.tag = 2
+        
         emailTextField.frame = CGRect(x: subX, y: loginHeight + subY * 1, width: subWidth, height: subHeight);
+        emailTextField.autocorrectionType = .no
+        emailTextField.autocapitalizationType = .none
+        emailTextField.delegate = self as? UITextFieldDelegate
+        emailTextField.tag = 3
+        
         passwordTextField.frame = CGRect(x: subX, y: loginHeight + subY * 2, width: subWidth, height: subHeight);
+        passwordTextField.autocorrectionType = .no
+        passwordTextField.autocapitalizationType = .none
+        passwordTextField.isSecureTextEntry = true
+        passwordTextField.delegate = self as? UITextFieldDelegate
+        passwordTextField.tag = 4
+        
         signupButton.frame = CGRect(x: subX, y: loginHeight + subY * 4, width: subWidth, height: subHeight);
         
         }
+    func shiftFrameOnKeyBoardPopUp(){
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if ((notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= self.view.frame.height * 0.16
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // Try to find next responder
+        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
+            nextField.becomeFirstResponder()
+        } else {
+            // Not found, so remove keyboard.
+            textField.resignFirstResponder()
+        }
+        // Do not add a line break
+        return false
+    }
 
 }
