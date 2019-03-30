@@ -21,25 +21,25 @@ var applyFilterAndSortG = false
 class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate {
     static var list:Array<AvailableObject> = [];
     
-    var sortByLabel = UILabel()
+    var sortByLabel = PaddingLabel()
     var sortByButton = UIButton()
     var sortByPicker = UIPickerView()
     var maxPriceTextBox = UITextField()
-    var priceLabel = UILabel()
-    var startTimeLabel = UILabel()
+    var priceLabel = PaddingLabel()
+    var startTimeLabel = PaddingLabel()
     var startDatePicker = UIDatePicker()
-    var endTimeLabel = UILabel()
+    var endTimeLabel = PaddingLabel()
     var endDatePicker = UIDatePicker()
-    var locationLabel = UILabel()
+    var locationLabel = PaddingLabel()
     var scrollView = UIScrollView()
     var containerView = UIView()
     var resetButton = UIBarButtonItem()
     var locationButtons: Array<UIButton> = [];
     
     
-    let labelFontSize:CGFloat = 21.0
     
     let sortFactors = ["Location", "Price", "Recency", "Start Time", "End Time"]
+    let leftMargin:CGFloat = 0;
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround() 
@@ -73,18 +73,20 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         scrollView.addSubview(containerView)
         view.addSubview(scrollView)
     }
+    
+    //MARK: SORT
     func setupSortByLabel() {
-        sortByLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
+        Helper.formatTitleLabel(sortByLabel)
         sortByLabel.text = "Sort By: " + sortByOption
         sortByLabel.sizeToFit()
-        sortByLabel.frame = CGRect(x: 25, y: self.view.frame.height * 0.05, width: self.view.frame.width, height: sortByLabel.frame.height)
+        sortByLabel.frame = CGRect(x: leftMargin, y: self.view.frame.height * 0.025, width: self.view.frame.width, height: sortByLabel.frame.height)
         containerView.addSubview(sortByLabel)
     }
     func setupSortByButton(){
         sortByButton.setImage(UIImage(named: "increasing"), for: .normal);
         sortByButton.setTitle("", for: .normal);
         Helper.setNormalButtonStyle(sortByButton, self)
-        sortByButton.frame = CGRect(x: self.view.frame.width - 25 - 30, y: self.view.frame.height * 0.05, width: 30, height: 30)
+        sortByButton.frame = CGRect(x: self.view.frame.width - leftMargin - 30, y: self.view.frame.height * 0.05, width: 30, height: 30)
         sortByButton.layer.cornerRadius = sortByButton.frame.size.width / 3
 //        containerView.addSubview(sortByButton)
     }
@@ -104,11 +106,13 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         }
         containerView.addSubview(sortByPicker)
     }
+    
+    //MARK: PRICE
     func setupPriceLabel(){
+        Helper.formatTitleLabel(priceLabel)
         priceLabel.text = "Max Price: "
-        priceLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
         priceLabel.sizeToFit()
-        priceLabel.frame = CGRect(x: 25, y: sortByPicker.frame.origin.y + sortByPicker.frame.height, width: priceLabel.frame.width, height: priceLabel.frame.height)
+        priceLabel.frame = CGRect(x: leftMargin, y: sortByPicker.frame.origin.y + sortByPicker.frame.height, width: self.view.frame.width, height: priceLabel.frame.height)
         containerView.addSubview(priceLabel)
         
     }
@@ -117,8 +121,10 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         maxPriceTextBox.placeholder = "eg. 5.0"
         maxPriceTextBox.text = max_price
         Helper.setTextFieldStyle(maxPriceTextBox)
+        maxPriceTextBox.layer.borderColor = UIColor.darkGray.cgColor
+        maxPriceTextBox.layer.borderWidth = 2;
         maxPriceTextBox.sizeToFit()
-        maxPriceTextBox.frame = CGRect(x: priceLabel.frame.origin.x + priceLabel.frame.width, y: sortByPicker.frame.origin.y + sortByPicker.frame.height, width: maxPriceTextBox.frame.width * 1.1, height: priceLabel.frame.height)
+        maxPriceTextBox.frame = CGRect(x: 25, y: priceLabel.frame.origin.y + priceLabel.frame.height + 25, width: maxPriceTextBox.frame.width * 3, height: priceLabel.frame.height * 1.5)
         maxPriceTextBox.addTarget(self, action: #selector(updateMaxPrice(_:)), for: .editingChanged)
         maxPriceTextBox.keyboardType = UIKeyboardType.decimalPad
         containerView.addSubview(maxPriceTextBox)
@@ -126,14 +132,16 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     @objc func updateMaxPrice(_ textField: UITextField) {
         max_price = maxPriceTextBox.text!
     }
+    
+    //MARK: TIME
     func setupTimeElements(){
+        Helper.formatTitleLabel(startTimeLabel)
         startTimeLabel.text = "Start Time:"
         if (start_time as? Date != nil){
             startTimeLabel.text = "Start Time:  \(Helper.getFormattedDate(start_time as! Date))"
         }
-        startTimeLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
         startTimeLabel.sizeToFit()
-        startTimeLabel.frame = CGRect(x: 25, y: priceLabel.frame.origin.y + priceLabel.frame.height + 10, width: self.view.frame.width, height: startTimeLabel.frame.height)
+        startTimeLabel.frame = CGRect(x: leftMargin, y: maxPriceTextBox.frame.origin.y + maxPriceTextBox.frame.height + 25, width: self.view.frame.width, height: startTimeLabel.frame.height)
         containerView.addSubview(startTimeLabel)
         
         // start date picker setup
@@ -149,13 +157,13 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         containerView.addSubview(startDatePicker)
         
         //end time label setup
+        Helper.formatTitleLabel(endTimeLabel)
         endTimeLabel.text = "End Time: "
         if (end_time as? Date != nil){
             endTimeLabel.text = "End Time:  \(Helper.getFormattedDate(end_time as! Date))"
         }
-        endTimeLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
         endTimeLabel.sizeToFit()
-        endTimeLabel.frame = CGRect(x: 25, y: startDatePicker.frame.origin.y + startDatePicker.frame.height + 10, width: self.view.frame.width, height: endTimeLabel.frame.height)
+        endTimeLabel.frame = CGRect(x: leftMargin, y: startDatePicker.frame.origin.y + startDatePicker.frame.height + 10, width: self.view.frame.width, height: endTimeLabel.frame.height)
         containerView.addSubview(endTimeLabel)
         
         // end date picker setup
@@ -180,16 +188,16 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         endTimeLabel.text = "End Time:  \(Helper.getFormattedDate(end_time as! Date))"
     }
     
-    
+    //MARK: LOCATIONS
     func setupLocationLabel() {
-        locationLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
+        Helper.formatTitleLabel(locationLabel)
         locationLabel.text = "Location(s):"
         locationLabel.sizeToFit()
-        locationLabel.frame = CGRect(x: 25, y: endDatePicker.frame.origin.y + endDatePicker.frame.height + 10, width: self.view.frame.width, height: locationLabel.frame.height)
+        locationLabel.frame = CGRect(x: leftMargin, y: endDatePicker.frame.origin.y + endDatePicker.frame.height + 10, width: self.view.frame.width, height: locationLabel.frame.height)
         containerView.addSubview(locationLabel)
     }
     func setupLocationCheckBoxes(){
-        var y = locationLabel.frame.origin.y + locationLabel.frame.height + 5
+        var y = locationLabel.frame.origin.y + locationLabel.frame.height + 25
         for location in GlobalVariables.locations{
             let checkBox = UIButton(type: .custom)
             // 0 = unchecked, 1 = checked

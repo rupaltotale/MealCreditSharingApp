@@ -137,6 +137,13 @@ class Helper: UIViewController {
         return dateTime
     }
     
+    static func formatTitleLabel(_ label: UILabel){
+        label.font = UIFont(name: GlobalVariables.normalFont, size: 21)
+        label.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.5)
+        label.layer.borderWidth = 2
+        label.layer.borderColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.75).cgColor
+    }
+    
 //    static func setButtonStyle(){
 //
 //    }

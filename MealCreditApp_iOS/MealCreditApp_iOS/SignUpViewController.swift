@@ -119,32 +119,27 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         firstNameTextField.frame = CGRect(x: subX, y: loginHeight + subY * -2, width: subWidth, height: subHeight);
         firstNameTextField.autocorrectionType = .no
         firstNameTextField.autocapitalizationType = .words
-        firstNameTextField.delegate = self as? UITextFieldDelegate
         firstNameTextField.tag = 0
         
         lastNameTextField.frame = CGRect(x: subX, y: loginHeight + subY * -1, width: subWidth, height: subHeight);
         lastNameTextField.autocorrectionType = .no
         lastNameTextField.autocapitalizationType = .words
-        lastNameTextField.delegate = self as? UITextFieldDelegate
         lastNameTextField.tag = 1
         
         usernameTextField.frame = CGRect(x: subX, y: loginHeight + subY * 0, width: subWidth, height: subHeight);
         usernameTextField.autocorrectionType = .no
         usernameTextField.autocapitalizationType = .none
-        usernameTextField.delegate = self as? UITextFieldDelegate
         usernameTextField.tag = 2
         
         emailTextField.frame = CGRect(x: subX, y: loginHeight + subY * 1, width: subWidth, height: subHeight);
         emailTextField.autocorrectionType = .no
         emailTextField.autocapitalizationType = .none
-        emailTextField.delegate = self as? UITextFieldDelegate
         emailTextField.tag = 3
         
         passwordTextField.frame = CGRect(x: subX, y: loginHeight + subY * 2, width: subWidth, height: subHeight);
         passwordTextField.autocorrectionType = .no
         passwordTextField.autocapitalizationType = .none
         passwordTextField.isSecureTextEntry = true
-        passwordTextField.delegate = self as? UITextFieldDelegate
         passwordTextField.tag = 4
         
         signupButton.frame = CGRect(x: subX, y: loginHeight + subY * 4, width: subWidth, height: subHeight);
