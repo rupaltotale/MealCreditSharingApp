@@ -23,14 +23,14 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         Helper.addFilterButton(filterButton, self);
         filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
         table.tableFooterView = UIView()
-        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.7)
+        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.75)
         
     }
     override func viewDidAppear(_ animated: Bool) {
         var strDate = "\(Date())"
         strDate = strDate.replacingOccurrences(of: " ", with: "")
         if !applyFilterAndSortG{
-            getAvailabilities(end_time: strDate)
+            getAvailabilities()
         }
         else{
             self.list = FilterViewController.list
@@ -44,26 +44,28 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "hgObj")
         let avObj = list[indexPath.row];
+        
+        let padding:CGFloat = 20.00;
         // Location Label
-        let locationLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        let locationLabel = UILabel()
         locationLabel.font = UIFont(name: GlobalVariables.normalFont, size: 20)
         locationLabel.textColor = UIColor.black;
         locationLabel.text = avObj.location!
         locationLabel.sizeToFit()
-        locationLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + 15, y: 25, width: locationLabel.frame.width, height: locationLabel.frame.height)
+        locationLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + padding, y: 25, width: locationLabel.frame.width, height: locationLabel.frame.height)
         cell.addSubview(locationLabel)
         cell.sizeToFit()
         // Price label
-        let priceLabel = UILabel(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
+        let priceLabel = UILabel()
         priceLabel.textColor = GlobalVariables.mainColor
         priceLabel.text = "$\(String(describing: avObj.price!))"
         priceLabel.font = UIFont(name: GlobalVariables.normalFont, size: 25)
         priceLabel.sizeToFit()
-        priceLabel.frame = CGRect(x: cell.frame.width - priceLabel.frame.width, y: (table.rowHeight - priceLabel.frame.height)/2, width: priceLabel.frame.width, height: priceLabel.frame.height)
+        priceLabel.frame = CGRect(x: cell.frame.width, y: (table.rowHeight - priceLabel.frame.height)/2, width: priceLabel.frame.width, height: priceLabel.frame.height)
         cell.addSubview(priceLabel)
         cell.sizeToFit()
         // Timing
-        let timeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        let timeLabel = UILabel()
         timeLabel.font = UIFont(name: GlobalVariables.normalFont, size: 18)
         timeLabel.textColor = UIColor.gray;
         let start_time = Helper.getFormattedDate((avObj.start_time)!)
@@ -72,11 +74,11 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         timeLabel.lineBreakMode = .byWordWrapping
         timeLabel.numberOfLines = 0
         timeLabel.sizeToFit()
-        timeLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + 15, y: table.rowHeight - timeLabel.frame.height - 15, width: timeLabel.frame.width, height: timeLabel.frame.height)
+        timeLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + padding, y: table.rowHeight - timeLabel.frame.height - 15, width: timeLabel.frame.width, height: timeLabel.frame.height)
         cell.addSubview(timeLabel)
-        
-        // cell
         cell.sizeToFit()
+        cell.accessoryType = .none
+        cell.selectionStyle = UITableViewCell.SelectionStyle.none
         
         return cell;
     }
@@ -114,6 +116,7 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
     func getAvailabilities(limit:Int = -1, location:Any = false, start_time:Any = false, end_time:Any = false, price:Any = false, sortBy:Any = false, username:Any = false) {
         var avList:Array<AvailableObject> = [];
         let urlString = GlobalVariables.rootUrl + "availability-list/" + "\(limit)/\(location)/\(username)/\(start_time)/\(end_time)/\(price)/\(sortBy)"
+        print(urlString)
         Alamofire.request(urlString).responseJSON{response in
             if let jsonObj = response.result.value{
                 let avObjs:Dictionary = jsonObj as! Dictionary<String, Any>;

@@ -23,7 +23,7 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
         Helper.addFilterButton(filterButton, self);
         filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
         table.tableFooterView = UIView()
-        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.7)        
+        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.75)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -40,26 +40,28 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "avObj")
         let avObj = list[indexPath.row];
+        
+        let padding:CGFloat = 20.00;
         // Location Label
-        let locationLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        let locationLabel = UILabel()
         locationLabel.font = UIFont(name: GlobalVariables.normalFont, size: 20)
         locationLabel.textColor = UIColor.black;
         locationLabel.text = avObj.location!
         locationLabel.sizeToFit()
-        locationLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + 15, y: 25, width: locationLabel.frame.width, height: locationLabel.frame.height)
+        locationLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + padding, y: 25, width: locationLabel.frame.width, height: locationLabel.frame.height)
         cell.addSubview(locationLabel)
         cell.sizeToFit()
         // Price label
-        let priceLabel = UILabel(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
+        let priceLabel = UILabel()
         priceLabel.textColor = GlobalVariables.mainColor
         priceLabel.text = "$\(String(describing: avObj.price!))"
         priceLabel.font = UIFont(name: GlobalVariables.normalFont, size: 25)
         priceLabel.sizeToFit()
-        priceLabel.frame = CGRect(x: cell.frame.width - priceLabel.frame.width, y: (table.rowHeight - priceLabel.frame.height)/2, width: priceLabel.frame.width, height: priceLabel.frame.height)
+        priceLabel.frame = CGRect(x: cell.frame.width, y: (table.rowHeight - priceLabel.frame.height)/2, width: priceLabel.frame.width, height: priceLabel.frame.height)
         cell.addSubview(priceLabel)
         cell.sizeToFit()
         // Timing
-        let timeLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        let timeLabel = UILabel()
         timeLabel.font = UIFont(name: GlobalVariables.normalFont, size: 18)
         timeLabel.textColor = UIColor.gray;
         let start_time = Helper.getFormattedDate((avObj.start_time)!)
@@ -68,7 +70,7 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
         timeLabel.lineBreakMode = .byWordWrapping
         timeLabel.numberOfLines = 0
         timeLabel.sizeToFit()
-        timeLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + 15, y: table.rowHeight - timeLabel.frame.height - 15, width: timeLabel.frame.width, height: timeLabel.frame.height)
+        timeLabel.frame = CGRect(x: (cell.textLabel?.frame.origin.x)! + padding, y: table.rowHeight - timeLabel.frame.height - 15, width: timeLabel.frame.width, height: timeLabel.frame.height)
         cell.addSubview(timeLabel)
         cell.sizeToFit()
         cell.accessoryType = .disclosureIndicator

@@ -22,6 +22,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     static var list:Array<AvailableObject> = [];
     
     var sortByLabel = UILabel()
+    var sortByButton = UIButton()
     var sortByPicker = UIPickerView()
     var maxPriceTextBox = UITextField()
     var priceLabel = UILabel()
@@ -44,12 +45,19 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround() 
         setupScrollView()
+        
         setupSortByLabel()
-        setupPicker()
+        setupSortByButton()
+        setupSortByPicker()
+        
         setupPriceLabel()
+        setupMaxPriceTextBox()
+        
         setupTimeElements()
+        
         setupLocationLabel()
         setupLocationCheckBoxes()
+        
         setupApplyButton()
         setupResetButton()
 //        self.view.backgroundColor = GlobalVariables.mainColor
@@ -74,7 +82,15 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         sortByLabel.frame = CGRect(x: 25, y: self.view.frame.height * 0.05, width: self.view.frame.width, height: sortByLabel.frame.height)
         containerView.addSubview(sortByLabel)
     }
-    func setupPicker(){
+    func setupSortByButton(){
+        sortByButton.setImage(UIImage(named: "increasing"), for: .normal);
+        sortByButton.setTitle("", for: .normal);
+        Helper.setNormalButtonStyle(sortByButton, self)
+        sortByButton.frame = CGRect(x: self.view.frame.width - 25 - 30, y: self.view.frame.height * 0.05, width: 30, height: 30)
+        sortByButton.layer.cornerRadius = sortByButton.frame.size.width / 3
+//        containerView.addSubview(sortByButton)
+    }
+    func setupSortByPicker(){
         self.sortByPicker.dataSource = self
         self.sortByPicker.delegate = self
         sortByPicker.backgroundColor = UIColor.white
@@ -97,6 +113,9 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         priceLabel.frame = CGRect(x: 25, y: sortByPicker.frame.origin.y + sortByPicker.frame.height, width: priceLabel.frame.width, height: priceLabel.frame.height)
         containerView.addSubview(priceLabel)
         
+    }
+    
+    func setupMaxPriceTextBox(){
         maxPriceTextBox.placeholder = "eg. 5.0"
         maxPriceTextBox.text = max_price
         Helper.setTextFieldStyle(maxPriceTextBox)
@@ -153,36 +172,6 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         containerView.addSubview(endDatePicker)
         
     }
-    func setupResetButton(){
-        resetButton.title = "Reset"
-//        resetButton.addTa
-        resetButton.target = self;
-        resetButton.action = #selector(resetAllFactors(sender:))
-        self.navigationItem.rightBarButtonItem = resetButton;
-    }
-    
-    @objc func resetAllFactors(sender: AnyObject) {
-        sortByOption = ""
-        locationsChecked = [String]()
-        start_time = false
-        end_time = false
-        max_price = ""
-        username = ""
-        applyFilterAndSortG = false
-        sortByLabel.text = "Sort By: " + sortByOption
-        maxPriceTextBox.placeholder = "eg. 5.0"
-        maxPriceTextBox.text = max_price
-        startTimeLabel.text = "Start Time:"
-        startDatePicker.setDate(Date(), animated: true)
-        endTimeLabel.text = "End Time: "
-        endDatePicker.setDate(Date(), animated: true)
-        sortByPicker.selectRow(0, inComponent: 0, animated: true)
-        for button in locationButtons{
-            if button.tag == 1{
-                self.toggleState(sender: button)
-            }
-        }
-    }
     @objc func changeStartDate() {
         start_time = startDatePicker.date
         startTimeLabel.text = "Start Time:  \(Helper.getFormattedDate(start_time as! Date))"
@@ -191,6 +180,8 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         end_time = endDatePicker.date
         endTimeLabel.text = "End Time:  \(Helper.getFormattedDate(end_time as! Date))"
     }
+    
+    
     func setupLocationLabel() {
         locationLabel.font = UIFont(name: GlobalVariables.normalFont, size: labelFontSize)
         locationLabel.text = "Location(s):"
@@ -319,6 +310,36 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         if let navController = self.navigationController {
             print(FilterViewController.list.count)
             navController.popViewController(animated: true)
+        }
+    }
+    
+    func setupResetButton(){
+        resetButton.title = "Reset"
+        resetButton.target = self;
+        resetButton.action = #selector(resetAllFactors(sender:))
+        self.navigationItem.rightBarButtonItem = resetButton;
+    }
+    
+    @objc func resetAllFactors(sender: AnyObject) {
+        sortByOption = ""
+        locationsChecked = [String]()
+        start_time = false
+        end_time = false
+        max_price = ""
+        username = ""
+        applyFilterAndSortG = false
+        sortByLabel.text = "Sort By: " + sortByOption
+        maxPriceTextBox.placeholder = "eg. 5.0"
+        maxPriceTextBox.text = max_price
+        startTimeLabel.text = "Start Time:"
+        startDatePicker.setDate(Date(), animated: true)
+        endTimeLabel.text = "End Time: "
+        endDatePicker.setDate(Date(), animated: true)
+        sortByPicker.selectRow(0, inComponent: 0, animated: true)
+        for button in locationButtons{
+            if button.tag == 1{
+                self.toggleState(sender: button)
+            }
         }
     }
     

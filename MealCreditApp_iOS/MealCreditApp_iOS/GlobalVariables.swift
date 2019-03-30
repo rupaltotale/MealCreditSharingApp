@@ -18,7 +18,8 @@ struct GlobalVariables {
     static var normalFont = "Avenir";
     static var buttonFont = "Arial";
     static var locations = ["Mustang", "Red Radish", "Canyon Cafe", "The Avenue", "805"]
-    static var rootUrl = "http://" + "127.0.0.1:8000/"
+    static var rootUrl = "http://benglossner.com/mc/"
+    // "http://" + "127.0.0.1:8000/"
 //    static var rootUrl = "http://" + "169.254.142.39:8000/"
     static var timeInterval: Double = 2*3600;
     

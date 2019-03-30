@@ -90,7 +90,7 @@ class Helper: UIViewController {
     static func getNewToken(){
         var token = "";
         let user_id = UserDefaults.standard.string(forKey: "user_id")
-        let urlString = "http://" + "127.0.0.1:8000/" + "token/" + user_id! ;
+        let urlString = GlobalVariables.rootUrl + "token/" + user_id! ;
         Alamofire.request(urlString).responseJSON{response in
             let obj:Dictionary = response.result.value! as! Dictionary<String, Any>
             token = obj["token"]! as! String
@@ -102,7 +102,7 @@ class Helper: UIViewController {
         filterButton.setTitle("Filter and Sort", for: .normal)
         Helper.setNormalButtonStyle(filterButton, view)
         filterButton.sizeToFit()
-        filterButton.frame = CGRect(x: (view.view.frame.width - filterButton.frame.width * 1.5)/2, y: view.view.frame.height * 0.725, width: filterButton.frame.width * 1.5, height: filterButton.frame.height * 1)
+        filterButton.frame = CGRect(x: (view.view.frame.width - filterButton.frame.width * 1.5)/2, y: view.view.frame.height * 0.775, width: filterButton.frame.width * 1.5, height: filterButton.frame.height * 1)
         filterButton.layer.cornerRadius = filterButton.frame.size.width / 11
         filterButton.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15).cgColor
         filterButton.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
