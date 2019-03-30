@@ -10,6 +10,7 @@
 		2A12AA08B195A4C323E8AEA8 /* Pods_MealCreditApp_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28EC1D0642FDFB9D3E6A79F4 /* Pods_MealCreditApp_iOS.framework */; };
 		396BB57022055F1C001A3810 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 396BB56F22055F1C001A3810 /* FilterViewController.swift */; };
 		39B5BEE8224F5ACD00F02D57 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B5BEE7224F5ACD00F02D57 /* PaddingLabel.swift */; };
+		39B5BEEA224FCE9000F02D57 /* FilterViewInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B5BEE9224FCE9000F02D57 /* FilterViewInfo.swift */; };
 		39C4CCC121CD8DBF006242F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCC021CD8DBF006242F3 /* AppDelegate.swift */; };
 		39C4CCC321CD8DBF006242F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCC221CD8DBF006242F3 /* ViewController.swift */; };
 		39C4CCC621CD8DBF006242F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CCC421CD8DBF006242F3 /* Main.storyboard */; };
@@ -50,6 +51,7 @@
 		28EC1D0642FDFB9D3E6A79F4 /* Pods_MealCreditApp_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MealCreditApp_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		396BB56F22055F1C001A3810 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		39B5BEE7224F5ACD00F02D57 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		39B5BEE9224FCE9000F02D57 /* FilterViewInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewInfo.swift; sourceTree = "<group>"; };
 		39C4CCBD21CD8DBF006242F3 /* MealCreditApp_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MealCreditApp_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39C4CCC021CD8DBF006242F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		39C4CCC221CD8DBF006242F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				39C4CCC221CD8DBF006242F3 /* ViewController.swift */,
 				39C4CCF021CDCB39006242F3 /* SignUpViewController.swift */,
 				39C4CCF821CEAA4A006242F3 /* AvailableObject.swift */,
+				39B5BEE9224FCE9000F02D57 /* FilterViewInfo.swift */,
 				39C4CCF421CE10F2006242F3 /* AvailableObjsViewController.swift */,
 				39C4CCFC21CF670F006242F3 /* EditObjectViewController.swift */,
 				39C4CD3821D176D6006242F3 /* AddObjectViewController.swift */,
@@ -424,6 +427,7 @@
 				39C4CCF321CE0476006242F3 /* Helper.swift in Sources */,
 				39C4CCF121CDCB39006242F3 /* SignUpViewController.swift in Sources */,
 				39C4CCC121CD8DBF006242F3 /* AppDelegate.swift in Sources */,
+				39B5BEEA224FCE9000F02D57 /* FilterViewInfo.swift in Sources */,
 				39C4CCF721CE1111006242F3 /* HungerObjsViewController.swift in Sources */,
 				39C4CD3921D176D6006242F3 /* AddObjectViewController.swift in Sources */,
 			);

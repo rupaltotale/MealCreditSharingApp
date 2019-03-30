@@ -23,12 +23,18 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
         Helper.addFilterButton(filterButton, self);
         filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
         table.tableFooterView = UIView()
-        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.75)
+        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: filterButton.frame.origin.y - 10)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         let username: String = UserDefaults.standard.string(forKey: "username")!;
-        getAvailabilities(username: username);
+        if !FilterViewController.filterInfo.forHunger && FilterViewController.filterInfo.apply{
+            self.list = FilterViewController.filterInfo.postList
+            table.reloadData();
+        }
+        else{
+            getAvailabilities(username: username)
+        }
     }
     
     
@@ -57,7 +63,7 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
         priceLabel.text = "$\(String(describing: avObj.price!))"
         priceLabel.font = UIFont(name: GlobalVariables.normalFont, size: 25)
         priceLabel.sizeToFit()
-        priceLabel.frame = CGRect(x: cell.frame.width, y: (table.rowHeight - priceLabel.frame.height)/2, width: priceLabel.frame.width, height: priceLabel.frame.height)
+        priceLabel.frame = CGRect(x: cell.frame.width - 25, y: (table.rowHeight - priceLabel.frame.height)/2, width: priceLabel.frame.width, height: priceLabel.frame.height)
         cell.addSubview(priceLabel)
         cell.sizeToFit()
         // Timing
@@ -96,7 +102,9 @@ class AvailableObjsViewController: UIViewController, UITableViewDelegate, UITabl
    
     // Filter and sort button pressed
     @objc func goToFilterPage() {
-        
+        FilterViewController.filterInfo.forHunger = false;
+        FilterViewController.filterInfo.username = true;
+        self.performSegue(withIdentifier: "goToFilterFromAv", sender: self);
     }
     
     func setStyle(){

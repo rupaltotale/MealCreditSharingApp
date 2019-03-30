@@ -15,11 +15,11 @@ var locationsChecked = [String]()
 var start_time:Any = false
 var end_time:Any = false
 var max_price = ""
-var username = ""
 var applyFilterAndSortG = false
 
 class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UIScrollViewDelegate {
     static var list:Array<AvailableObject> = [];
+    static var filterInfo: FilterViewInfo = FilterViewInfo(username: false, postList: [], apply: false, forHunger: false);
     
     var sortByLabel = PaddingLabel()
     var sortByButton = UIButton()
@@ -258,9 +258,13 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     @objc func applyChanges(){
         applyFilterAndSortG = true
-        let limit = -1 // NO CHANGE
+        FilterViewController.filterInfo.apply = true
+        let limit = -1
         var location: Any = false
-        let username = false // NO CHANGE
+        var username: Any = false
+        if FilterViewController.filterInfo.username{
+            username = UserDefaults.standard.string(forKey: "username")!
+        }
         var start: Any = false
         var end: Any = false
         var price:Any = false
@@ -293,6 +297,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         }
         var avList:Array<AvailableObject> = [];
         FilterViewController.list = [];
+        FilterViewController.filterInfo.postList = []
         for l in locationsChecked{
             location = l.trimmingCharacters(in: .whitespacesAndNewlines) // locations have a tab at the start
             let urlString = GlobalVariables.rootUrl + "availability-list/" + "\(limit)/\(location)/\(username)/\(start)/\(end)/\(price)/\(sort)"
@@ -309,13 +314,13 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
                     
                 }
                 FilterViewController.list += avList;
+                FilterViewController.filterInfo.postList += avList
 
             }
         }
         
         // Seque back once done
         if let navController = self.navigationController {
-            print(FilterViewController.list.count)
             navController.popViewController(animated: true)
         }
     }
@@ -333,8 +338,8 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         start_time = false
         end_time = false
         max_price = ""
-        username = ""
         applyFilterAndSortG = false
+        FilterViewController.filterInfo.apply = false
         sortByLabel.text = "Sort By: " + sortByOption
         maxPriceTextBox.placeholder = "eg. 5.0"
         maxPriceTextBox.text = max_price

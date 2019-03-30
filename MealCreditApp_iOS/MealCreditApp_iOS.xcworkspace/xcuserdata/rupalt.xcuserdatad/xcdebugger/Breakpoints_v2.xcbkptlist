@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MealCreditApp_iOS/FilterViewController.swift"
-            timestampString = "575627735.788518"
+            timestampString = "575659387.663082"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
             landmarkName = "applyChanges()"
             landmarkType = "7">
          </BreakpointContent>

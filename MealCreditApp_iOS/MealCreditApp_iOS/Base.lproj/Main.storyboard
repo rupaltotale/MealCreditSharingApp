@@ -282,7 +282,8 @@
                     <connections>
                         <outlet property="table" destination="L3Y-Ju-vTy" id="qmk-Jz-FZs"/>
                         <segue destination="2pu-zP-7ub" kind="show" identifier="goToEditAv" id="zxd-iu-Non"/>
-                        <segue destination="KDM-YN-Tjl" kind="show" identifier="goToAddAv" id="Wrw-Lr-Tzj"/>
+                        <segue destination="HLk-G6-fIQ" kind="show" identifier="goToFilterFromAv" id="JrG-0m-pED"/>
+                        <segue destination="KDM-YN-Tjl" kind="show" identifier="goToAddAv" id="d5r-kZ-5Ui"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QRm-eP-ZSG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -316,7 +317,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ziZ-Ft-7Ts" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5144.8000000000002" y="-1503.5982008995504"/>
+            <point key="canvasLocation" x="5601" y="-1545"/>
         </scene>
         <!--Edit Object View Controller-->
         <scene sceneID="JyN-p3-ZlQ">
@@ -356,7 +357,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="92t-yw-57w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5301.6000000000004" y="-779.46026986506752"/>
+            <point key="canvasLocation" x="6441" y="-927"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="6h2-J0-1IN">
@@ -463,6 +464,7 @@
         <image name="hungry" width="45" height="38"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="JrG-0m-pED"/>
         <segue reference="vMz-ow-XqJ"/>
         <segue reference="f2J-mJ-c8H"/>
     </inferredMetricsTieBreakers>

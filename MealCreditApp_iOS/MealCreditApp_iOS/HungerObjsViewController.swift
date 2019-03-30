@@ -12,6 +12,7 @@ import Alamofire
 class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var table: UITableView!
+    
     let filterButton: UIButton = UIButton(frame: CGRect(x: 10, y: 10, width: 10, height: 10))
     var list:Array<AvailableObject> = [];
     var sortBy = UIPickerView()
@@ -23,18 +24,18 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         Helper.addFilterButton(filterButton, self);
         filterButton.addTarget(self, action: #selector(goToFilterPage), for: .touchUpInside)
         table.tableFooterView = UIView()
-        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: self.view.frame.height * 0.75)
+        table.frame = CGRect(x: table.frame.origin.x, y: table.frame.origin.y, width: self.view.frame.width, height: filterButton.frame.origin.y - 10)
         
     }
     override func viewDidAppear(_ animated: Bool) {
         var strDate = "\(Date())"
         strDate = strDate.replacingOccurrences(of: " ", with: "")
-        if !applyFilterAndSortG{
-            getAvailabilities()
+        if FilterViewController.filterInfo.forHunger && FilterViewController.filterInfo.apply{
+            self.list = FilterViewController.filterInfo.postList
+            table.reloadData();
         }
         else{
-            self.list = FilterViewController.list
-            table.reloadData();
+            getAvailabilities()
         }
     }
     // TABLE FUNCTIONS -->
@@ -61,7 +62,7 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
         priceLabel.text = "$\(String(describing: avObj.price!))"
         priceLabel.font = UIFont(name: GlobalVariables.normalFont, size: 25)
         priceLabel.sizeToFit()
-        priceLabel.frame = CGRect(x: cell.frame.width, y: (table.rowHeight - priceLabel.frame.height)/2, width: priceLabel.frame.width, height: priceLabel.frame.height)
+        priceLabel.frame = CGRect(x: cell.frame.width - 25, y: (table.rowHeight - priceLabel.frame.height)/2, width: priceLabel.frame.width, height: priceLabel.frame.height)
         cell.addSubview(priceLabel)
         cell.sizeToFit()
         // Timing
@@ -91,6 +92,8 @@ class HungerObjsViewController: UIViewController , UITableViewDelegate, UITableV
     
     // Filter and sort button pressed
     @objc func goToFilterPage() {
+        FilterViewController.filterInfo.forHunger = true;
+        FilterViewController.filterInfo.username = false;
         self.performSegue(withIdentifier: "goToFilter", sender: self);
     }
     
