@@ -36,7 +36,6 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     var resetButton = UIBarButtonItem()
     var locationButtons: Array<UIButton> = [];
     
-    var lastY:CGFloat = 0
     
     let labelFontSize:CGFloat = 21.0
     
@@ -51,7 +50,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         setupSortByPicker()
         
         setupPriceLabel()
-        setupMaxPriceTextBox()
+        setupMaxPriceTextField()
         
         setupTimeElements()
         
@@ -66,12 +65,11 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        scrollView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height * 0.9)
+        scrollView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height * 0.88)
         containerView.frame = CGRect(x: 0, y: 0, width: scrollView.contentSize.width, height: scrollView.contentSize.height)
     }
     func setupScrollView(){
         self.scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 270)
         scrollView.addSubview(containerView)
         view.addSubview(scrollView)
     }
@@ -115,13 +113,14 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         
     }
     
-    func setupMaxPriceTextBox(){
+    func setupMaxPriceTextField(){
         maxPriceTextBox.placeholder = "eg. 5.0"
         maxPriceTextBox.text = max_price
         Helper.setTextFieldStyle(maxPriceTextBox)
         maxPriceTextBox.sizeToFit()
         maxPriceTextBox.frame = CGRect(x: priceLabel.frame.origin.x + priceLabel.frame.width, y: sortByPicker.frame.origin.y + sortByPicker.frame.height, width: maxPriceTextBox.frame.width * 1.1, height: priceLabel.frame.height)
         maxPriceTextBox.addTarget(self, action: #selector(updateMaxPrice(_:)), for: .editingChanged)
+        maxPriceTextBox.keyboardType = UIKeyboardType.decimalPad
         containerView.addSubview(maxPriceTextBox)
     }
     @objc func updateMaxPrice(_ textField: UITextField) {
@@ -213,7 +212,7 @@ class FilterViewController: UIViewController, UIPickerViewDelegate, UIPickerView
             containerView.addSubview(checkBox)
             locationButtons.append(checkBox)
         }
-        lastY = y
+        scrollView.contentSize = CGSize(width: self.view.frame.width, height: y)
     }
     @objc func toggleState(sender: UIButton)
     {

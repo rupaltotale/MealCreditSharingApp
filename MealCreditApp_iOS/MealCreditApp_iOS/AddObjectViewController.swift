@@ -119,6 +119,7 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
             priceTextField.sizeToFit()
             priceTextField.frame = CGRect(x: 45, y: cell.frame.height/2 - priceTextField.frame.height/2, width: cell.frame.width, height: priceTextField.frame.height)
             label.textColor = GlobalVariables.mainColor
+            priceTextField.keyboardType = UIKeyboardType.decimalPad
             cell.addSubview(priceTextField)
             
         }
@@ -168,7 +169,8 @@ class AddObjectViewController: UIViewController, UITableViewDataSource, UITableV
         if (array[indexPath.section][indexPath.row] == "Location Picker" ){
             locationPicker.backgroundColor = UIColor.white
             locationPicker.showsSelectionIndicator = true
-            locationPicker.frame = CGRect(x:15, y: 0, width: cell.frame.width, height: 150)
+            locationPicker.sizeToFit()
+            locationPicker.frame = CGRect(x:(self.view.frame.width - locationPicker.frame.width)/2, y: 0, width: cell.frame.width, height: 150)
             cell.addSubview(locationPicker)
             cell.tag = 1;
         }
