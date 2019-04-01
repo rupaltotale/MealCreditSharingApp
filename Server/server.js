@@ -129,7 +129,7 @@ app.get('/availability-list/:size/:where/:who/:start/:end/:price/:sortBy', (req,
     }
 
     wrapper.getAvailabilityList(holder["size"], holder["where"], holder["who"], holder["start"], holder["end"], holder["price"], holder["sort"]).then((result) => {
-        console.log(result)
+        //console.log(result)
         res.status(200).json({
             "result" : result
         }); 
@@ -563,7 +563,7 @@ app.post('/register/', function(req, res) {
 
 function authenticate(token, res, user_id){
     if(token == undefined || token == "" || token == null) {
-        console.log("Error here");
+        //console.log("Error here");
         return res.status(401).json({
             "message" : "Invalid token - 1"
         });
@@ -573,13 +573,13 @@ function authenticate(token, res, user_id){
     let retToken = verifyToken(token);
     // The === on the false is important, as 0 can be a user_id
     if(retToken === false) {
-        console.log("Error here2");
+        //console.log("Error here2");
         return res.status(401).json({
             "message" : "Invalid token - 2"
         });
     }
     else if(retToken != user_id) {
-        console.log("Error here3");
+        //console.log("Error here3");
         return res.status(401).json({
             "message" : "Invalid user ID"
         });

@@ -8,7 +8,7 @@ var timeOff = process.env.TIME_OFFSET;
 if(timeOff == undefined || timeOff == null) {
     timeOff = defaultTimeOff;
 }
-console.log(timeOff);
+console.log("Timeoff: " + timeOff);
 
 module.exports = class DataAccess {
 
@@ -74,7 +74,7 @@ module.exports = class DataAccess {
             myQuery += ` LIMIT ${size}`;
         }
 
-        console.log(myQuery);
+        //console.log(myQuery);
 
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
