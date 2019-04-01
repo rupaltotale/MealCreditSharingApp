@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.spec.ECField;
 import java.util.Calendar;
+import java.util.Date;
 
 import okhttp3.Response;
 
@@ -89,6 +90,10 @@ public class EditAvPost extends AppCompatActivity {
                 String endTime = ((TextView) findViewById(R.id.timepick2_edit)).getText().toString();
                 final String formattedStartDate = DateParser.convertSlashDateTime(startDate, startTime);
                 final String formattedEndDate = DateParser.convertSlashDateTime(endDate, endTime);
+                if(!DateParser.isDateTimeLess(new ClientDateTime(startDate, startTime), new ClientDateTime(endDate, endTime))) {
+                    DoAlert.doBasicAlert("Please put an end time that is AFTER your start time!", EditAvPost.this);
+                    return;
+                }
                 final String location = locList.getSelectedItem().toString();
                 final String associatedId = isAvEdit ? JsonMethods.get(jsonPostInfo, "av_id") : JsonMethods.get(jsonPostInfo, "hg_id");
                 JSONObject json = new JSONObject();
@@ -176,30 +181,32 @@ public class EditAvPost extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         tv_date1 = (TextView) findViewById(R.id.datepick1_edit);
         tv_date2 = (TextView) findViewById(R.id.datepick2_edit);
-        String startDate = startDateTime.substring(0, startDividerIndex);
-        String endDate = endDateTime.substring(0, endDividerIndex);
+        final String startDate = startDateTime.substring(0, startDividerIndex);
+        final String endDate = endDateTime.substring(0, endDividerIndex);
         tv_date1.setText(startDate);
         tv_date2.setText(endDate);
         tv_time1 = (TextView) findViewById(R.id.timepick1_edit);
         tv_time2 = (TextView) findViewById(R.id.timepick2_edit);
-        String startTime = startDateTime.substring(startDividerIndex + 1);
-        String endTime = endDateTime.substring(endDividerIndex + 1);
+        final String startTime = startDateTime.substring(startDividerIndex + 1);
+        final String endTime = endDateTime.substring(endDividerIndex + 1);
         tv_time1.setText(startTime);
         tv_time2.setText(endTime);
+        final ClientDateTime startCDT = new ClientDateTime(startDate, startTime);
+        final ClientDateTime endCDT = new ClientDateTime(endDate, endTime);
 
         tv_date1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                int month = cal.get(Calendar.MONTH);
+//                Calendar cal = Calendar.getInstance();
+//                int year = cal.get(Calendar.YEAR);
+//                int day = cal.get(Calendar.DAY_OF_MONTH);
+//                int month = cal.get(Calendar.MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         EditAvPost.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener1,
-                        year, month, day);
+                        startCDT.year, startCDT.month, startCDT.day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -211,22 +218,28 @@ public class EditAvPost extends AppCompatActivity {
                 month = month + 1;
                 //Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
                 String date = month + "/" + day + "/" + year;
-                tv_date1.setText(date);
+                int comp1 = (month * 31) + day + (year * 372);
+                if(DateParser.isEqualOrAfterCurrentDate(comp1)) {
+                    tv_date1.setText(date);
+                }
+                else {
+                    DoAlert.doBasicAlert("Please enter a valid date!", EditAvPost.this);
+                }
             }
         };
         tv_date2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                int month = cal.get(Calendar.MONTH);
+//                Calendar cal = Calendar.getInstance();
+//                int year = cal.get(Calendar.YEAR);
+//                int day = cal.get(Calendar.DAY_OF_MONTH);
+//                int month = cal.get(Calendar.MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         EditAvPost.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mDateSetListener2,
-                        year, month, day);
+                        endCDT.year, endCDT.month, endCDT.day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -238,19 +251,25 @@ public class EditAvPost extends AppCompatActivity {
                 month = month + 1;
                 //Log.d(TAG, "onDateSet: mm/dd/yyy: " + month + "/" + day + "/" + year);
                 String date = month + "/" + day + "/" + year;
-                tv_date2.setText(date);
+                int comp1 = (month * 31) + day + (year * 372);
+                if(DateParser.isEqualOrAfterCurrentDate(comp1)) {
+                    tv_date2.setText(date);
+                }
+                else {
+                    DoAlert.doBasicAlert("Please enter a valid date!", EditAvPost.this);
+                }
             }
         };
 
         tv_time1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                int minute = cal.get(Calendar.MINUTE);
-                int h = cal.get(Calendar.HOUR_OF_DAY);
+//                Calendar cal = Calendar.getInstance();
+//                int minute = cal.get(Calendar.MINUTE);
+//                int h = cal.get(Calendar.HOUR_OF_DAY);
 
                 TimePickerDialog dialog = new TimePickerDialog(
-                        EditAvPost.this, mTimeSetListener1, h, minute, false);
+                        EditAvPost.this, mTimeSetListener1, startCDT.hour, startCDT.minute, false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -259,6 +278,12 @@ public class EditAvPost extends AppCompatActivity {
         mTimeSetListener1 = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                if(DateParser.isEqualToCurrentDate(tv_date1.getText().toString())) {
+                    if(DateParser.isTimeLess(hour, minute)) {
+                        DoAlert.doBasicAlert("Please enter a valid time!", EditAvPost.this);
+                        return;
+                    }
+                }
                 String relation = hour >= 12 ? "PM" : "AM";
                 String minuteStr = minute < 10 ? "0" + minute : Integer.toString(minute);
                 String newStr = DateParser.getAppropriateHourFrom24(relation, hour) + ":" + minuteStr + " " + relation;
@@ -270,11 +295,11 @@ public class EditAvPost extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Calendar cal = Calendar.getInstance();
-                int minute = cal.get(Calendar.MINUTE);
-                int h = cal.get(Calendar.HOUR_OF_DAY);
+//                int minute = cal.get(Calendar.MINUTE);
+//                int h = cal.get(Calendar.HOUR_OF_DAY);
 
                 TimePickerDialog dialog = new TimePickerDialog(
-                        EditAvPost.this, mTimeSetListener2, h, minute, false);
+                        EditAvPost.this, mTimeSetListener2, endCDT.hour, endCDT.minute, false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
@@ -283,6 +308,12 @@ public class EditAvPost extends AppCompatActivity {
         mTimeSetListener2 = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+                if(DateParser.isEqualToCurrentDate(tv_date2.getText().toString())) {
+                    if(DateParser.isTimeLess(hour, minute)) {
+                        DoAlert.doBasicAlert("Please enter a valid time!", EditAvPost.this);
+                        return;
+                    }
+                }
                 String relation = hour >= 12 ? "PM" : "AM";
                 String minuteStr = minute < 10 ? "0" + minute : Integer.toString(minute);
                 String newStr = DateParser.getAppropriateHourFrom24(relation, hour) + ":" + minuteStr + " " + relation;

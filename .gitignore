@@ -1,9 +1,6 @@
 # Don't track content of these folders
+Server/node_modules
 Server/node_modules/
 Server/package.json
 Server/package-lock.json
-<<<<<<< HEAD
 Server/.env
-=======
-Server/.env
->>>>>>> 11ea439b41e625722d364cef35683a86b34f7d24

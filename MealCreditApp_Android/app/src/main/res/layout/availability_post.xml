@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
+    android:background="@drawable/border_bot_white"
     android:layout_width="match_parent">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="80sp"
         android:orientation="horizontal"
+        android:id="@+id/top_post_layout"
         android:gravity="center_vertical"
-        android:background="@drawable/border_bot_white"
         android:weightSum="1">
 
         <TextView
-            android:layout_weight="0.5"
+            android:layout_weight="0.3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:layout_marginLeft="10sp"
             android:textColor="@color/black"
             android:text="@string/av_post_title"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp"
             />
 
@@ -41,5 +51,31 @@
             android:text="@string/av_post_into"
             android:textSize="20sp"
             />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/top_post_layout"
+        android:weightSum="1"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </RelativeLayout>

@@ -145,7 +145,9 @@ public class MainActivity extends AppCompatActivity {
         View rowView = inflator.inflate(R.layout.availability_post, null);
         ViewGroup vg = (ViewGroup) rowView;
         TextView newV = (TextView) (((ViewGroup) vg.getChildAt(0)).getChildAt(0));
-        Button newB = (Button) (((ViewGroup) vg.getChildAt(0)).getChildAt(2));
+        TextView newV2 = (TextView) (((ViewGroup) vg.getChildAt(0)).getChildAt(1));
+        Button newB = (Button) (((ViewGroup) vg.getChildAt(0)).getChildAt(
+                ((LinearLayout)vg.getChildAt(0)).getChildCount() - 1));
         newB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +160,19 @@ public class MainActivity extends AppCompatActivity {
         });
         String newVText = "POST " + (postNum + 1);
         newV.setText(newVText);
+        newVText = "$" + JsonMethods.getString(myAvailabilities.get(postNum),"asking_price");
+        newV2.setText(newVText);
+
+        TextView newV3 = (TextView) (((ViewGroup) vg.getChildAt(1)).getChildAt(0));
+        TextView newV4 = (TextView) (((ViewGroup) vg.getChildAt(1)).getChildAt(1));
+        TextView newV5 = (TextView) (((ViewGroup) vg.getChildAt(1)).getChildAt(2));
+        newV3.setText(JsonMethods.getString(myAvailabilities.get(postNum),"location"));
+        newV4.setText(DateParser.reverseParseServerDateTime(
+                JsonMethods.getString(myAvailabilities.get(postNum),"start_date")));
+        newV5.setText(DateParser.reverseParseServerDateTime(
+                JsonMethods.getString(myAvailabilities.get(postNum),"end_date")));
+
+
         final View newRowView = rowView;
         runOnUiThread(new Runnable() {
             @Override

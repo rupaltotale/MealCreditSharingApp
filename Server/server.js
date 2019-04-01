@@ -63,6 +63,7 @@ app.enable('trust proxy')
  */
 
  // Have a regular every hour to delete old availability/hunger
+ // TODO: Need to enact this
 
  function deleteOld() {
     let pastDateTime = dateParser.getCurrentDayOffset();

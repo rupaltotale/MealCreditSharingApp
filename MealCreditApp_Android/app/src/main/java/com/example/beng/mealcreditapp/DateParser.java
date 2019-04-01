@@ -219,4 +219,40 @@ public class DateParser {
         Pattern VALID_TIME = Pattern.compile("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9] (PM|AM)$");
         return VALID_TIME.matcher(time).find();
     }
+
+    public static boolean isEqualOrAfterCurrentDate(int comp1) {
+        String cmp = DateParser.getCurrentDateTime();
+        ClientDateTime ctd = new ClientDateTime(cmp);
+        int comp2 = (ctd.month * 31) + ctd.day + (ctd.year * 372);
+        System.out.println("Month: " + ctd.month);
+        System.out.println("Change: " + comp1 + " vs " + "Now: " + comp2);
+        return comp1 >= comp2;
+    }
+
+    public static boolean isEqualToCurrentDate(String date) {
+        int lastSlashIndex = date.lastIndexOf("/");
+        int firstSlashIndex = date.indexOf("/");
+
+        int year = Integer.parseInt(date.substring(lastSlashIndex + 1));
+        int month = Integer.parseInt(date.substring(0, firstSlashIndex));
+        int day = Integer.parseInt(date.substring(firstSlashIndex + 1, lastSlashIndex));
+        int comp1 = (month * 31) + day + (year * 372);
+
+        String cmp = DateParser.getCurrentDateTime();
+        ClientDateTime ctd = new ClientDateTime(cmp);
+        int comp2 = (ctd.month * 31) + ctd.day + (ctd.year * 372);
+        return comp1 == comp2;
+    }
+
+    public static boolean isTimeLess(int hour, int minute) {
+        int c1 = hour * 60 + minute;
+        String cmp = DateParser.getCurrentDateTime();
+        ClientDateTime ctd = new ClientDateTime(cmp);
+        return c1 < (ctd.hour * 60 + ctd.minute);
+    }
+
+    public static boolean isDateTimeLess(ClientDateTime cdt1, ClientDateTime cdt2) {
+        return (cdt1.month * 31) + cdt1.day + (cdt1.year * 372) < (cdt2.month * 31) + cdt2.day + (cdt2.year * 372);
+
+    }
 }

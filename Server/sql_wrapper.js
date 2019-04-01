@@ -1,9 +1,14 @@
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const dateParser = require('./dateParsing');
-const timeOff = 16;
 require('dotenv').config()
 const saltRounds = 10;
+const defaultTimeOff = 18;
+var timeOff = process.env.TIME_OFFSET;
+if(timeOff == undefined || timeOff == null) {
+    timeOff = defaultTimeOff;
+}
+console.log(timeOff);
 
 module.exports = class DataAccess {
 
@@ -69,7 +74,7 @@ module.exports = class DataAccess {
             myQuery += ` LIMIT ${size}`;
         }
 
-        //console.log(myQuery);
+        console.log(myQuery);
 
         await new Promise((resolve, reject) => this._connection.query(myQuery, (err, result, fields) => {
             if (err) {
