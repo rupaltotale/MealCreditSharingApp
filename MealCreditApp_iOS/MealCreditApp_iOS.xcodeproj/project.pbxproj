@@ -23,9 +23,9 @@
 		39C4CCF521CE10F2006242F3 /* AvailableObjsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF421CE10F2006242F3 /* AvailableObjsViewController.swift */; };
 		39C4CCF721CE1111006242F3 /* HungerObjsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF621CE1111006242F3 /* HungerObjsViewController.swift */; };
 		39C4CCF921CEAA4A006242F3 /* AvailableObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCF821CEAA4A006242F3 /* AvailableObject.swift */; };
-		39C4CCFD21CF670F006242F3 /* EditObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CCFC21CF670F006242F3 /* EditObjectViewController.swift */; };
 		39C4CD3921D176D6006242F3 /* AddObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C4CD3821D176D6006242F3 /* AddObjectViewController.swift */; };
 		39C4CD3B21D19207006242F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39C4CD3A21D19207006242F3 /* Assets.xcassets */; };
+		D5A68C7A22CC1822007D5934 /* EditObjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A68C7922CC1822007D5934 /* EditObjectViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +76,7 @@
 		4E8260EAAEA5AB37148256BD /* Pods-MealCreditApp_iOSUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOSUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOSUITests/Pods-MealCreditApp_iOSUITests.release.xcconfig"; sourceTree = "<group>"; };
 		76F178B180DFB4CDF3413382 /* Pods-MealCreditApp_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOS/Pods-MealCreditApp_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		886C86A34AEE5B6E264ECD5B /* Pods-MealCreditApp_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOSTests/Pods-MealCreditApp_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		D5A68C7922CC1822007D5934 /* EditObjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditObjectViewController.swift; sourceTree = "<group>"; };
 		F9884153D4327E1DFAB90252 /* Pods-MealCreditApp_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MealCreditApp_iOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MealCreditApp_iOS/Pods-MealCreditApp_iOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -151,6 +152,7 @@
 		39C4CCBF21CD8DBF006242F3 /* MealCreditApp_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D5A68C7922CC1822007D5934 /* EditObjectViewController.swift */,
 				39C4CCC021CD8DBF006242F3 /* AppDelegate.swift */,
 				39C4CCEE21CDA28A006242F3 /* GlobalVariables.swift */,
 				39C4CCF221CE0476006242F3 /* Helper.swift */,
@@ -417,8 +419,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5A68C7A22CC1822007D5934 /* EditObjectViewController.swift in Sources */,
 				39B5BEE8224F5ACD00F02D57 /* PaddingLabel.swift in Sources */,
-				39C4CCFD21CF670F006242F3 /* EditObjectViewController.swift in Sources */,
 				39C4CCF921CEAA4A006242F3 /* AvailableObject.swift in Sources */,
 				39C4CCEF21CDA28A006242F3 /* GlobalVariables.swift in Sources */,
 				39C4CCC321CD8DBF006242F3 /* ViewController.swift in Sources */,
