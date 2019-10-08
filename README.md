@@ -1,1 +1,1 @@
-# mealCreditThing
+# Meal Credit App
