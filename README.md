@@ -1,2 +1,1 @@
 # mealCreditThing
-Meal Credit Thingamagiggy
